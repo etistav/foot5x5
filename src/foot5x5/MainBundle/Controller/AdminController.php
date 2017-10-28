@@ -3,14 +3,11 @@
 namespace foot5x5\MainBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 use foot5x5\MainBundle\Entity\MatchPlayer;
-use foot5x5\MainBundle\Entity\Param;
 use foot5x5\MainBundle\Entity\Player;
 use foot5x5\MainBundle\Entity\Ranking;
 use foot5x5\MainBundle\Entity\Result;
-use foot5x5\MainBundle\Entity\Standing;
 use foot5x5\MainBundle\Entity\Transaction;
 use foot5x5\UserBundle\Entity\User;
 
@@ -28,7 +25,6 @@ class AdminController extends Controller
      */
     public function indexAction() {
 
-        $mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
         $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
@@ -74,7 +70,7 @@ class AdminController extends Controller
 
         $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
-            $trimesterForm->bind($request);
+            $trimesterForm->submit($request);
             if ($trimesterForm->isValid()) {
                 $idTrimester = $trimesterForm->get('stdCombo')->getData();
                 $currentYear = substr($idTrimester, 0, 4);
@@ -121,16 +117,20 @@ class AdminController extends Controller
         $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
 
         $players = $plrRepo->findAll();
+        $matchPlayerA = array();
+        $matchPlayerB = array();
+        
+        
         // Initialisation de 5 joueurs dans chaque équipe
         for ($i = 1; $i <= 5; $i++) {
             $matchPlayerA[$i] = new MatchPlayer();
-            $playerA = $plrRepo->find(2 * $i - 1);
+            // $playerA = $plrRepo->find(2 * $i - 1);
             // $matchPlayerA[$i]->setPlayer($playerA);
             $matchPlayerA[$i]->setTeam('A');
             $match->addMatchPlayer($matchPlayerA[$i]);
 
             $matchPlayerB[$i] = new MatchPlayer();
-            $playerB = $plrRepo->find(2 * $i);
+            // $playerB = $plrRepo->find(2 * $i);
             // $matchPlayerB[$i]->setPlayer($playerB);
             $matchPlayerB[$i]->setTeam('B');
             $match->addMatchPlayer($matchPlayerB[$i]);
@@ -141,7 +141,7 @@ class AdminController extends Controller
 
         $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
-            $matchForm->bind($request);
+            $matchForm->submit($request);
             if ($matchForm->isValid()) {
 
                 //echo $request->getMethod();
@@ -197,11 +197,11 @@ class AdminController extends Controller
 
         $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
-            $matchForm->bind($request);
+            $matchForm->submit($request);
             if ($matchForm->isValid()) {
 
                 // Si date modifiée, mise à jour des n° de matchs suivants
-                // TODO...
+                // TODO gestion n°match si modif date
 
                 // MAJ du match en BDD
                 $em = $this->getDoctrine()->getManager();
@@ -359,14 +359,13 @@ class AdminController extends Controller
      */
     public function addPlayerAction() {
         $player = new Player();
-        $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
 
         // Création du formulaire associé
         $playerForm = $this->createForm(new PlayerType(), $player);
 
         $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
-            $playerForm->bind($request);
+            $playerForm->submit($request);
             if ($playerForm->isValid()) {
                 // Ecriture du player en BDD
                 $em = $this->getDoctrine()->getManager();
@@ -404,7 +403,7 @@ class AdminController extends Controller
 
         $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
-            $playerForm->bind($request);
+            $playerForm->submit($request);
             if ($playerForm->isValid()) {
                 // Ecriture du player en BDD
                 $em = $this->getDoctrine()->getManager();
@@ -499,14 +498,13 @@ class AdminController extends Controller
      */
     public function addUserAction() {
         $user = new User();
-        $usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
 
         // Création du formulaire associé
         $userForm = $this->createForm(new UserType(), $user);
 
         $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
-            $userForm->bind($request);
+            $userForm->submit($request);
             if ($userForm->isValid()) {
                 // Génération d'une valeur aléatoire pour le salt
                 $salt = substr(md5(time()), 0, 23);
@@ -556,7 +554,7 @@ class AdminController extends Controller
 
         $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
-            $userForm->bind($request);
+            $userForm->submit($request);
             if ($userForm->isValid()) {
 
                 // Ecriture du user en BDD
@@ -614,15 +612,13 @@ class AdminController extends Controller
      */
     public function addTransactionAction() {
         $transaction = new Transaction();
-        $trnRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Transaction');
-        $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
 
         // Création du formulaire associé
         $trnForm = $this->createForm(new TransactionType(), $transaction);
 
         $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
-            $trnForm->bind($request);
+            $trnForm->submit($request);
             if ($trnForm->isValid()) {
                 // Ecriture du user en BDD
                 $em = $this->getDoctrine()->getManager();
@@ -673,7 +669,7 @@ class AdminController extends Controller
 
         $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
-            $trnForm->bind($request);
+            $trnForm->submit($request);
             if ($trnForm->isValid()) {
                 // Modification de la transaction en BDD
                 $em = $this->getDoctrine()->getManager();

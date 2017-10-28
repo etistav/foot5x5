@@ -1,0 +1,78 @@
+{% extends "foot5x5MainBundle::layout.html.twig" %}
+
+{% block title %}Classement {{ standing.name }}{% endblock %}
+
+{% block content %}
+<div id="trim-form-container" class="col-md-12">
+    <h2><span class="label dark-blue-grad">Classement {{ standing.name }}</span></h2>
+    {% if standingForm is defined %}
+    <div class="well col-md-4">
+        {{ form_start(standingForm, { 'attr': {'class': 'form-inline'} }) }}
+        <div class="form-group">
+            {{ form_label(standingForm.stdCombo, null, { 'label_attr': { 'class': 'control-label' }}) }}
+            {{ form_errors(standingForm.stdCombo) }}
+            {{ form_widget(standingForm.stdCombo, { 'attr': { 'class': 'form-control' }}) }}
+            <button type="submit" class="btn btn-primary dark-blue-grad">Afficher</button>
+        </div>
+        {{ form_end(standingForm) }}
+    </div>
+    {% endif %}
+</div>
+
+<div id="standing-container" class="col-md-12">
+    <div class="col-lg-10 table-responsive">
+        {% if standing.rankings %}
+        <table id="standing-table" class="table table-striped table-bordered table-condensed">
+            <thead class="dark-blue-grad">
+                <tr>
+                    <th class="col-md-1 standing-center-column">##</th>
+                    <th class="col-md-2 standing-left-column">Nom</th>
+                    <th class="col-md-1 standing-center-column">PTS</th>
+                    <th class="col-md-1 standing-center-column">MJ</th>
+                    <th class="col-md-1 standing-center-column">G</th>
+                    <th class="col-md-1 standing-center-column">N</th>
+                    <th class="col-md-1 standing-center-column">P</th>
+                    <th class="col-md-1 standing-center-column">BP</th>
+                    <th class="col-md-1 standing-center-column">BC</th>
+                    <th class="col-md-1 standing-center-column">DIFF</th>
+                    <th class="col-md-1 standing-center-column">EVAL</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for ranking in standing.rankings %}
+                <tr {% if ranking.rank == 1 %} class="standing-first-player"
+                    {% elseif ranking.rank > 1 and ranking.rank <= 3 %} class="success"
+                    {% elseif ranking.rank > loop.length - 3 and ranking.rank < loop.length %} class="danger"
+                    {% elseif ranking.rank == loop.length %} class="standing-last-player"
+                    {% else %} class="standing-mid-table" {% endif %}>
+                    <td class="col-md-1 standing-center-column">{{ ranking.rank }}</td>
+                    <td class="col-md-2 standing-left-column">
+                        <div class="standing-player">
+                            {% if ranking.player.user is null %}
+                                <img src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_40') }}" alt="profilePic_default.png" />
+                            {% else %}
+                                <img src="{{ ranking.player.user.pictureWebPath | imagine_filter('avatar_40') }}" alt="{{ ranking.player.user.profilePicture }}" />
+                            {% endif %}
+                            <strong>{{ ranking.player.name }}</strong>
+                        </div>
+                    </td>
+                    <td class="col-md-1 standing-center-column">{{ ranking.points }}</td>
+                    <td class="col-md-1 standing-center-column">{{ ranking.played }}</td>
+                    <td class="col-md-1 standing-center-column">{{ ranking.won }}</td>
+                    <td class="col-md-1 standing-center-column">{{ ranking.drawn }}</td>
+                    <td class="col-md-1 standing-center-column">{{ ranking.lost }}</td>
+                    <td class="col-md-1 standing-center-column">{{ ranking.goalsFor }}</td>
+                    <td class="col-md-1 standing-center-column">{{ ranking.goalsAgainst }}</td>
+                    <td class="col-md-1 standing-center-column">{{ ranking.goalsDiff }}</td>
+                    <td class="col-md-1 standing-center-column">{{ ranking.eval|number_format(2, '.') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <div class="alert alert-warning">Aucun classement trouvé pour le trimestre T0{{ standing.trimester }} {{ standing.year }}</div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

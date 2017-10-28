@@ -1,0 +1,150 @@
+{% extends 'layout.html.twig' %}
+{% set adminMenu = true %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h2 class="text-center">{{ block('title') }}</h2>
+{% for flashMessage in app.session.flashbag.get('success') %}
+<div class="alert alert-success">
+    {{ flashMessage }}
+</div>
+{% endfor %}
+
+<div class="well">
+{{ form_start(randomDrawForm, { 'attr': {'class': 'form-horizontal'} }) }}
+    <div class="form-group">
+        {{ form_label(randomDrawForm.player01, null, { 'label_attr':  {
+            'class': 'col-sm-4 control-label'
+        }}) }}
+        <div class="col-sm-6">
+            {{ form_errors(randomDrawForm.player01) }}
+            {{ form_widget(randomDrawForm.player01, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(randomDrawForm.player02, null, { 'label_attr':  {
+            'class': 'col-sm-4 control-label'
+        }}) }}
+        <div class="col-sm-6">
+            {{ form_errors(randomDrawForm.player02) }}
+            {{ form_widget(randomDrawForm.player02, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(randomDrawForm.player03, null, { 'label_attr':  {
+            'class': 'col-sm-4 control-label'
+        }}) }}
+        <div class="col-sm-6">
+            {{ form_errors(randomDrawForm.player03) }}
+            {{ form_widget(randomDrawForm.player03, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(randomDrawForm.player04, null, { 'label_attr':  {
+            'class': 'col-sm-4 control-label'
+        }}) }}
+        <div class="col-sm-6">
+            {{ form_errors(randomDrawForm.player04) }}
+            {{ form_widget(randomDrawForm.player04, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(randomDrawForm.player05, null, { 'label_attr':  {
+            'class': 'col-sm-4 control-label'
+        }}) }}
+        <div class="col-sm-6">
+            {{ form_errors(randomDrawForm.player05) }}
+            {{ form_widget(randomDrawForm.player05, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(randomDrawForm.player06, null, { 'label_attr':  {
+            'class': 'col-sm-4 control-label'
+        }}) }}
+        <div class="col-sm-6">
+            {{ form_errors(randomDrawForm.player06) }}
+            {{ form_widget(randomDrawForm.player06, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(randomDrawForm.player07, null, { 'label_attr':  {
+            'class': 'col-sm-4 control-label'
+        }}) }}
+        <div class="col-sm-6">
+            {{ form_errors(randomDrawForm.player07) }}
+            {{ form_widget(randomDrawForm.player07, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(randomDrawForm.player08, null, { 'label_attr':  {
+            'class': 'col-sm-4 control-label'
+        }}) }}
+        <div class="col-sm-6">
+            {{ form_errors(randomDrawForm.player08) }}
+            {{ form_widget(randomDrawForm.player08, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(randomDrawForm.player09, null, { 'label_attr':  {
+            'class': 'col-sm-4 control-label'
+        }}) }}
+        <div class="col-sm-6">
+            {{ form_errors(randomDrawForm.player09) }}
+            {{ form_widget(randomDrawForm.player09, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(randomDrawForm.player10, null, { 'label_attr':  {
+            'class': 'col-sm-4 control-label'
+        }}) }}
+        <div class="col-sm-6">
+            {{ form_errors(randomDrawForm.player10) }}
+            {{ form_widget(randomDrawForm.player10, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-4 col-sm-3">
+            <input type="submit" class="btn btn-primary" value="Tirage" />
+        </div>
+    </div>
+{{ form_end(randomDrawForm) }}
+{% if playersSelected %}
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th>Joueurs sélectionnés</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for player in playersSelected %}
+            <tr>
+                <td>{{ player.name }}</td>
+                <td>{{ player.valAvg }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+</div>
+{% endblock %}

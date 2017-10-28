@@ -1,0 +1,37 @@
+# src/foot5x5/MainBundle/Resources/config/services.yml
+
+services:
+
+#    foot5x5_main.example:
+#        class: foot5x5\MainBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+    
+    # Gestion de l'affichage du datePicker pour un champ date dans un formulaire
+    foot5x5.datePicker:
+        class: foot5x5\MainBundle\Form\Type\DatePickerType
+        tags:
+            - { name: form.type, alias: datePicker }
+
+    # Gestion de l'affichage du playerDrop pour un champ player dans un formulaire
+    foot5x5.playerDrop:
+        class: foot5x5\MainBundle\Form\Type\PlayerDropType
+        arguments: ['foot5x5\MainBundle\Entity\Player', @doctrine.orm.entity_manager]
+        tags:
+            - { name: form.type, alias: playerDrop }
+
+    # Gestion de l'affichage du sliderNote pour un champ note dans un formulaire
+    foot5x5.sliderNote:
+        class: foot5x5\MainBundle\Form\Type\SliderNoteType
+        arguments: ['foot5x5\MainBundle\Entity\Note', @doctrine.orm.entity_manager]
+        tags:
+            - { name: form.type, alias: sliderNote }
+
+    # Gestion de l'affichage de l'inscription beta
+    # - arguments: date à partir de laquelle l'inscription beta n'apparaîtra plus
+    # - event: nom de l'évènement que le listener veut écouter
+    # - method: nom de la méthode du listener à exécuter lorsque l'évènement est déclenché 
+    foot5x5.beta_listener:
+        class: foot5x5\MainBundle\Beta\BetaListener
+        arguments: ["2015-09-01"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }

@@ -1,0 +1,173 @@
+{% extends "foot5x5MainBundle::layout.html.twig" %}
+
+{% block title %}Joueurs{% endblock %}
+
+{% block content %}
+<h2><span class="label dark-blue-grad">Joueurs</span></h2>
+{% for flashMessage in app.session.flashbag.get('success') %}
+<div class="alert alert-success">
+    {{ flashMessage }}
+</div>
+{% endfor %}
+<div id="players-container" class="col-xs-12 col-sm-12 col-md-12">
+    <ul id="players-photos">
+        {% for player in players %}
+        <li id="player-photo-{{ player.id }}" class="player-photo">
+            <a data-popup-open="popup-{{ player.id }}" href="#">
+                {% if player.user is null %}
+                    <img src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_200') }}" alt="{{ player.name }}" />
+                {% else %}
+                    <img src="{{ player.user.pictureWebPath | imagine_filter('avatar_200') }}" alt="{{ player.name }}" />
+                {% endif %}
+                <p>{{ player.name }}</p>
+                {#<div class="players-logo"></div>#}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>    
+</div>
+
+{% for player in players %}
+<div class="popup" data-popup="popup-{{ player.id }}">
+    <div class="popup-inner">
+        <div class="popup-inner-scroll">
+            <div class="popup-player-header">
+                {% if player.user is null %}
+                    <img class="popup-player-pic" src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_200') }}" alt="{{ player.name }}" />
+                {% else %}
+                    <img class="popup-player-pic" src="{{ player.user.pictureWebPath | imagine_filter('avatar_200') }}" alt="{{ player.name }}" />
+                {% endif %}
+                <div class="popup-player-info">
+                    <h2><span>{{ player.name }}</span></h2>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td class="popup-player-label">Age :</td>
+                                {% if player.user is not null %}<td>{{ player.user.age }} ans</td>
+                                {% else %}<td>N.C.</td>
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                <td class="popup-player-label">Date de naissance :</td>
+                                {% if player.user is not null %}<td>{{ player.user.birthday|date('d/m/Y') }}</td>
+                                {% else %}<td>N.C.</td>
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                <td class="popup-player-label">Classement actuel :</td>
+                                <td>{{ ranks[player.id] }}</td>
+                            </tr>
+                            <tr>
+                                <td class="popup-player-label">Série en cours :</td>
+                                <td>{{ currentForms[player.id] }}
+                                {% if currentSeries[player.id] != "" %} ({{ currentSeries[player.id] }})
+                                {% else %}
+                                {% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td class="popup-player-label">Bilan complet :</td>
+                                <td>{{ globalResults[player.id] }}</td>
+                            </tr>
+                            <tr>
+                                <td class="popup-player-label">Dernier match :</td>
+                                {% if lastMatches[player.id] == "-" %}
+                                    <td>{{ lastMatches[player.id] }}</td>
+                                {% else %}
+                                    <td>{{ lastMatches[player.id].date|date('d/m/Y') }} {{ resultsForPlayer[player.id] }}</td>
+                                {% endif %}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="popup-player-stats">
+                <h3>Statistiques</h3>
+                <table id="player-stats-table" class="table table-striped table-bordered table-condensed">
+                    <thead class="bg-primary">
+                        <tr>
+                            <th class="col-md-1 text-center">Trim.</th>
+                            <th class="col-md-1 text-center">Class.</th>
+                            <th class="col-md-1 text-center">MJ</th>
+                            <th class="col-md-1 text-center">PTS</th>
+                            <th class="col-md-1 text-center">G</th>
+                            <th class="col-md-1 text-center">N</th>
+                            <th class="col-md-1 text-center">P</th>
+                            <th class="col-md-1 text-center">EVAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ranking in ranksPerPeriod[player.id] %}
+                        <tr {% if ranking.rank == 1 %} class="standing-first-player" {% endif %}
+                        {% if ranking.rank > 1 and ranking.rank <= 3 %} class="success" {% endif %}
+                        {% if ranking.rank > ranking.standing.nbPlayers - 3 and ranking.rank < ranking.standing.nbPlayers %} class="danger" {% endif %}
+                        {% if ranking.rank == ranking.standing.nbPlayers %} class="standing-last-player" {% endif %}>
+                            <td class="col-md-1 text-center popup-player-trim" >T0{{ ranking.standing.trimester }} {{ ranking.standing.year }}</td>
+                            <td class="col-md-1 text-center" >{{ ranking.rank }}/{{ ranking.standing.nbPlayers }}</td>
+                            <td class="col-md-1 text-center" >{{ ranking.played }}/{{ ranking.standing.nbMatch }}</td>
+                            <td class="col-md-1 text-center" >{{ ranking.points }}</td>
+                            <td class="col-md-1 text-center" >{{ ranking.won }}</td>
+                            <td class="col-md-1 text-center" >{{ ranking.drawn }}</td>
+                            <td class="col-md-1 text-center" >{{ ranking.lost }}</td>
+                            <td class="col-md-1 text-center popup-player-eval" >{{ ranking.eval|number_format(2, '.') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="popup-player-palm">
+                <h3>Palmares</h3>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="popup-player-label">Meilleur classement :</td>
+                            <td class="popup-player-best-rank">{{ bestRanks[player.id] }}</td>
+                        </tr>
+                        <tr>
+                            <td class="popup-player-label">Pire classement :</td>
+                            <td class="popup-player-worst-rank">{{ worstRanks[player.id] }}</td>
+                        </tr>
+                        <tr>
+                            <td class="popup-player-label">Nb fois champion du trimestre :</td>
+                            <td>{{ nbTitles[player.id] }}</td>
+                        </tr>
+                        <tr>
+                            <td class="popup-player-label">Nb fois sur le podium du trimestre :</td>
+                            <td>{{ nbPodiums[player.id] }}</td>
+                        </tr>
+                        <tr>
+                            <td class="popup-player-label">Nb fois relégué du trimestre :</td>
+                            <td>{{ nbRelegations[player.id] }}</td>
+                        </tr>
+                        <tr>
+                            <td class="popup-player-label">Nb fois lanterne rouge du trimestre :</td>
+                            <td>{{ nbTimesLast[player.id] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <a class="popup-close" data-popup-close="popup-{{ player.id }}" href="#">x</a>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<script>
+    $(function() {
+        //----- OPEN
+        $('[data-popup-open]').on('click', function(e)  {
+            var targeted_popup_class = jQuery(this).attr('data-popup-open');
+            $('[data-popup="' + targeted_popup_class + '"]').fadeIn(350);
+     
+            e.preventDefault();
+        });
+     
+        //----- CLOSE
+        $('[data-popup-close]').on('click', function(e)  {
+            var targeted_popup_class = jQuery(this).attr('data-popup-close');
+            $('[data-popup="' + targeted_popup_class + '"]').fadeOut(350);
+     
+            e.preventDefault();
+        });
+    });
+</script>
+{% endblock %}

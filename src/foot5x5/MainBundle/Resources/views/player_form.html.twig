@@ -1,0 +1,94 @@
+{% extends 'foot5x5MainBundle::layout.html.twig' %}
+{% set adminMenu = true %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h2 class="text-center">{{ block('title') }}</h2>
+{% for flashMessage in app.session.flashbag.get('success') %}
+<div class="alert alert-success">
+    {{ flashMessage }}
+</div>
+{% endfor %}
+
+<div class="well">
+{{ form_start(playerForm, { 'attr': {'class': 'form-horizontal'} }) }}
+    <div class="form-group">
+        {{ form_label(playerForm.name, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-3">
+            {{ form_errors(playerForm.name) }}
+            {{ form_widget(playerForm.name, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(playerForm.valAtt, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-2">
+            {{ form_errors(playerForm.valAtt) }}
+            {{ form_widget(playerForm.valAtt, { 'attr':  {
+                'class': 'form-control',
+                'rows': '8'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(playerForm.valDef, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-2">
+            {{ form_errors(playerForm.valDef) }}
+            {{ form_widget(playerForm.valDef, { 'attr':  {
+                'class': 'form-control',
+                'rows': '8'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(playerForm.valPhy, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-2">
+            {{ form_errors(playerForm.valPhy) }}
+            {{ form_widget(playerForm.valPhy, { 'attr':  {
+                'class': 'form-control',
+                'rows': '8'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(playerForm.cashBalance, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-2">
+            {{ form_errors(playerForm.cashBalance) }}
+            {{ form_widget(playerForm.cashBalance, { 'attr':  {
+                'class': 'form-control',
+                'rows': '8'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(playerForm.isActive, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-1">
+            {{ form_errors(playerForm.isActive) }}
+            {{ form_widget(playerForm.isActive, { 'attr':  {
+                'class': 'form-control',
+                'rows': '8'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-5 col-sm-3">
+            <input type="submit" class="btn btn-primary" value="{{ buttonLabel }}" />
+        </div>
+    </div>
+{{ form_end(playerForm) }}
+</div>
+{% endblock %}

@@ -1,0 +1,232 @@
+{% extends 'foot5x5MainBundle::layout.html.twig' %}
+{% set adminMenu = true %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h2 class="text-center">{{ block('title') }}</h2>
+{% for flashMessage in app.session.flashbag.get('success') %}
+<div class="alert alert-success">
+    {{ flashMessage }}
+</div>
+{% endfor %}
+
+{% form_theme matchForm 'foot5x5MainBundle:Form:fields.html.twig' %}
+
+<div id="results-container" class="col-md-12">
+{{ form_start(matchForm, { 'attr': {'class': 'form-horizontal'} }) }}
+    <div class="well col-md-3">
+        <ul id="players-draggable" class="players-draggable">
+            {% for player in players %}
+            <li id="listPlayers_{{ player.id }}" class="player-draggable ui-state-default">{{ player.name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-md-6 col-md-offset-1">
+        <table id="result-table" class="table table-bordered table-condensed">
+            <thead class="bg-primary">
+                <tr>
+                    <th class="text-center" colspan="5">
+                        <div class="col-md-4 col-md-offset-4 input-group date" id="datepicker">
+                            {{ form_widget(matchForm.date, {attr: {
+                                'class': 'form-control' },
+                            }) }}
+                            <label class="input-group-btn" for="foot5x5_mainbundle_result_date_datepicker">
+                                <span class="btn btn-default">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </label>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="col-md-2 result-teamA">
+                        <ol id="teamA-droppable" class="players-droppable">
+                        {% for matchPlayer in matchForm.matchPlayers %}
+                            {% if matchPlayer.team.vars.value == 'A' %}
+                                {{ form_widget(matchPlayer.player) }}
+                            {% endif %}
+                        {% endfor %}
+                        </ol>
+                    </td>
+                    <td class="col-md-1 result-score">
+                        {{ form_errors(matchForm.scoreTeamA) }}
+                        {{ form_widget(matchForm.scoreTeamA, { 'attr':  {
+                            'class': 'form-control'
+                        }}) }}
+                    </td>
+                    <td class="col-md-1 result-score">-</td>
+                    <td class="col-md-1 result-score">
+                        {{ form_errors(matchForm.scoreTeamB) }}
+                        {{ form_widget(matchForm.scoreTeamB, { 'attr':  {
+                            'class': 'form-control'
+                        }}) }}
+                    </td>
+                    <td class="col-md-2 result-teamB">
+                        <ol id="teamB-droppable" class="players-droppable">
+                        {% for matchPlayer in matchForm.matchPlayers %}
+                            {% if matchPlayer.team.vars.value == 'B' %}
+                                {{ form_widget(matchPlayer.player) }}
+                            {% endif %}
+                        {% endfor %}
+                        </ol>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="submit" class="btn btn-primary" value="{{ buttonLabel }}" />
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-offset-3">
+        
+    </div>
+</div>
+{{ form_end(matchForm) }}
+
+<script type="text/javascript">
+    jQuery(function($) {
+        $('#foot5x5_mainbundle_result_date_datepicker').datepicker({
+            //altFormat  : "yy-mm-dd",
+            //altField   : '#alternate',
+            dateFormat: 'yy-mm-dd',
+            selectOtherMonths: true,
+            showAnim: 'slide',
+            showOtherMonths: true
+        });
+    });
+</script>
+{#
+<script type="text/javascript">
+    $(function() {
+        $( "#players-sortable, #teamA-sortable, #teamB-sortable" ).sortable({
+            connectWith: ".players-sortable",
+            placeholder: "ui-sortable-placeholder" 
+        });
+    });
+</script>
+#}
+<script type="text/javascript">
+    $(function() {
+
+        $( init );
+        function init() {
+            var player = "";
+
+            // Boucle sur les 10 potentiels matchPlayers
+            for ( var i=0; i<10; i++ ) {
+                player = $("#matchPlayers_"+i).text().trim()
+                if (player == "") {
+                    // Désactiver le drag
+                    $("#matchPlayers_"+i).draggable("disable");
+                } else {
+                    // Mettre en surbrillance et cacher le joueur dans la liste à gauche
+                    $("#matchPlayers_"+i).addClass("ui-state-highlight");
+                    hidePlayer(player);
+                }
+            }
+        }
+
+        $( ".player-draggable" ).draggable({
+            // connectToSortable: ".players-sortable",
+            helper: "clone",
+            opacity: 0.7,
+            revert: "invalid",
+            // snap: ".player-droppable",
+            stack: ".player-draggable",
+            // zindex: 100
+        }).droppable({
+            accept: ".players-droppable dt.player-droppable",
+            activeClass: "custom-state-active",
+            drop: function( event, ui ) {
+                recyclePlayer( ui.draggable );
+            }
+        });
+        $( ".player-droppable" ).droppable({
+            activeClass: "ui-state-active",
+            hoverClass: "ui-state-hover",
+            /* accept: ":not(.ui-sortable-helper)", */
+            drop: handlePlayerDrop,
+            // out: handlePlayerOut
+        }).draggable({
+            helper: "clone",
+            opacity: 0.7,
+            // revert: "invalid",
+            start: handleStartDrag,
+            stop: handlePlayerOut,
+        });
+
+        function handlePlayerDrop(event, ui) {
+            // id de la zone de drop
+            var slotId = $(this).attr("id");
+            var playerNameBefore = $(this).text().trim();
+
+            // id de l'input hidden correspondant
+            var inputId = "#foot5x5_mainbundle_result_"+slotId+"_player";
+
+            // nom du joueur droppé
+            var playerName = ui.draggable.text().trim();
+
+            // Cacher le joueur dans la liste à gauche
+            hidePlayer(playerName);
+
+            // Mise à jour du nom du joueur dans la zone de drop
+            $(this).text(playerName);
+            // $(this).removeClass("ui-state-default");
+            $(this).addClass("ui-state-highlight");
+            $(this).draggable("enable");
+
+            // Mise à jour de la value de l'input hidden pour prise
+            // en compte lors de la soumission du formulaire
+            $(inputId).val(playerName);
+
+            if (playerNameBefore != "") {
+                // Réafficher le joueur dans la liste à gauche
+                showPlayer(playerNameBefore);
+            }
+        }
+
+        function handleStartDrag(event, ui) {
+            ui.helper.width(100);
+        }
+
+        function handlePlayerOut(event, ui) {
+            // alert($(this).text());
+            // alert(ui.draggable.text());
+            var player = $(this).text().trim();
+            var slotId = $(this).attr("id");
+            var inputId = "#foot5x5_mainbundle_result_"+slotId+"_player";
+
+            // Effacer le nom dans la zone matchPlayer
+            $(this).text("");
+            $(this).removeClass("ui-state-highlight");
+            $(this).draggable("disable");
+            $(inputId).val("");
+            ui.helper.remove();
+
+            // Réafficher le joueur dans la liste à gauche
+            showPlayer(player);
+        }
+
+        function hidePlayer(player) {
+            $(".player-draggable").each( function() {
+                if ($(this).text().trim() == player) {
+                    $(this).addClass("player-dropped");
+                }
+            });
+        }
+
+        function showPlayer(player) {
+            $(".player-draggable").each( function() {
+                if ($(this).text().trim() == player) {
+                    $(this).removeClass("player-dropped");
+                }
+            });
+        }
+
+    });
+</script>
+
+{% endblock %}

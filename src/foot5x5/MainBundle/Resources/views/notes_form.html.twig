@@ -1,0 +1,64 @@
+{% extends "foot5x5MainBundle::layout.html.twig" %}
+
+{% block title %}Notes {{ user.username }}{% endblock %}
+
+{% block content %}
+<div id="notes-container" class="col-md-6">
+    <h2><span class="label label-primary">Notes {{ user.username }}</span></h2>
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="alert alert-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {{ form_start(notesForm) }}
+    <table id="notes-table" class="table table-striped table-bordered table-condensed">
+        <thead class="bg-primary">
+            <tr>
+                <th class="col-md-2 notes-left-column">Nom</th>
+                <th class="col-md-1 notes-left-column">Att</th>
+                <th class="col-md-1 notes-left-column">Def</th>
+                <th class="col-md-1 notes-left-column">Phy</th>
+                <th class="col-md-1 notes-left-column">Moy</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for note in notesForm.notes %}
+            <tr>
+                <td class="col-md-2 notes-left-column">
+                    {{ form_widget(note.player, { 'attr':  {
+                        'class': 'form-control'
+                    }}) }}
+                </td>
+                <td class="col-md-1 notes-left-column">
+                    {{ form_errors(note.valAtt) }}
+                    {{ form_widget(note.valAtt, { 'attr':  {
+                        'class': 'form-control'
+                    }}) }}
+                </td>
+                <td class="col-md-1 notes-left-column">
+                    {{ form_errors(note.valDef) }}
+                    {{ form_widget(note.valDef, { 'attr':  {
+                        'class': 'form-control'
+                    }}) }}
+                </td>
+                <td class="col-md-1 notes-left-column">
+                    {{ form_errors(note.valPhy) }}
+                    {{ form_widget(note.valPhy, { 'attr':  {
+                        'class': 'form-control'
+                    }}) }}
+                </td>
+                <td class="col-md-1 notes-left-column">
+                    {{ form_widget(note.valAvg, { 'attr':  {
+                        'class': 'form-control'
+                    }}) }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary" value="Enregistrer" />
+    </div>
+    {{ form_end(notesForm) }}
+</div>
+{% endblock %}

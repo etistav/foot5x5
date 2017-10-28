@@ -1,0 +1,129 @@
+{% extends 'foot5x5MainBundle::layout.html.twig' %}
+{% set adminMenu = true %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h2 class="text-center">{{ block('title') }}</h2>
+{% for flashMessage in app.session.flashbag.get('success') %}
+<div class="alert alert-success">
+    {{ flashMessage }}
+</div>
+{% endfor %}
+{% if action == 'addUser' %}
+    {% if form_errors(userForm.password.first) %}
+    <div class="alert alert-danger">
+        {{ form_errors(userForm.password.first) }}
+    </div>
+    {% endif %}
+{% endif %}
+
+<div class="well">
+{{ form_start(userForm, { 'attr': {'class': 'form-horizontal'} }) }}
+    <div class="form-group">
+        {{ form_label(userForm.firstname, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-4">
+            {{ form_errors(userForm.firstname) }}
+            {{ form_widget(userForm.firstname, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(userForm.lastname, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-4">
+            {{ form_errors(userForm.lastname) }}
+            {{ form_widget(userForm.lastname, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(userForm.birthday, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-4">
+            {{ form_errors(userForm.birthday) }}
+            {{ form_widget(userForm.birthday, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(userForm.username, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-4">
+            {{ form_errors(userForm.username) }}
+            {{ form_widget(userForm.username, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    {% if action == 'addUser' %}
+    <div class="form-group">
+        {{ form_label(userForm.password.first, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-4">
+            {{ form_widget(userForm.password.first, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(userForm.password.second, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-4">
+            {{ form_widget(userForm.password.second, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    {% endif %}
+    <div class="form-group">
+        {{ form_label(userForm.roles, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-2">
+            {{ form_errors(userForm.roles) }}
+            {{ form_widget(userForm.roles, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(userForm.player, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="matchPlayers col-sm-2">
+            {{ form_errors(userForm.player) }}
+            {{ form_widget(userForm.player, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(userForm.file, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="matchPlayers col-sm-2">
+            {{ form_errors(userForm.file) }}
+            {{ form_widget(userForm.file, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-5 col-sm-3">
+            <input type="submit" class="btn btn-primary" value="{{ buttonLabel }}" />
+        </div>
+    </div>
+{{ form_end(userForm) }}
+</div>
+{% endblock %}

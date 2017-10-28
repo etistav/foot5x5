@@ -1,0 +1,169 @@
+{% extends "foot5x5MainBundle::layout.html.twig" %}
+
+{% block title %}Résultats T0{{ currentTrimester }} {{ currentYear }}{% endblock %}
+
+{% block content %}
+<div id="trim-form-container" class="col-md-12">
+    <h2><span class="label dark-blue-grad">T0{{ currentTrimester }} {{ currentYear }} Résultats</span></h2>
+    {% if trimesterForm is defined %}
+    <div class="well col-md-4">
+        {{ form_start(trimesterForm, { 'attr': {'class': 'form-inline'} }) }}
+        <div class="form-group">
+            {{ form_label(trimesterForm.stdCombo, null, { 'label_attr': { 'class': 'control-label' }}) }}
+            {{ form_errors(trimesterForm.stdCombo) }}
+            {{ form_widget(trimesterForm.stdCombo, { 'attr': { 'class': 'form-control' }}) }}
+            <button type="submit" class="btn btn-primary dark-blue-grad">Afficher</button>
+        </div>
+        {{ form_end(trimesterForm) }}
+    </div>
+    {% endif %}
+</div>
+
+{% if results %}
+<div id="results-container" class="col-md-12">
+    <div class="col-md-6">
+        {% for result in results %}
+        <table id="result-table" class="table table-bordered table-condensed">
+            <thead class="dark-blue-grad">
+                <tr>
+                    <th class="text-center" colspan="5">
+                    {% if result.num|length == 1 %}
+                        M0{{ result.num }}
+                    {% else %}
+                        M{{ result.num }}
+                    {% endif %}
+                    - {{ result.date|date('d/m/Y') }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="col-md-2 result-teamA">
+                        <dl>
+                        {% for matchPlayer in result.matchPlayers %}
+                            {% if matchPlayer.match.id == result.id and matchPlayer.team == "A" %}
+                            <a data-popup-open="popup-{{ matchPlayer.player.id }}" href="#">
+                                <dt class="well">
+                                    {% if matchPlayer.player.user is null %}
+                                        <img src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_40') }}" alt="profilePic_default.png" />
+                                    {% else %}
+                                        <img src="{{ matchPlayer.player.user.pictureWebPath | imagine_filter('avatar_40') }}" alt="{{ matchPlayer.player.user.profilePicture }}" />
+                                    {% endif %}
+                                    <span>{{ matchPlayer.player.name }}</span>
+                                </dt>
+                            </a>
+                            {% endif %}
+                        {% endfor %}
+                        </dl>
+                    </td>
+                    <td {% if result.scoreTeamA > result.scoreTeamB %} class="col-md-1 result-score result-victory" {% endif %}
+                        {% if result.scoreTeamA == result.scoreTeamB %} class="col-md-1 result-score result-draw" {% endif %}
+                        {% if result.scoreTeamA < result.scoreTeamB %} class="col-md-1 result-score result-defeat" {% endif %}>
+                        {{ result.scoreTeamA }}
+                    </td>
+                    <td class="col-md-1 result-score">-</td>
+                    <td {% if result.scoreTeamA > result.scoreTeamB %} class="col-md-1 result-score result-defeat" {% endif %}
+                        {% if result.scoreTeamA == result.scoreTeamB %} class="col-md-1 result-score result-draw" {% endif %}
+                        {% if result.scoreTeamA < result.scoreTeamB %} class="col-md-1 result-score result-victory" {% endif %}>
+                        {{ result.scoreTeamB }}
+                    </td>
+                    <td class="col-md-2 result-teamB">
+                        <dl>
+                        {% for matchPlayer in result.matchPlayers %}
+                            {% if matchPlayer.match.id == result.id and matchPlayer.team == "B" %}
+                            <a data-popup-open="popup-{{ matchPlayer.player.id }}" href="#">
+                                <dt class="well">
+                                    <span>{{ matchPlayer.player.name }}</span>
+                                    {% if matchPlayer.player.user is null %}
+                                        <img src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_40') }}" alt="profilePic_default.png" />
+                                    {% else %}
+                                        <img src="{{ matchPlayer.player.user.pictureWebPath | imagine_filter('avatar_40') }}" alt="{{ matchPlayer.player.user.profilePicture }}" />
+                                    {% endif %}
+                                </dt>
+                            </a>
+                            {% endif %}
+                        {% endfor %}
+                        </dl>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+    <div class="alert alert-warning">Aucun résultat trouvé pour le trimestre T0{{ currentTrimester }} {{ currentYear }}</div>
+{% endif %}
+
+{% for player in players %}
+<div class="popup" data-popup="popup-{{ player.id }}">
+    <div class="popup-inner popup-mini-inner">
+        <div class="popup-inner-scroll">
+            <div class="popup-player-header">
+                {% if player.user is null %}
+                    <img class="popup-player-pic" src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_200') }}" alt="{{ player.name }}" />
+                {% else %}
+                    <img class="popup-player-pic" src="{{ player.user.pictureWebPath | imagine_filter('avatar_200') }}" alt="{{ player.name }}" />
+                {% endif %}
+                <div class="popup-player-info">
+                    <h2><span>{{ player.name }}</span></h2>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td class="popup-player-label">Age :</td>
+                                {% if player.user is not null %}<td>{{ player.user.age }} ans</td>
+                                {% else %}<td>N.C.</td>
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                <td class="popup-player-label">Date de naissance :</td>
+                                {% if player.user is not null %}<td>{{ player.user.birthday|date('d/m/Y') }}</td>
+                                {% else %}<td>N.C.</td>
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                <td class="popup-player-label">Classement actuel :</td>
+                                <td>{{ ranks[player.id] }}</td>
+                            </tr>
+                            <tr>
+                                <td class="popup-player-label">Série en cours :</td>
+                                <td>{{ currentForms[player.id] }}
+                                {% if currentSeries[player.id] != "" %} ({{ currentSeries[player.id] }})
+                                {% else %}
+                                {% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td class="popup-player-label">Bilan complet :</td>
+                                <td>{{ globalResults[player.id] }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <a class="popup-close" data-popup-close="popup-{{ player.id }}" href="#">x</a>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<script>
+    $(function() {
+        //----- OPEN
+        $('[data-popup-open]').on('click', function(e)  {
+            var targeted_popup_class = jQuery(this).attr('data-popup-open');
+            $('[data-popup="' + targeted_popup_class + '"]').fadeIn(350);
+     
+            e.preventDefault();
+        });
+     
+        //----- CLOSE
+        $('[data-popup-close]').on('click', function(e)  {
+            var targeted_popup_class = jQuery(this).attr('data-popup-close');
+            $('[data-popup="' + targeted_popup_class + '"]').fadeOut(350);
+     
+            e.preventDefault();
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'foot5x5MainBundle::layout.html.twig' %}
+{% set adminMenu = true %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h2 class="text-center">{{ block('title') }}</h2>
+{% for flashMessage in app.session.flashbag.get('success') %}
+<div class="alert alert-success">
+    {{ flashMessage }}
+</div>
+{% endfor %}
+
+{% form_theme trnForm 'foot5x5MainBundle:Form:fields.html.twig' %}
+
+<div id="finances-form" class="well">
+{{ form_start(trnForm, { 'attr': {'class': 'form-horizontal'} }) }}
+    <div class="form-group">
+        {{ form_label(trnForm.date, null, { 'label_attr':  {
+            'class': 'col-md-5 control-label'
+        }}) }}
+        <div class="col-md-2 input-group date" id="datepicker">
+            {{ form_widget(trnForm.date, {attr: {
+                'class': 'form-control' },
+            }) }}
+            <label class="input-group-btn" for="foot5x5_mainbundle_transaction_date_datepicker">
+                <span class="btn btn-default">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(trnForm.giver, null, { 'label_attr':  {
+            'class': 'col-md-5 control-label'
+        }}) }}
+        <div class="col-md-3">
+            {{ form_errors(trnForm.giver) }}
+            {{ form_widget(trnForm.giver, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(trnForm.receiver, null, { 'label_attr':  {
+            'class': 'col-md-5 control-label'
+        }}) }}
+        <div class="col-md-3">
+            {{ form_errors(trnForm.receiver) }}
+            {{ form_widget(trnForm.receiver, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(trnForm.amount, null, { 'label_attr':  {
+            'class': 'col-md-5 control-label'
+        }}) }}
+        <div class="col-md-2">
+            {{ form_errors(trnForm.amount) }}
+            {{ form_widget(trnForm.amount, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-5 col-md-3">
+            <input type="submit" class="btn btn-primary" value="{{ buttonLabel }}" />
+        </div>
+    </div>
+{{ form_end(trnForm) }}
+</div>
+<script type="text/javascript">
+    jQuery(function($) {
+        $('#foot5x5_mainbundle_transaction_date_datepicker').datepicker({
+            //altFormat  : "yy-mm-dd",
+            //altField   : '#alternate',
+            dateFormat: 'yy-mm-dd',
+            selectOtherMonths: true,
+            showAnim: 'slide',
+            showOtherMonths: true
+        });
+    });
+</script>
+{% endblock %}

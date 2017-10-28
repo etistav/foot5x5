@@ -1,0 +1,76 @@
+{% extends "foot5x5MainBundle::layout.html.twig" %}
+
+{% block title %}Finances{% endblock %}
+
+{% block content %}
+
+<div id="finances-container" class="col-md-12 well">
+    {% if debts is defined %}
+    <div class="col-md-7">
+        <h3><span class="label">Bilan</span></h3>
+        <div class="col-md-6">
+            <table class="table table-striped table-bordered table-condensed">
+                <thead class="dark-blue-grad">
+                    <tr>
+                        <th class="text-center" colspan="2">Dettes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for player in debts %}
+                    <tr>
+                        <td>{{ player.name }}</td>
+                        <td class="col-md-4 text-center">{{ player.cashBalance }} €</td>
+                    </tr>
+                {% endfor %}
+                    <tr id="finances-totalDebts">
+                        <td>TOTAL :</td>
+                        <td class="col-md-4 text-center">{{ totalDebts.total }} €</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <table class="table table-striped table-bordered table-condensed">
+                <thead class="dark-blue-grad">
+                    <tr>
+                        <th class="text-center" colspan="2">Avoirs</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for player in credits %}
+                    <tr>
+                        <td>{{ player.name }}</td>
+                        <td class="col-md-4 text-center">{{ player.cashBalance }} €</td>
+                    </tr>
+                {% endfor %}
+                    <tr id="finances-totalCredits">
+                        <td>TOTAL :</td>
+                        <td class="col-md-4 text-center">{{ totalCredits.total }} €</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <h3><span class="label">Dernières Transactions</span></h3>
+        <table class="table table-striped table-bordered table-condensed">
+                <thead class="dark-blue-grad">
+                    <tr>
+                        <th class="col-md-3">Date</th>
+                        <th class="col-md-3">Donneur</th>
+                        <th class="col-md-3">Receveur</th>
+                        <th class="col-md-3 text-center">Montant</th>
+                    </tr>
+                </thead>
+                {% for tran in transactions %}
+                <tr>
+                    <td class="col-md-3">{{ tran.date|date('d/m/Y') }}</a></td>
+                    <td class="col-md-3">{{ tran.giver.name }}</a></td>
+                    <td class="col-md-3">{{ tran.receiver.name }}</a></td>
+                    <td class="col-md-3 text-center">{{ tran.amount }} €</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+    {% endif %}
+</div>
+{% endblock %}

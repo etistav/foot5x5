@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{{ asset('lib/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('lib/bootstrap/css/bootstrap-table.css') }}" rel="stylesheet">
+    <link href="{{ asset('lib/jquery/jquery-ui.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('lib/jquery/jquery-ui.structure.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('lib/jquery/jquery-ui.theme.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/foot5x5.css') }}" rel="stylesheet">
+    <title>Foot 5x5 - {% block title %}{% endblock %}</title>
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="{{ asset('lib/jquery/jquery-1.11.2.min.js') }}"></script>
+    <!-- jQuery UI -->
+    <script type="text/javascript" src="{{ asset('lib/jquery/jquery-ui-1.11.4.min.js') }}"></script>
+    <!-- JavaScript Boostrap plugin -->
+    <script type="text/javascript" src="{{ asset('lib/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('lib/bootstrap/js/bootstrap-table.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('lib/bootstrap/js/bootstrap-table-fr-FR.js') }}"></script>
+    <!-- CKEditor -->
+    <script type="text/javascript" src="{{ asset('ckeditor/ckeditor.js') }}"></script>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-custom navbar-fixed-top navbar-inverse dark-blue-grad" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-target">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-left" href="{{ path('foot5x5_main_homepage') }}"><img src="{{ 'logoFoot5x5_001d.png'  | imagine_filter('avatar_40') }}" alt="Foot5x5_logo" /></a>
+                </div>
+                <div class="collapse navbar-collapse" id="navbar-collapse-target">
+                    <ul class="nav navbar-nav">
+                        <li {% if app.request.attributes.get('_route') == 'foot5x5_main_homepage' %}class="active"{% endif %}>
+                            <a href="{{ path('foot5x5_main_homepage') }}">Home</a>
+                        </li>
+                        <li {% if app.request.attributes.get('_route') == 'results' %}class="active"{% endif %}>
+                            <a href="{{ path('results') }}">Résultats</a>
+                        </li>
+                        <li {% if app.request.attributes.get('_route') == 'standings' %}class="active"{% endif %}>
+                            <a href="{{ path('standings') }}">Classement</a>
+                        </li>
+                        <li {% if app.request.attributes.get('_route') == 'players' %}class="active"{% endif %}>
+                            <a href="{{ path('players') }}">Joueurs</a>
+                        </li>
+                        <li {% if app.request.attributes.get('_route') == 'random_draw' %}class="active"{% endif %}>
+                            <a href="{{ path('random_draw') }}">Tirage</a>
+                        </li>
+                        <li {% if app.request.attributes.get('_route') == 'finances' %}class="active"{% endif %}>
+                            <a href="{{ path('finances') }}">Finances</a>
+                        </li>
+                        {% if app.security.token and is_granted('ROLE_EVALUATOR') %}
+                        <li {% if app.request.attributes.get('_route') == 'notes' %}class="active"{% endif %}>
+                            <a href="{{ path('notes') }}"><span class="glyphicon glyphicon-cog"></span> Notes</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if app.security.token and is_granted('IS_AUTHENTICATED_FULLY') %}
+                            {% if app.security.token and is_granted('ROLE_ADMIN') %}
+                            <li class="{% if adminMenu is defined %}active{% endif %}">
+                                <a href="{{ path('admin_home') }}"><span class="glyphicon glyphicon-cog"></span> Administration</a>
+                            </li>
+                            {% endif %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-user"></span> Bienvenue, {{ app.security.token.user.username }} <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ path('myprofile') }}">Mon Profil</a></li>
+                                    <li><a href="{{ path('logout') }}">Déconnexion</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-user"></span> Non connecté <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ path('login') }}">Connexion</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div><!-- /.container -->
+        </nav>
+        <div id="content" class="container">{% block content %}{% endblock %}</div>
+        <div id="footer">
+            <div class="container">
+                <p class="navbar-text pull-left">Foot 5x5 - © Etienne AURAND, 2015</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

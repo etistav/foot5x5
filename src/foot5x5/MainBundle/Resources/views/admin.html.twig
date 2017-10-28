@@ -1,0 +1,347 @@
+{% extends "foot5x5MainBundle::layout.html.twig" %}
+{% set adminMenu = true %}
+
+{% block title %}Administration{% endblock %}
+
+{% block content %}
+<h2 class="text-center">{{ block('title') }}</h2>
+{% for flashMessage in app.session.flashbag.get('success') %}
+<div class="alert alert-success">
+    {{ flashMessage }}
+</div>
+{% endfor %}
+<div class="row">
+    <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+        <ul class="nav nav-tabs nav-justified">
+            <li {% if activeTab == 'results' %}class="active"{% endif %}><a href="#admin-results-panel" data-toggle="tab">Résultats</a></li>
+            <li {% if activeTab == 'standings' %}class="active"{% endif %}><a href="#admin-standings-panel" data-toggle="tab">Classements</a></li>
+            <li {% if activeTab == 'players' %}class="active"{% endif %}><a href="#admin-players-panel" data-toggle="tab">Joueurs</a></li>
+            <li {% if activeTab == 'users' %}class="active"{% endif %}><a href="#admin-users-panel" data-toggle="tab">Users</a></li>
+            <li {% if activeTab == 'finance' %}class="active"{% endif %}><a href="#admin-finances-panel" data-toggle="tab">Finances</a></li>
+        </ul>
+    </div>
+</div>
+<div class="tab-content">
+    
+    {% if activeTab == 'results' %}
+    <div class="tab-pane fade in active admin-panel" id="admin-results-panel">
+    {% else %}
+    <div class="tab-pane fade admin-panel" id="admin-results-panel">
+    {% endif %}
+        {% if trimesterForm is defined %}
+        <div id="admin-results-form" class="well col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+            {{ form_start(trimesterForm, { 'attr': {'class': 'form-horizontal'} }) }}
+            <div class="form-group">
+                {{ form_label(trimesterForm.stdCombo, null, { 'label_attr':  {
+                    'class': 'col-sm-3 col-md-3 control-label'
+                }}) }}
+                <div class="col-sm-4 col-md-4">
+                    {{ form_errors(trimesterForm.stdCombo) }}
+                    {{ form_widget(trimesterForm.stdCombo, { 'attr':  {
+                        'class': 'form-control'
+                    }}) }}
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <input type="submit" class="btn btn-primary dark-blue-grad" value="Afficher" />
+                </div>
+            </div>
+            {{ form_end(trimesterForm) }}
+        </div>
+        {% endif %}
+        <div class="admin-button-new col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+            <a href="{{ path('add_match') }}"><button type="button" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouveau match</button></a>
+        </div>
+        {% if results %}
+        <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+            <table class="table table-hover table-condensed">
+                <thead class="bg-primary dark-blue-grad">
+                    <tr>
+                        {#<th colspan="5">Liste des matchs du T0{{ currentTrimester }} {{ currentYear }}</th>#}
+                        <th class="col-md-1">N°Match</th>
+                        <th class="col-md-2">Date</th>
+                        <th class="col-md-2 admin-right-column"></th>
+                        <th class="col-md-1 admin-center-column">Score</th>
+                        <th class="col-md-2"></th>
+                        <th class="col-md-2 admin-center-column">Edit/Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in results %}
+                    <tr>
+                        <td class="col-md-1">M{{ result.num }}</td>
+                        <td class="col-md-2">{{ result.date|date('d/m/Y') }}</td>
+                        <td class="col-md-2 admin-right-column">EQUIPE A</td>
+                        <td class="col-md-1 admin-center-column">{{ result.scoreTeamA }}-{{ result.scoreTeamB }}</td>
+                        <td class="col-md-2">EQUIPE B</td>
+                        <td class="col-md-2 admin-center-column">
+                            <a href="{{ path('edit_match', {'id':result.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+                            <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#resultDialog{{ result.id }}"><span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                            <div class="modal fade" id="resultDialog{{ result.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="myModalLabel">Confirmation suppression match</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            Veux-tu vraiment supprimer le match du {{ result.date|date('d/m/Y') }} ?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                            <a href="{{ path('delete_match', {'id':result.id}) }}" class="btn btn-danger">Supprimer</a>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-warning">Aucun résultat trouvé pour le trimestre T0{{ currentTrimester }} {{ currentYear }}</div>
+        {% endif %}
+    </div>
+
+    {% if activeTab == 'standings' %}
+    <div class="tab-pane fade in active admin-panel" id="admin-standings-panel">
+    {% else %}
+    <div class="tab-pane fade admin-panel" id="admin-standings-panel">
+    {% endif %}
+        {% if standings %}
+        <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+            <table class="table table-hover table-condensed">
+                <thead class="bg-primary dark-blue-grad">
+                    <tr>
+                        <th class="col-md-2 admin-center-column">Année</th>
+                        <th class="col-md-2 admin-center-column">Trimestre</th>
+                        <th class="col-md-2 admin-center-column">Calculer</th>
+                        <th class="col-md-2 admin-center-column">Delete</th>
+                    </tr>
+                </thead>
+                {% for standing in standings %}
+                <tr>
+                    <td class="col-md-2 admin-center-column">{{ standing.year }}</td>
+                    <td class="col-md-2 admin-center-column"><a class="standingName" href="/standing/{{ standing.id }}">{{ standing.trimName }}</a></td>
+                    <td class="col-md-2 admin-center-column">
+                        <a href="{{ path('calc_standing', {'id':standing.id}) }}" class="btn btn-info btn-xs" title="Calculer"><span class="glyphicon glyphicon-refresh"></span></a>
+                    </td>
+                    <td class="col-md-2 admin-center-column">
+                        <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#standingDialog{{ standing.id }}"><span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <div class="modal fade" id="standingDialog{{ standing.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">Confirmation suppression classement</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Veux-tu vraiment supprimer le classement du T0{{ standing.trimester }} {{ standing.year }} ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                        <a href="{{ path('delete_standing', {'id':standing.id}) }}" class="btn btn-danger">Supprimer</a>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-warning">Aucun classement trouvé.</div>
+        {% endif %}
+    </div>
+
+    {% if activeTab == 'players' %}
+    <div class="tab-pane fade in active admin-panel" id="admin-players-panel">
+    {% else %}
+    <div class="tab-pane fade admin-panel" id="admin-players-panel">
+    {% endif %}
+        <div class="admin-button-new col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+            <a href="{{ path('add_player') }}"><button type="button" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouveau joueur</button></a>
+        </div>
+        {% if players %}
+        <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+            <table class="table table-hover table-condensed">
+                <thead class="bg-primary dark-blue-grad">
+                    <tr>
+                        <th class="col-md-2">Nom</th>
+                        <th class="col-md-1 admin-center-column">Att</th>
+                        <th class="col-md-1 admin-center-column">Def</th>
+                        <th class="col-md-1 admin-center-column">Phy</th>
+                        <th class="col-md-1 admin-center-column">Moy</th>
+                        <th class="col-md-2 admin-center-column">Edit/Delete</th>
+                        <th class="col-md-2 admin-center-column">Solde</th>
+                    </tr>
+                </thead>
+                {% for player in players %}
+                <tr>
+                    <td class="col-md-2"><a class="playerName" href="/player/{{ player.id }}">{{ player.name }}</a></td>
+                    <td class="col-md-1 admin-center-column">{{ player.valAtt|number_format(1, '.') }}</td>
+                    <td class="col-md-1 admin-center-column">{{ player.valDef|number_format(1, '.') }}</td>
+                    <td class="col-md-1 admin-center-column">{{ player.valPhy|number_format(1, '.') }}</td>
+                    <td class="col-md-1 admin-center-column">{{ player.valAvg|number_format(1, '.') }}</td>
+                    <td class="col-md-2 admin-center-column">
+                        <a href="{{ path('edit_player', {'id':player.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+                        <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#playerDialog{{ player.id }}"><span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <div class="modal fade" id="playerDialog{{ player.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">Confirmation suppression joueur</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Veux-tu vraiment supprimer le joueur {{ player.name }} ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                        <a href="{{ path('delete_player', {'id':player.id}) }}" class="btn btn-danger">Supprimer</a>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                    </td>
+                    <td class="col-md-2 admin-center-column">
+                        <a href="{{ path('update_player_balance', {'id':player.id, 'operation':'credit'}) }}" class="btn btn-success btn-xs" title="Plus"><span class="glyphicon glyphicon-plus"></span></a>
+                        <a href="{{ path('update_player_balance', {'id':player.id, 'operation':'debit'}) }}" class="btn btn-warning btn-xs" title="Minus"><span class="glyphicon glyphicon-minus"></span></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-warning">Aucun joueur trouvé.</div>
+        {% endif %}
+    </div>
+
+    {% if activeTab == 'users' %}
+    <div class="tab-pane fade in active admin-panel" id="admin-users-panel">
+    {% else %}
+    <div class="tab-pane fade admin-panel" id="admin-users-panel">
+    {% endif %}
+        <div class="admin-button-new col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+            <a href="{{ path('add_user') }}"><button type="button" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouvel utilisateur</button></a>
+        </div>
+        {% if users %}
+        <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+            <table class="table table-hover table-condensed">
+                <thead class="bg-primary dark-blue-grad">
+                    <tr>
+                        <th class="col-md-2">Username</th>
+                        <th class="col-md-2">Role</th>
+                        <th class="col-md-2">Joueur</th>
+                        <th class="col-md-2 admin-center-column">Edit/Delete</th>
+                    </tr>
+                </thead>
+                {% for user in users %}
+                <tr>
+                    <td class="col-md-2">{{ user.username }}</a></td>
+                    <td class="col-md-2">
+                        {% if 'ROLE_ADMIN' in user.roles %}
+                            Admin
+                        {% else %}
+                            {% if 'ROLE_EVALUATOR' in user.roles %}
+                                Evaluateur
+                            {% else %}
+                                Joueur
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td class="col-md-2">{{ user.player.name }}</td>
+                    <td class="col-md-2 admin-center-column">
+                        <a href="{{ path('edit_user', {'id':user.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+                        <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#userDialog{{ user.id }}"><span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <div class="modal fade" id="userDialog{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">Confirmation suppression utilisateur</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Veux-tu vraiment supprimer le user {{ user.username }} ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                        <a href="{{ path('delete_user', {'id':user.id}) }}" class="btn btn-danger">Supprimer</a>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-warning">Aucun utilisateur trouvé.</div>
+        {% endif %}
+    </div>
+
+    {% if activeTab == 'finance' %}
+    <div class="tab-pane fade in active admin-panel" id="admin-finances-panel">
+    {% else %}
+    <div class="tab-pane fade admin-panel" id="admin-finances-panel">
+    {% endif %}
+        <div class="admin-button-new col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+            <a href="{{ path('add_transaction') }}"><button type="button" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouvelle transaction</button></a>
+        </div>
+        {% if transactions %}
+        <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+            <table class="table table-hover table-condensed">
+                <thead class="bg-primary dark-blue-grad">
+                    <tr>
+                        <th class="col-md-2">Date</th>
+                        <th class="col-md-2">Donneur</th>
+                        <th class="col-md-2">Receveur</th>
+                        <th class="col-md-1">Montant</th>
+                        <th class="col-md-2 admin-center-column">Edit/Delete</th>
+                    </tr>
+                </thead>
+                {% for tran in transactions %}
+                <tr>
+                    <td class="col-md-2">{{ tran.date|date('d/m/Y') }}</a></td>
+                    <td class="col-md-2">{{ tran.giver.name }}</a></td>
+                    <td class="col-md-2">{{ tran.receiver.name }}</a></td>
+                    <td class="col-md-1">{{ tran.amount }} €</a></td>
+                    <td class="col-md-2 admin-center-column">
+                        <a href="{{ path('edit_transaction', {'id':tran.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+                        <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#tranDialog{{ tran.id }}"><span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <div class="modal fade" id="tranDialog{{ tran.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">Confirmation suppression transaction</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Veux-tu vraiment supprimer la transaction de {{ tran.amount }}€ entre {{ tran.giver.name }} et {{ tran.receiver.name }} ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                        <a href="{{ path('delete_transaction', {'id':tran.id}) }}" class="btn btn-danger">Supprimer</a>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-warning">Aucune transaction trouvée.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

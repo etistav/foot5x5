@@ -1,0 +1,44 @@
+{# src/foot5x5/MainBundle/Resources/views/Form/fields.html.twig #}
+
+{% block datePicker_widget %}
+    {% spaceless %}
+        {#<input type="text" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>#}
+        {% set attr = attr|merge({'class': ((attr.class|default('') ~ ' datepicker')|trim)}) %}
+        {% set  id = id ~ "_datepicker" %}
+        {#% set  full_name = "datepicker_" ~ full_name  %#}
+        <input type="text" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+        {#<input type="hidden" id="alternate"/>#}
+    {% endspaceless %}
+{% endblock datePicker_widget %}
+
+{#
+{% block playerDrop_widget %}
+    {% spaceless %}
+        {% set attr = attr|merge({'class': ((attr.class|default('') ~ ' player-droppable ui-state-default')|trim)}) %}
+        <li {{ block('widget_attributes') }}>{% if value is not empty %}{{ value }} {% endif %}</li>
+    {% endspaceless %}
+{% endblock playerDrop_widget %}
+#}
+
+
+{# id = foot5x5_mainbundle_result_matchPlayers_0_player #}
+{% block playerDrop_widget %}
+    {% spaceless %}
+        <li id="matchPlayers_{{ id|slice(39, 1) }}" class="player-droppable ui-state-default">{{ value }}</li>
+        <input type="hidden" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    {% endspaceless %}
+{% endblock playerDrop_widget %}
+
+
+{# id = foot5x5_mainbundle_note_valAtt _valDef _valPhy#}
+{% block sliderNote_widget %}
+    {% spaceless %}
+        {% set sliderId = id ~ "_slider" %}
+        <div class="col-sm-4 slider-div">
+            <div id="{{ sliderId }}" class="slider-note"></div>
+        </div>
+        <div class="col-sm-1">
+            <input type="text" id="{{ id }}" name="{{ id|slice(0, 23) }}[{{ name }}]" readonly required="required" class="form-control" rows="2" value="{{ value }}">
+        </div>
+    {% endspaceless %}
+{% endblock sliderNote_widget %}

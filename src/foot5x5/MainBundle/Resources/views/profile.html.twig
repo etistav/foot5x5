@@ -1,0 +1,47 @@
+{% extends "foot5x5MainBundle::layout.html.twig" %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block content %}
+
+<h2><span class="label dark-blue-grad">{{ user.firstname }} {{ user.lastname }}</span></h2>
+
+{% for flashMessage in app.session.flashbag.get('success') %}
+<div class="alert alert-success">
+    {{ flashMessage }}
+</div>
+{% endfor %}
+
+<div id="profile-container" class="col-md-12 well">
+	<div id="profile-pic">
+		<img src="{{ user.pictureWebPath | imagine_filter('avatar_200') }}" alt="{{ user.profilePicture }}" />
+		<a href="{{ path('edit_pwd') }}"><button type="button" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-cog"></span> Modifier mot de passe</button></a>
+	</div>
+	<div id="profile-info">
+		<h3><span class="label">Informations Générales</span></h3>
+		<p><span class="profile-info-label">Nom utilisateur : </span>{{ user.username }}</p>
+		<p><span class="profile-info-label">Date d'anniversaire : </span>{{ user.birthday|date('d/m/Y') }} ({{ user.age }} ans)</p>
+		<p><span class="profile-info-label">Rôle : </span>
+			{% if user.roles[0] == "ROLE_ADMIN" %}Administrateur
+			{% elseif user.roles[0] == "ROLE_EVALUATOR" %}Evaluateur
+			{% elseif user.roles[0] == "ROLE_USER" %}Joueur
+			{% endif %}
+		</p>
+		<p><span class="profile-info-label">Nom joueur : </span>{{ user.player.name }}</p>
+		
+		<h3><span class="label">Performances actuelles</span></h3>
+		<p><span class="profile-info-label">Classement : </span>{{ rank }}</p>
+		<p><span class="profile-info-label">Série en cours : </span>{{ currentForm }}</p>
+		<p><span class="profile-info-label">Dernier match : </span>{{ lastMatch.date|date('d/m/Y') }} {{ resultForPlayer }}</p>
+
+		<h3><span class="label">Statistiques Classement</span></h3>
+		<p><span class="profile-info-label">Meilleur classement : </span>{{ bestRank }}</p>
+		<p><span class="profile-info-label">Pire classement : </span>{{ worstRank }}</p>
+		<p><span class="profile-info-label">Nb fois champion du trimestre : </span>{{ nbTitles }}</p>
+		<p><span class="profile-info-label">Nb fois sur le podium du trimestre : </span>{{ nbPodiums }}</p>
+		<p><span class="profile-info-label">Nb fois relégué du trimestre : </span>{{ nbRelegations }}</p>
+		<p><span class="profile-info-label">Nb fois lanterne rouge du trimestre : </span>{{ nbTimesLast }}</p>
+	</div>
+</div>
+
+{% endblock %}

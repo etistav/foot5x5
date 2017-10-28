@@ -1,0 +1,84 @@
+{% extends "foot5x5MainBundle::layout.html.twig" %}
+{% set adminMenu = true %}
+
+{% block title %}Notes {{ user.username }}{% endblock %}
+
+{% block content %}
+
+<div id="notes-container" class="col-md-8">
+    <h2><span class="label dark-blue-grad">Mes notes</span></h2>
+    {% for flashMessage in app.session.flashbag.get('success') %}
+    <div class="alert alert-success">
+        {{ flashMessage }}
+    </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('warning') %}
+    <div class="alert alert-warning">
+        {{ flashMessage }}
+    </div>
+    {% endfor %}
+    {% if players %}
+    <div class="table-responsive">
+        <table data-toggle="table" class="table table-hover table-striped table-condensed" data-sort-name="name" data-sort-order="asc">
+            <thead>
+                <tr>
+                    <th data-field="name" data-sortable="true" class="col-md-2">Joueur</th>
+                    <th data-field="valAtt" data-sortable="true" class="col-md-1 text-center">Attaque</th>
+                    <th data-field="valDef" data-sortable="true" class="col-md-1 text-center">Défense</th>
+                    <th data-field="valPhy" data-sortable="true" class="col-md-1 text-center">Physique</th>
+                    <th data-field="valAvg" data-sortable="true" class="col-md-1 text-center">Moyenne</th>
+                    <th class="col-md-1 text-center">Modif.</th>
+                    <th class="col-md-1 text-center">Suppr.</th>
+                </tr>
+            </thead>
+            {% for player in players %}
+            <tr>
+                <td class="playerName">{{ player.name }}</td>
+                {% if player.notes|length > 0 %}
+                    {% for note in player.notes %}
+                    <td class="text-center">{{ note.valAtt|number_format(1, '.') }}</td>
+                    <td class="text-center">{{ note.valDef|number_format(1, '.') }}</td>
+                    <td class="text-center">{{ note.valPhy|number_format(1, '.') }}</td>
+                    <td class="text-center">{{ note.valAvg|number_format(1, '.') }}</td>
+                    {% endfor %}
+                {% else %}
+                    <td class="text-center">-</td>
+                    <td class="text-center">-</td>
+                    <td class="text-center">-</td>
+                    <td class="text-center">-</td>
+                {% endif %}
+                <td class="text-center">
+                    <a href="{{ path('edit_note', {'id':player.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+                </td>
+                <td>
+                    {% if player.notes|length > 0 %}
+                    <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#playerDialog{{ player.id }}"><span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                    <div class="modal fade" id="playerDialog{{ player.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="myModalLabel">Confirmation suppression note</h4>
+                                </div>
+                                <div class="modal-body">
+                                    Veux-tu vraiment supprimer tes notes pour {{ player.name }} ?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                    <a href="{{ path('delete_note', {'id':player.id}) }}" class="btn btn-danger">Supprimer</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-warning">Aucun joueur trouvé.</div>
+    {% endif %}
+</div>
+{% endblock %}

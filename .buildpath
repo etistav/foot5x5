@@ -76,11 +76,6 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/friendsofsymfony/user-bundle">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/imagine/imagine/lib">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
@@ -186,12 +181,42 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/symfony/symfony/src/Symfony/Bridge/Doctrine">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/symfony/symfony/src/Symfony/Bridge/Monolog">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/symfony/symfony/src/Symfony/Bridge/ProxyManager">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/symfony/symfony/src/Symfony/Bridge/Swiftmailer">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/symfony/symfony/src/Symfony/Bridge/Twig">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/symfony/symfony/src/Symfony/Bundle">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/symfony/symfony/src/Symfony/Component/HttpFoundation/Resources/stubs">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry excluding="Symfony/Component/HttpFoundation/Resources/stubs/|Symfony/Component/Intl/Resources/stubs/" kind="src" path="vendor/symfony/symfony/src">
+	<buildpathentry excluding="HttpFoundation/Resources/stubs/|Intl/Resources/stubs/" kind="src" path="vendor/symfony/symfony/src/Symfony/Component">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>

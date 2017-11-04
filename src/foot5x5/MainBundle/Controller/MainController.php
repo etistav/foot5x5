@@ -299,25 +299,23 @@ class MainController extends Controller
         }
 
         // Création du formulaire associé
-        $noteForm = $this->createForm(new NoteType(), $note);
+        $noteForm = $this->createForm(NoteType::class, $note);
 
-        if ($request->getMethod() == 'POST') {
-            $noteForm->submit($request);
-            if ($noteForm->isValid()) {
-                /// MAJ des notes du joueur pour l'utilisateur connecté
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($note);
-                $em->flush();
+        $noteForm->handleRequest($request);
+        if ($noteForm->isSubmitted() && $noteForm->isValid()) {
+        		// MAJ des notes du joueur pour l'utilisateur connecté
+        		$em = $this->getDoctrine()->getManager();
+        		$em->persist($note);
+        		$em->flush();
 
-                // MAJ des notes globales du joueur
-                $player = $notRepo->updateNotesPlayer($player);
-                $em->persist($player);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'Les notes de '.$player->getName().' ont bien été modifiées.');
-                return $this->redirect($this->generateUrl('notes'));
-            }
+        		// MAJ des notes globales du joueur
+        		$player = $notRepo->updateNotesPlayer($player);
+        		$em->persist($player);
+        		$em->flush();
+        	
+        		// Redirection sur la page d'admin avec gestion du message d'info
+        		$this->get('session')->getFlashBag()->add('success', 'Les notes de '.$player->getName().' ont bien été modifiées.');
+        		return $this->redirect($this->generateUrl('notes'));
         }
         return $this->render(
             'foot5x5MainBundle::note_form.html.twig',
@@ -517,7 +515,7 @@ class MainController extends Controller
         $user = $this->getUser();
 
         // Création du formulaire associé
-        $userPwdForm = $this->createForm(new UserPwdType(), $user);
+        $userPwdForm = $this->createForm(UserPwdType::class, $user);
 
         if ($request->getMethod() == 'POST') {
             $userPwdForm->submit($request);
@@ -566,7 +564,7 @@ class MainController extends Controller
         $formOptions = array(
         		"action" => "register"
         );
-        $userForm = $this->createForm(new UserType(), $user, $formOptions);
+        $userForm = $this->createForm(UserType::class, $user, $formOptions);
         $errors = array();
         
         // Handle the submit (will only happen on POST)

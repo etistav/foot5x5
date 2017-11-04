@@ -51,39 +51,39 @@
 </div>
 <script>
     $(function() {
-        $( "#foot5x5_mainbundle_note_valAtt_slider" ).slider({
+        $( "#note_valAtt_slider" ).slider({
             step: 0.5,
             min: 0,
             max: 10,
             range: "min",
-            value: $("#foot5x5_mainbundle_note_valAtt").val(),
+            value: $("#note_valAtt").val(),
             slide: function( event, ui ) {
-                $("#foot5x5_mainbundle_note_valAtt").val(ui.value);
+                $("#note_valAtt").val(ui.value);
             }
         });
-        $( "#foot5x5_mainbundle_note_valDef_slider" ).slider({
+        $( "#note_valDef_slider" ).slider({
             step: 0.5,
             min: 0,
             max: 10,
             range: "min",
-            value: $("#foot5x5_mainbundle_note_valDef").val(),
+            value: $("#note_valDef").val(),
             slide: function( event, ui ) {
-                $("#foot5x5_mainbundle_note_valDef").val(ui.value);
+                $("#note_valDef").val(ui.value);
             }
         });
-        $( "#foot5x5_mainbundle_note_valPhy_slider" ).slider({
+        $( "#note_valPhy_slider" ).slider({
             step: 0.5,
             min: 0,
             max: 10,
             range: "min",
-            value: $("#foot5x5_mainbundle_note_valPhy").val(),
+            value: $("#note_valPhy").val(),
             slide: function( event, ui ) {
-                $("#foot5x5_mainbundle_note_valPhy").val(ui.value);
+                $("#note_valPhy").val(ui.value);
             }
         });
-        $("#foot5x5_mainbundle_note_valAtt").val($("#foot5x5_mainbundle_note_valAtt_slider").slider("value"));
-        $("#foot5x5_mainbundle_note_valDef").val($("#foot5x5_mainbundle_note_valDef_slider").slider("value"));
-        $("#foot5x5_mainbundle_note_valPhy").val($("#foot5x5_mainbundle_note_valPhy_slider").slider("value"));
+        $("#note_valAtt").val($("#note_valAtt_slider").slider("value"));
+        $("#note_valDef").val($("#note_valDef_slider").slider("value"));
+        $("#note_valPhy").val($("#note_valPhy_slider").slider("value"));
     });
 </script>
 

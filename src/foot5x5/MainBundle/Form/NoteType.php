@@ -5,6 +5,7 @@ namespace foot5x5\MainBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use foot5x5\MainBundle\Form\Type\SliderNoteType;
 
 class NoteType extends AbstractType
 {
@@ -15,13 +16,13 @@ class NoteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('valAtt', 'sliderNote', array(
+            ->add('valAtt', SliderNoteType::class, array(
                 'label' => 'Note Attaque'
             ))
-            ->add('valDef', 'sliderNote', array(
+            ->add('valDef', SliderNoteType::class, array(
                 'label' => 'Note Défense'
             ))
-            ->add('valPhy', 'sliderNote', array(
+            ->add('valPhy', SliderNoteType::class, array(
                 'label' => 'Note Physique'
             ))
             // ->add('valDef', 'number', array(
@@ -51,13 +52,5 @@ class NoteType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'foot5x5\MainBundle\Entity\Note'
         ));
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'foot5x5_mainbundle_note';
     }
 }

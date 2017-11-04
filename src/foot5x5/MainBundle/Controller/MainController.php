@@ -83,21 +83,17 @@ class MainController extends Controller
             $trimNames[] = $trimName;
             $trimIds[] = $trimId;
         }
-        $trimNames = array_combine($trimIds, $trimNames);
+        $trimNames = array_combine($trimNames, $trimIds);
         $trimesterForm = $this->createFormBuilder()
             ->add('stdCombo', ChoiceType::class, array(
                 'choices' => $trimNames,
             		'choices_as_values' => true,
-            		'choice_label' => function($trimNames, $key, $index) {
-            			return $trimNames;
-            		},
                 'label' => 'Trimestre'
-                //'placeholder' => 'Choisir...'
             ))
             ->getForm();
-
-        if ($request->getMethod() == 'POST') {
-            $trimesterForm->submit($request);
+		
+		$trimesterForm->handleRequest($request);
+		if ($trimesterForm->isSubmitted()) {
             if ($trimesterForm->isValid()) {
                 $idTrimester = $trimesterForm->get('stdCombo')->getData();
                 $currentYear = substr($idTrimester, 0, 4);
@@ -155,32 +151,26 @@ class MainController extends Controller
         $idStanding = $lastStanding->getId();
         $standingsName = array();
         $standingsId = array();
+        $standingsNames = array();
         foreach ($standings as $standing) {
             $standingsName[] = $standing->getName();
             $standingsId[] = $standing->getId();
         }
-        $standingsName = array_combine($standingsId, $standingsName);
+        $standingsNames = array_combine($standingsName, $standingsId);
         $standingForm = $this->createFormBuilder()
             ->add('stdCombo', ChoiceType::class, array(
-            		'choices' => $standingsName,
+            		'choices' => $standingsNames,
             		'choices_as_values' => true,
-            		'choice_label' => function($standingsName, $key, $index) {
-            			return $standingsName;
-            		},
                 'label' => 'Choix'
-                //'placeholder' => 'Choisir...'
             ))
             ->getForm();
 
-        if ($request->getMethod() == 'POST') {
-            $standingForm->submit($request);
-            if ($standingForm->isValid()) {
-                $idStanding = $standingForm->get('stdCombo')->getData();
-            }
+        $standingForm->handleRequest($request);
+        if ($standingForm->isSubmitted() && $standingForm->isValid()) {
+        		$idStanding = $standingForm->get('stdCombo')->getData();
         }
         
         $standing = $stdRepo->find($idStanding);
-        //$rankings = $app['dao.ranking']->listAllByStanding($idStanding);
 
         return $this->render(
             'foot5x5MainBundle::standing.html.twig',

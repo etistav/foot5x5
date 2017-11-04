@@ -2,9 +2,6 @@
 
 namespace foot5x5\MainBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-
 use foot5x5\MainBundle\Entity\MatchPlayer;
 use foot5x5\MainBundle\Entity\Player;
 use foot5x5\MainBundle\Entity\Ranking;
@@ -17,6 +14,10 @@ use foot5x5\MainBundle\Form\ResultType;
 use foot5x5\MainBundle\Form\TransactionType;
 use foot5x5\UserBundle\Form\UserEditType;
 use foot5x5\UserBundle\Form\UserType;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\HttpFoundation\Request;
 
 class AdminController extends Controller
 {
@@ -63,8 +64,9 @@ class AdminController extends Controller
         }
         $trimNames = array_combine($trimIds, $trimNames);
         $trimesterForm = $this->createFormBuilder()
-            ->add('stdCombo', 'choice', array(
-                'choices' => $trimNames,
+            ->add('stdCombo', ChoiceType::class, array(
+            		'choices' => $trimNames,
+            		'choices_as_values' => true,
                 'label' => 'Trimestre'
                 //'placeholder' => 'Choisir...'
             ))

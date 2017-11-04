@@ -3,6 +3,7 @@
 namespace foot5x5\UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -25,12 +26,13 @@ class UserEditType extends AbstractType
                 'label' => 'Date de naissance'
             ))
             ->add('username', 'text')
-            ->add('roles', 'choice', array(
+            ->add('roles', ChoiceType::class, array(
                 'choices' => array(
                     'ROLE_ADMIN' => 'Admin',
                     'ROLE_EVALUATOR' => 'Evaluateur',
                     'ROLE_USER' => 'Player'
                 ),
+            		'choices_as_values' => true,
                 'required' => true,
                 'multiple' => true,
                 'expanded' => true

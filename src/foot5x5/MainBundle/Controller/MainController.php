@@ -2,14 +2,17 @@
 
 namespace foot5x5\MainBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
 use foot5x5\MainBundle\Entity\Note;
 use foot5x5\UserBundle\Entity\User;
 use foot5x5\MainBundle\Form\NoteType;
 use foot5x5\MainBundle\Form\RandomDrawType;
 use foot5x5\UserBundle\Form\UserType;
 use foot5x5\UserBundle\Form\UserPwdType;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class MainController extends Controller
 {
@@ -82,8 +85,9 @@ class MainController extends Controller
         }
         $trimNames = array_combine($trimIds, $trimNames);
         $trimesterForm = $this->createFormBuilder()
-            ->add('stdCombo', 'choice', array(
+            ->add('stdCombo', ChoiceType::class, array(
                 'choices' => $trimNames,
+            		'choices_as_values' => true,
                 'label' => 'Trimestre'
                 //'placeholder' => 'Choisir...'
             ))
@@ -154,8 +158,9 @@ class MainController extends Controller
         }
         $standingsName = array_combine($standingsId, $standingsName);
         $standingForm = $this->createFormBuilder()
-            ->add('stdCombo', 'choice', array(
-                'choices' => $standingsName,
+            ->add('stdCombo', ChoiceType::class, array(
+            		'choices' => $standingsName,
+            		'choices_as_values' => true,
                 'label' => 'Choix'
                 //'placeholder' => 'Choisir...'
             ))

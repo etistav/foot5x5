@@ -3,6 +3,7 @@
 namespace foot5x5\UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -63,12 +64,13 @@ class UserType extends AbstractType
     					'first_options'   => array('label' => 'Password'),
     					'second_options'  => array('label' => 'Repeat password'),
     			))
-    			->add('roles', 'choice', array(
+    			->add('roles', ChoiceType::class, array(
     					'choices' => array(
     							'ROLE_ADMIN' => 'Admin',
     							'ROLE_EVALUATOR' => 'Evaluateur',
     							'ROLE_USER' => 'Player'
     					),
+    					'choices_as_values' => true,
     					'required' => true,
     					'multiple' => true,
     					'expanded' => true

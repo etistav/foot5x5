@@ -27,11 +27,11 @@ class UserEditType extends AbstractType
             ))
             ->add('username', 'text')
             ->add('roles', ChoiceType::class, array(
-                'choices' => array(
-                    'ROLE_ADMIN' => 'Admin',
-                    'ROLE_EVALUATOR' => 'Evaluateur',
-                    'ROLE_USER' => 'Player'
-                ),
+            		'choices' => array(
+            			'Admin' => 'ROLE_ADMIN',
+            			'Evaluateur' => 'ROLE_EVALUATOR',
+            			'Player' => 'ROLE_USER',
+            		),
             		'choices_as_values' => true,
                 'required' => true,
                 'multiple' => true,
@@ -57,13 +57,5 @@ class UserEditType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'foot5x5\UserBundle\Entity\User'
         ));
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'foot5x5_userbundle_user';
     }
 }

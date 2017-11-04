@@ -66,9 +66,9 @@ class UserType extends AbstractType
     			))
     			->add('roles', ChoiceType::class, array(
     					'choices' => array(
-    							'ROLE_ADMIN' => 'Admin',
-    							'ROLE_EVALUATOR' => 'Evaluateur',
-    							'ROLE_USER' => 'Player'
+    						'Admin' => 'ROLE_ADMIN',
+    						'Evaluateur' => 'ROLE_EVALUATOR',
+    						'Player' => 'ROLE_USER',
     					),
     					'choices_as_values' => true,
     					'required' => true,

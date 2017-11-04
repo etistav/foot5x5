@@ -88,6 +88,9 @@ class MainController extends Controller
             ->add('stdCombo', ChoiceType::class, array(
                 'choices' => $trimNames,
             		'choices_as_values' => true,
+            		'choice_label' => function($trimNames, $key, $index) {
+            			return $trimNames;
+            		},
                 'label' => 'Trimestre'
                 //'placeholder' => 'Choisir...'
             ))
@@ -161,6 +164,9 @@ class MainController extends Controller
             ->add('stdCombo', ChoiceType::class, array(
             		'choices' => $standingsName,
             		'choices_as_values' => true,
+            		'choice_label' => function($standingsName, $key, $index) {
+            			return $standingsName;
+            		},
                 'label' => 'Choix'
                 //'placeholder' => 'Choisir...'
             ))
@@ -374,54 +380,52 @@ class MainController extends Controller
         $matchPlayers = array();
         $selectedPlayersList = array();
 
-        $randomDrawForm= $this->createForm(new RandomDrawType(), $players);
+        $randomDrawForm= $this->createForm(RandomDrawType::class, $players);
         
-        if ($request->getMethod() == 'POST') {
-            $randomDrawForm->submit($request);
-            if ($randomDrawForm->isValid()) {
-                $selectedPlayersString = $randomDrawForm->get('selectedPlayers')->getData();
-                $selectedPlayersList = explode(",", $selectedPlayersString);
-                $nbSelectedPlayers = count($selectedPlayersList);
-                if ($nbSelectedPlayers == 10) {
-                    $IsRandomOK = false;
-                    $nbDraw=0;
-                    $selectedPlayers = array();
-                    foreach ($selectedPlayersList as $selectedPlayerName) {
-                        $selectedPlayers[] = $plrRepo->findOneByName($selectedPlayerName);
-                    }
-                    while ((!$IsRandomOK) or ($nbDraw >= 10)) {
-                        $nbDraw++;
-                        $sumAvgTeamA = 0;
-                        $sumAvgTeamB = 0;
-                        $matchPlayers = $mplRepo->randomDraw($selectedPlayers);
-                        for ($i=0; $i < 10; $i++) {
-                            $team = $matchPlayers[$i]->getTeam();
-                            switch ($team) {
-                                case 'A':
-                                    $sumAvgTeamA += $matchPlayers[$i]->getPlayer()->getValAvg();
-                                    break;
-                                case 'B':
-                                    $sumAvgTeamB += $matchPlayers[$i]->getPlayer()->getValAvg();
-                                    break;
-                                default:
-                                    $this->get('session')->getFlashBag()->add('warning', 'Pas de team définie pour '.$matchPlayers[$i]->getPlayer()->getName());
-                                    break;
-                            }
-                        }
-                        if (abs($sumAvgTeamA-$sumAvgTeamB) <= 2) {
-                            $IsRandomOK = true;
-                        }
-                    }
-                    $this->get('session')->getFlashBag()->add('success', 'Tirage au sort effectué!');
-                } else {
-                    if ($nbSelectedPlayers > 10) {
-                        $this->get('session')->getFlashBag()->add('warning', 'Trop de joueurs sélectionnés : '.$nbSelectedPlayers);
-                    } else {
-                        $this->get('session')->getFlashBag()->add('warning', 'Nombre de joueurs sélectionnés insuffisant : '.$nbSelectedPlayers);
-                    }
-                }
-            }
-        }
+        $randomDrawForm->handleRequest($request);
+		if ($randomDrawForm->isSubmitted() && $randomDrawForm->isValid()) {
+			$selectedPlayersString = $randomDrawForm->get('selectedPlayers')->getData();
+			$selectedPlayersList = explode(",", $selectedPlayersString);
+			$nbSelectedPlayers = count($selectedPlayersList);
+			if ($nbSelectedPlayers == 10) {
+				$IsRandomOK = false;
+				$nbDraw=0;
+				$selectedPlayers = array();
+				foreach ($selectedPlayersList as $selectedPlayerName) {
+					$selectedPlayers[] = $plrRepo->findOneByName($selectedPlayerName);
+				}
+				while ((!$IsRandomOK) or ($nbDraw >= 10)) {
+					$nbDraw++;
+					$sumAvgTeamA = 0;
+					$sumAvgTeamB = 0;
+					$matchPlayers = $mplRepo->randomDraw($selectedPlayers);
+					for ($i=0; $i < 10; $i++) {
+						$team = $matchPlayers[$i]->getTeam();
+						switch ($team) {
+							case 'A':
+								$sumAvgTeamA += $matchPlayers[$i]->getPlayer()->getValAvg();
+								break;
+							case 'B':
+								$sumAvgTeamB += $matchPlayers[$i]->getPlayer()->getValAvg();
+								break;
+							default:
+								$this->get('session')->getFlashBag()->add('warning', 'Pas de team définie pour '.$matchPlayers[$i]->getPlayer()->getName());
+								break;
+						}
+					}
+					if (abs($sumAvgTeamA-$sumAvgTeamB) <= 2) {
+						$IsRandomOK = true;
+					}
+				}
+				$this->get('session')->getFlashBag()->add('success', 'Tirage au sort effectué!');
+			} else {
+				if ($nbSelectedPlayers > 10) {
+					$this->get('session')->getFlashBag()->add('warning', 'Trop de joueurs sélectionnés : '.$nbSelectedPlayers);
+				} else {
+					$this->get('session')->getFlashBag()->add('warning', 'Nombre de joueurs sélectionnés insuffisant : '.$nbSelectedPlayers);
+				}
+			}
+		}
 
         return $this->render(
             'foot5x5MainBundle::randomDraw.html.twig',

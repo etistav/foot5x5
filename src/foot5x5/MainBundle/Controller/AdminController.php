@@ -67,6 +67,9 @@ class AdminController extends Controller
             ->add('stdCombo', ChoiceType::class, array(
             		'choices' => $trimNames,
             		'choices_as_values' => true,
+            		'choice_label' => function($trimNames, $key, $index) {
+            			return $trimNames;
+            		},
                 'label' => 'Trimestre'
                 //'placeholder' => 'Choisir...'
             ))

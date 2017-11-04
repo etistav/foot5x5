@@ -13,6 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class MainController extends Controller
 {
+	/**
+	 * Management of the home page
+	 */
     public function indexAction() {
 
         $mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
@@ -54,7 +57,12 @@ class MainController extends Controller
 		);
     }
 
-    public function resultsAction() {
+    /**
+     * Management of the 'results' view
+     *
+     * @param Request $request
+     */
+    public function resultsAction(Request $request) {
 
         $mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
@@ -81,7 +89,6 @@ class MainController extends Controller
             ))
             ->getForm();
 
-        $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
             $trimesterForm->submit($request);
             if ($trimesterForm->isValid()) {
@@ -128,7 +135,12 @@ class MainController extends Controller
         );
     }
 
-    public function standingsAction() {
+    /**
+     * Management of the 'standings' view
+     *
+     * @param Request $request
+     */
+    public function standingsAction(Request $request) {
 
         $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
         $standings = $stdRepo->findAll();
@@ -149,7 +161,6 @@ class MainController extends Controller
             ))
             ->getForm();
 
-        $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
             $standingForm->submit($request);
             if ($standingForm->isValid()) {
@@ -170,6 +181,9 @@ class MainController extends Controller
         );
     }
 
+    /**
+     * Management of the 'players' view
+     */
     public function playersAction() {
         $mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
@@ -233,6 +247,9 @@ class MainController extends Controller
         );
     }
 
+    /**
+     * Management of the 'notes' view
+     */
     public function notesAction() {
 
         $user = $this->getUser();
@@ -248,7 +265,13 @@ class MainController extends Controller
         );
     }
 
-    public function editNoteAction($id) {
+    /**
+     * Management of the 'edit notes' view
+     *
+     * @param Request $request
+     * @param integer $id id du joueur modifié
+     */
+    public function editNoteAction(Request $request, $id) {
 
         $user = $this->getUser();
         $notRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Note');
@@ -267,7 +290,6 @@ class MainController extends Controller
         // Création du formulaire associé
         $noteForm = $this->createForm(new NoteType(), $note);
 
-        $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
             $noteForm->submit($request);
             if ($noteForm->isValid()) {
@@ -297,6 +319,11 @@ class MainController extends Controller
         );
     }
 
+    /**
+     * Handle the removal of players' notes
+     *
+     * @param integer $id id du joueur modifié
+     */
     public function deleteNoteAction($id) {
         $user = $this->getUser();
         $notRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Note');
@@ -329,7 +356,12 @@ class MainController extends Controller
         return $this->redirect($this->generateUrl('notes'));
     }
 
-    public function randomDrawAction() {
+    /**
+     * Management of the 'random draw' view
+     *
+     * @param Request $request
+     */
+    public function randomDrawAction(Request $request) {
     
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
@@ -339,7 +371,6 @@ class MainController extends Controller
 
         $randomDrawForm= $this->createForm(new RandomDrawType(), $players);
         
-        $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
             $randomDrawForm->submit($request);
             if ($randomDrawForm->isValid()) {
@@ -399,6 +430,9 @@ class MainController extends Controller
         );
     }
 
+    /**
+     * Management of the 'finance' view
+     */
     public function financesAction() {
 
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
@@ -421,6 +455,9 @@ class MainController extends Controller
         );
     }
 
+    /**
+     * Management of the 'user profile' view
+     */
     public function profileAction() {
         
         $user = $this->getUser();
@@ -462,13 +499,17 @@ class MainController extends Controller
         );
     }
 
-    public function editPwdAction() {
+    /**
+     * Management of the 'edit password' view
+     *
+     * @param Request $request
+     */
+    public function editPwdAction(Request $request) {
         $user = $this->getUser();
 
         // Création du formulaire associé
         $userPwdForm = $this->createForm(new UserPwdType(), $user);
 
-        $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
             $userPwdForm->submit($request);
             if ($userPwdForm->isValid()) {
@@ -503,7 +544,12 @@ class MainController extends Controller
             )
         );
     }
-    
+
+    /**
+     * Management of the 'register' view
+     *
+     * @param Request $request
+     */
     public function registerAction(Request $request) {
     	
         // Build the form
@@ -553,7 +599,10 @@ class MainController extends Controller
     			)
     		);
     }
-    
+
+    /**
+     * Management of the 'welcome' view
+     */
     public function welcomeAction() {
     	
     		return $this->render(

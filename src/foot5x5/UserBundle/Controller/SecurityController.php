@@ -5,17 +5,22 @@ namespace foot5x5\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Request;
 
 class SecurityController extends Controller
 {
-    public function loginAction() {
+	/**
+	 * Handle the 'login' view
+	 *
+	 * @param Request $request
+	 */
+    public function loginAction(Request $request) {
 
         // Si le visiteur est déjà identifié, on le redirige vers la page d'accueil
         if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirect($this->generateUrl('foot5x5_main_homepage'));
         }
-
-        $request = $this->getRequest();
+        
         $session = $request->getSession();
 
         // Vérification d'éventuelles erreurs lors d'une précédente soumission du formulaire

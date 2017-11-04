@@ -3,6 +3,7 @@
 namespace foot5x5\MainBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 use foot5x5\MainBundle\Entity\MatchPlayer;
 use foot5x5\MainBundle\Entity\Player;
@@ -20,10 +21,11 @@ use foot5x5\UserBundle\Form\UserType;
 class AdminController extends Controller
 {
     /**
-     * Contrôleur pour la gestion de la page d'administration
+     * Management of the admin home page
      * 
+     * @param Request $request
      */
-    public function indexAction() {
+    public function indexAction(Request $request) {
 
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
@@ -32,7 +34,7 @@ class AdminController extends Controller
         $usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
 
         // Gestion de l'onglet actif en session et réinitialisation
-        $session = $this->getRequest()->getSession();
+        $session = $request->getSession();
         if ($session->get('activeTab') == '') {
             $activeTab = 'results';
         } else {
@@ -68,7 +70,6 @@ class AdminController extends Controller
             ))
             ->getForm();
 
-        $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
             $trimesterForm->submit($request);
             if ($trimesterForm->isValid()) {
@@ -106,15 +107,16 @@ class AdminController extends Controller
      ***********************************/
 
     /**
-     * Contrôleur pour l'action de création d'un nouveau match.
+     * Management of the 'add match' view
      * 
+     * @param Request $request
      */
-    public function addMatchAction() {
+    public function addMatchAction(Request $request) {
         $match = new Result();
 
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
-        $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
+        // $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
 
         $players = $plrRepo->findAll();
         $matchPlayerA = array();
@@ -139,7 +141,6 @@ class AdminController extends Controller
         // Création du formulaire associé
         $matchForm = $this->createForm(new ResultType(), $match);
 
-        $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
             $matchForm->submit($request);
             if ($matchForm->isValid()) {
@@ -150,7 +151,7 @@ class AdminController extends Controller
                 $match->setNum($matchNum);
 
                 // Création d'un classement pour le trimestre si besoin
-                $isStandingCreated = $stdRepo->initializeStanding($match->getYear(), $match->getTrimester());
+                // $isStandingCreated = $stdRepo->initializeStanding($match->getYear(), $match->getTrimester());
 
                 // Ecriture du match en BDD
                 $em = $this->getDoctrine()->getManager();
@@ -181,11 +182,12 @@ class AdminController extends Controller
     }
 
     /**
-     * Contrôleur pour l'action de modification d'un match.
+     * Management of the 'edit match' view
      *
+     * @param Request $request
      * @param integer $id match id
      */
-    public function editMatchAction($id) {
+    public function editMatchAction(Request $request, $id) {
 
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
@@ -195,7 +197,7 @@ class AdminController extends Controller
         $dateEditedMatch = $match->getDate()->format('d/m/Y');
         $matchForm = $this->createForm(new ResultType(), $match);
 
-        $request = $this->get('request');
+
         if ($request->getMethod() == 'POST') {
             $matchForm->submit($request);
             if ($matchForm->isValid()) {
@@ -227,7 +229,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Contrôleur pour l'action de suppression d'un match.
+     * Handle the removal of a match
      *
      * @param integer $id match id
      */
@@ -256,7 +258,7 @@ class AdminController extends Controller
      ***********************************/
 
     /**
-     * Contrôleur pour l'action de calcul d'un classement.
+     * Handle the calculation of a standing
      *
      * @param integer $id Standing id
      */
@@ -354,16 +356,16 @@ class AdminController extends Controller
      ***********************************/
 
     /**
-     * Contrôleur pour l'action de création d'un nouveau joueur.
+     * Management of the 'add player' view
      * 
+     * @param Request $request
      */
-    public function addPlayerAction() {
+    public function addPlayerAction(Request $request) {
         $player = new Player();
 
         // Création du formulaire associé
         $playerForm = $this->createForm(new PlayerType(), $player);
 
-        $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
             $playerForm->submit($request);
             if ($playerForm->isValid()) {
@@ -390,18 +392,18 @@ class AdminController extends Controller
     }
 
     /**
-     * Contrôleur pour l'action de modification d'un joueur.
+     * Management of the 'edit match' view
      *
+     * @param Request $request
      * @param integer $id Player id
      */
-    public function editPlayerAction($id) {
+    public function editPlayerAction(Request $request, $id) {
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $player = $plrRepo->find($id);
 
         // Création du formulaire associé
         $playerForm = $this->createForm(new PlayerType(), $player);
 
-        $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
             $playerForm->submit($request);
             if ($playerForm->isValid()) {
@@ -428,7 +430,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Contrôleur pour l'action de suppression d'un joueur.
+     * Handle the removal of a player
      *
      * @param integer $id Player id
      */
@@ -453,7 +455,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Contrôleur pour la mise à jour du solde d'un joueur.
+     * Contrôller to handle the update of one player's balance
      *
      * @param integer $id Player id
      * @param string $operation 'credit' or 'debit'
@@ -493,16 +495,16 @@ class AdminController extends Controller
      ***********************************/
 
     /**
-     * Contrôleur pour l'action de création d'un nouvel utilisateur.
+     * Management of the 'add user' view
      * 
+     * @param Request $request
      */
-    public function addUserAction() {
+    public function addUserAction(Request $request) {
         $user = new User();
 
         // Création du formulaire associé
         $userForm = $this->createForm(new UserType(), $user);
 
-        $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
             $userForm->submit($request);
             if ($userForm->isValid()) {
@@ -541,18 +543,18 @@ class AdminController extends Controller
     }
 
     /**
-     * Contrôleur pour l'action de modification d'un utilisateur.
+     * Management of the 'edit user' view
      *
+     * @param Request $request
      * @param integer $id User id
      */
-    public function editUserAction($id) {
+    public function editUserAction(Request $request, $id) {
         $usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
         $user = $usrRepo->find($id);
 
         // Création du formulaire associé
         $userForm = $this->createForm(new UserEditType(), $user);
 
-        $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
             $userForm->submit($request);
             if ($userForm->isValid()) {
@@ -581,7 +583,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Contrôleur pour l'action de suppression d'un utilisateur.
+     * Handle the removal of a user
      *
      * @param integer $id User id
      */
@@ -607,16 +609,16 @@ class AdminController extends Controller
      ***********************************/
 
     /**
-     * Contrôleur pour l'action de création d'un nouvel transaction.
+     * Management of the 'add transaction' view
      * 
+     * @param Request $request
      */
-    public function addTransactionAction() {
+    public function addTransactionAction(Request $request) {
         $transaction = new Transaction();
 
         // Création du formulaire associé
         $trnForm = $this->createForm(new TransactionType(), $transaction);
 
-        $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
             $trnForm->submit($request);
             if ($trnForm->isValid()) {
@@ -655,11 +657,12 @@ class AdminController extends Controller
     }
 
     /**
-     * Contrôleur pour l'action de modification d'un transaction.
+     * Management of the 'edit transaction' view
      *
+     * @param Request $request
      * @param integer $id Transaction id
      */
-    public function editTransactionAction($id) {
+    public function editTransactionAction(Request $request, $id) {
         $trnRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Transaction');
         $transaction = $trnRepo->find($id);
         $previousAmount = $transaction->getAmount();
@@ -667,7 +670,6 @@ class AdminController extends Controller
         // Création du formulaire associé
         $trnForm = $this->createForm(new TransactionType(), $transaction);
 
-        $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
             $trnForm->submit($request);
             if ($trnForm->isValid()) {
@@ -705,7 +707,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Contrôleur pour l'action de suppression d'une transaction.
+     * Handle the removal of a transaction
      *
      * @param integer $id Transaction id
      */

@@ -56,22 +56,22 @@
                         <li {% if app.request.attributes.get('_route') == 'finances' %}class="active"{% endif %}>
                             <a href="{{ path('finances') }}">Finances</a>
                         </li>
-                        {% if app.security.token and is_granted('ROLE_EVALUATOR') %}
+                        {% if app.user and is_granted('ROLE_EVALUATOR') %}
                         <li {% if app.request.attributes.get('_route') == 'notes' %}class="active"{% endif %}>
                             <a href="{{ path('notes') }}"><span class="glyphicon glyphicon-cog"></span> Notes</a>
                         </li>
                         {% endif %}
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        {% if app.security.token and is_granted('IS_AUTHENTICATED_FULLY') %}
-                            {% if app.security.token and is_granted('ROLE_ADMIN') %}
+                        {% if app.user and is_granted('IS_AUTHENTICATED_FULLY') %}
+                            {% if app.user and is_granted('ROLE_ADMIN') %}
                             <li class="{% if adminMenu is defined %}active{% endif %}">
                                 <a href="{{ path('admin_home') }}"><span class="glyphicon glyphicon-cog"></span> Administration</a>
                             </li>
                             {% endif %}
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-user"></span> Bienvenue, {{ app.security.token.user.username }} <b class="caret"></b></a>
+                                <span class="glyphicon glyphicon-user"></span> Bienvenue, {{ app.user.username }} <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ path('myprofile') }}">Mon Profil</a></li>
                                     <li><a href="{{ path('logout') }}">Déconnexion</a></li>

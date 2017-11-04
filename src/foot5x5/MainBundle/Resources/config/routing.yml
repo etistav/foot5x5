@@ -1,115 +1,157 @@
 foot5x5_main_homepage:
     path:     /
-    defaults: { _controller: foot5x5MainBundle:Main:index }
+    defaults:
+        _controller: foot5x5MainBundle:Main:index
 
 login:
     path:     /login
-    defaults: { _controller: foot5x5MainBundle:Main:login }
+    defaults:
+        _controller: foot5x5MainBundle:Main:login
+
+register:
+    path:     /register
+    defaults:
+        _controller: foot5x5MainBundle:Main:register
+
+register_check:
+    path:     /register_check
+
+welcome:
+    path:     /welcome
+    defaults:
+        _controller: foot5x5MainBundle:Main:welcome
 
 myprofile:
     path:     /profile
-    defaults: { _controller: foot5x5MainBundle:Main:profile }
+    defaults:
+        _controller: foot5x5MainBundle:Main:profile
 
 edit_pwd:
     path:     /profile/edit_pwd
-    defaults: { _controller: foot5x5MainBundle:Main:editPwd }
+    defaults:
+        _controller: foot5x5MainBundle:Main:editPwd
 
 results:
     path:     /results
-    defaults: { _controller: foot5x5MainBundle:Main:results }
+    defaults:
+        _controller: foot5x5MainBundle:Main:results
 
 standing:
     path:     /standing/{id}
-    defaults: { _controller: foot5x5MainBundle:Main:standing }
+    defaults:
+        _controller: foot5x5MainBundle:Main:standing
 
 standings:
     path:     /standings
-    defaults: { _controller: foot5x5MainBundle:Main:standings }
+    defaults:
+        _controller: foot5x5MainBundle:Main:standings
 
 players:
     path:     /players
-    defaults: { _controller: foot5x5MainBundle:Main:players }
+    defaults:
+        _controller: foot5x5MainBundle:Main:players
 
 notes:
     path:     /notes
-    defaults: { _controller: foot5x5MainBundle:Main:notes }
+    defaults:
+        _controller: foot5x5MainBundle:Main:notes
 
 edit_note:
     path:     /note/{id}/edit
-    defaults: { _controller: foot5x5MainBundle:Main:editNote }
+    defaults:
+        _controller: foot5x5MainBundle:Main:editNote
 
 delete_note:
     path:     /note/{id}/delete
-    defaults: { _controller: foot5x5MainBundle:Main:deleteNote }
+    defaults:
+        _controller: foot5x5MainBundle:Main:deleteNote
 
 random_draw:
     path:     /random
-    defaults: { _controller: foot5x5MainBundle:Main:randomDraw }
+    defaults:
+        _controller: foot5x5MainBundle:Main:randomDraw
 
 finances:
     path:     /finances
-    defaults: { _controller: foot5x5MainBundle:Main:finances }
+    defaults:
+        _controller: foot5x5MainBundle:Main:finances
 
 admin_home:
     path:     /admin
-    defaults: { _controller: foot5x5MainBundle:Admin:index }
+    defaults:
+        _controller: foot5x5MainBundle:Admin:index
 
 add_match:
     path:     /admin/match/add
-    defaults: { _controller: foot5x5MainBundle:Admin:addMatch }
+    defaults:
+        _controller: foot5x5MainBundle:Admin:addMatch
 
 edit_match:
     path:     /admin/match/{id}/edit
-    defaults: { _controller: foot5x5MainBundle:Admin:editMatch }
+    defaults:
+        _controller: foot5x5MainBundle:Admin:editMatch
 
 delete_match:
     path:     /admin/match/{id}/delete
-    defaults: { _controller: foot5x5MainBundle:Admin:deleteMatch }
+    defaults:
+        _controller: foot5x5MainBundle:Admin:deleteMatch
 
 calc_standing:
     path:     /admin/standing/{id}/calc
-    defaults: { _controller: foot5x5MainBundle:Admin:calcStanding }
+    defaults:
+        _controller: foot5x5MainBundle:Admin:calcStanding
 
 delete_standing:
     path:     /admin/standing/{id}/delete
-    defaults: { _controller: foot5x5MainBundle:Admin:deleteStanding }
+    defaults:
+        _controller: foot5x5MainBundle:Admin:deleteStanding
 
 add_player:
     path:     /admin/player/add
-    defaults: { _controller: foot5x5MainBundle:Admin:addPlayer }
+    defaults:
+        _controller: foot5x5MainBundle:Admin:addPlayer
 
 edit_player:
     path:     /admin/player/{id}/edit
-    defaults: { _controller: foot5x5MainBundle:Admin:editPlayer }
+    defaults:
+        _controller: foot5x5MainBundle:Admin:editPlayer
 
 delete_player:
     path:     /admin/player/{id}/delete
-    defaults: { _controller: foot5x5MainBundle:Admin:deletePlayer }
+    defaults:
+        _controller: foot5x5MainBundle:Admin:deletePlayer
 
 update_player_balance:
     path:     /admin/player/{id}/{operation}
-    defaults: { _controller: foot5x5MainBundle:Admin:updatePlayerBalance }
+    defaults:
+        _controller: foot5x5MainBundle:Admin:updatePlayerBalance
 
 add_user:
     path:     /admin/user/add
-    defaults: { _controller: foot5x5MainBundle:Admin:addUser }
+    defaults:
+        _controller: foot5x5MainBundle:Admin:addUser
 
 edit_user:
     path:     /admin/user/{id}/edit
-    defaults: { _controller: foot5x5MainBundle:Admin:editUser }
+    defaults:
+        _controller: foot5x5MainBundle:Admin:editUser
 
 delete_user:
     path:     /admin/user/{id}/delete
-    defaults: { _controller: foot5x5MainBundle:Admin:deleteUser }
+    defaults:
+        _controller: foot5x5MainBundle:Admin:deleteUser
 
 add_transaction:
     path:     /admin/transaction/add
-    defaults: { _controller: foot5x5MainBundle:Admin:addTransaction }
+    defaults:
+        _controller: foot5x5MainBundle:Admin:addTransaction
 
 edit_transaction:
     path:     /admin/transaction/{id}/edit
-    defaults: { _controller: foot5x5MainBundle:Admin:editTransaction }
+    defaults:
+        _controller: foot5x5MainBundle:Admin:editTransaction
 
 delete_transaction:
     path:     /admin/transaction/{id}/delete
-    defaults: { _controller: foot5x5MainBundle:Admin:deleteTransaction }
+    defaults:
+        _controller: foot5x5MainBundle:Admin:deleteTransaction

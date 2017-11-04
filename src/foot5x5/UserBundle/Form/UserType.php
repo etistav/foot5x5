@@ -4,7 +4,7 @@ namespace foot5x5\UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserType extends AbstractType
 {
@@ -14,50 +14,81 @@ class UserType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('firstname', 'text', array(
-                'label' => 'Prénom'
-            ))
-            ->add('lastname', 'text', array(
-                'label' => 'Nom'
-            ))
-            ->add('birthday', 'birthday', array(
-                'label' => 'Date de naissance'
-            ))
-            ->add('username', 'text')
-            ->add('password', 'repeated', array(
-                'type'            => 'password',
-                'invalid_message' => 'The password fields must match.',
-                'options'         => array('required' => true),
-                'first_options'   => array('label' => 'Password'),
-                'second_options'  => array('label' => 'Repeat password'),
-            ))
-            ->add('roles', 'choice', array(
-                'choices' => array(
-                    'ROLE_ADMIN' => 'Admin',
-                    'ROLE_EVALUATOR' => 'Evaluateur',
-                    'ROLE_USER' => 'Player'
-                ),
-                'required' => true,
-                'multiple' => true,
-                'expanded' => true
-            ))
-            ->add('player', 'entity', array(
-                'class' => 'foot5x5MainBundle:Player',
-                'property' => 'name',
-                'multiple' => false
-            ))
-            ->add('file', 'file', array(
-                'label' => 'Photo de profil',
-                'required' => false
-            ))
-        ;
+    		if ($options['action'] = "register") {
+    			$builder
+    			->add('firstname', 'text', array(
+    					'label' => 'Prénom'
+    			))
+    			->add('lastname', 'text', array(
+    					'label' => 'Nom'
+    			))
+    			->add('username', 'text')
+    			->add('email', 'email')
+    			->add('password', 'repeated', array(
+    					'type'            => 'password',
+    					'invalid_message' => 'The password fields must match.',
+    					'options'         => array('required' => true),
+    					'first_options'   => array('label' => 'Password'),
+    					'second_options'  => array('label' => 'Repeat password'),
+    			))
+    			->add('birthday', 'birthday', array(
+    					'label' => 'Date de naissance',
+    					'widget' => 'choice',
+    					'placeholder' => array(
+    							'year' => 'yyyy', 'month' => 'mm', 'day' => 'dd',
+    					),
+    					'format' => 'dd/MM/yyyy',
+    					'years' => range(date('Y'), date('Y')-70)
+    			));
+    		} else {
+    			$builder
+    			->add('firstname', 'text', array(
+    					'label' => 'Prénom'
+    			))
+    			->add('lastname', 'text', array(
+    					'label' => 'Nom'
+    			))
+    			->add('birthday', 'birthday', array(
+    				'label' => 'Date de naissance',
+				'placeholder' => array(
+						'year' => 'Year', 'month' => 'Month', 'day' => 'Day',
+				)
+    			))
+    			->add('username', 'text')
+    			->add('email', 'text')
+    			->add('password', 'repeated', array(
+    					'type'            => 'password',
+    					'invalid_message' => 'The password fields must match.',
+    					'options'         => array('required' => true),
+    					'first_options'   => array('label' => 'Password'),
+    					'second_options'  => array('label' => 'Repeat password'),
+    			))
+    			->add('roles', 'choice', array(
+    					'choices' => array(
+    							'ROLE_ADMIN' => 'Admin',
+    							'ROLE_EVALUATOR' => 'Evaluateur',
+    							'ROLE_USER' => 'Player'
+    					),
+    					'required' => true,
+    					'multiple' => true,
+    					'expanded' => true
+    			))
+    			->add('player', 'entity', array(
+    					'class' => 'foot5x5MainBundle:Player',
+    					'property' => 'name',
+    					'multiple' => false
+    			))
+    			->add('file', 'file', array(
+    					'label' => 'Photo de profil',
+    					'required' => false
+    			));
+    		}
     }
     
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'foot5x5\UserBundle\Entity\User'

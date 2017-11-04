@@ -1,0 +1,14 @@
+{% extends "foot5x5MainBundle::layout.html.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h2 class="text-center">{{ block('title') }}</h2>
+<div class="well">
+    <div id="welcome-buttons">
+        <a href="{{ path('welcome') }}"><button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Créer une communauté</button></a>
+        <a href="{{ path('welcome') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-chevron-right"></span> Rejoindre une communauté</button></a>
+    </div>
+</div>
+
+{% endblock %}

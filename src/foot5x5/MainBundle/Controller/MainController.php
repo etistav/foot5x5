@@ -4,9 +4,12 @@ namespace foot5x5\MainBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use foot5x5\MainBundle\Entity\Note;
+use foot5x5\UserBundle\Entity\User;
 use foot5x5\MainBundle\Form\NoteType;
 use foot5x5\MainBundle\Form\RandomDrawType;
+use foot5x5\UserBundle\Form\UserType;
 use foot5x5\UserBundle\Form\UserPwdType;
+use Symfony\Component\HttpFoundation\Request;
 
 class MainController extends Controller
 {
@@ -499,5 +502,65 @@ class MainController extends Controller
                 'userPwdForm' => $userPwdForm->createView()
             )
         );
+    }
+    
+    public function registerAction(Request $request) {
+    	
+        // Build the form
+        $user = new User();
+        $formOptions = array(
+        		"action" => "register"
+        );
+        $userForm = $this->createForm(new UserType(), $user, $formOptions);
+        $errors = array();
+        
+        // Handle the submit (will only happen on POST)
+        $userForm->handleRequest($request);
+        if ($userForm->isSubmitted() && $userForm->isValid()) {
+        		// Génération d'une valeur aléatoire pour le salt
+        		$salt = substr(md5(time()), 0, 23);
+        		$user->setSalt($salt);
+        		
+        		// Encodage du mot de passe
+        		$factory =$this->get('security.encoder_factory');
+        		$encoder = $factory->getEncoder($user);
+        		$plainPassword = $user->getPassword();
+        		$password = $encoder->encodePassword($plainPassword, $user->getSalt());
+        		$user->setPassword($password);
+    		
+    		    // Save the user
+    		    $em = $this->getDoctrine()->getManager();
+    		    $em->persist($user);
+    		    $em->flush();
+    		
+    		    // TODO send email
+    		    // ...
+        	    
+        	    // Redirect to home page with message management
+        	    $this->get('session')->getFlashBag()->add('success', 'Le user '.$user->getUsername().' a bien été créé.');
+        	    return $this->redirect($this->generateUrl('register'));
+        	    // return $this->redirect($this->generateUrl('foot5x5_main_homepage'));
+        	
+    		    //return $this->redirectToRoute('foot5x5_main_homepage');
+        }
+        
+        return $this->render(
+    			'foot5x5MainBundle::register.html.twig',
+    			array(
+    				'userForm' => $userForm->createView(),
+    				'title' => 'S\'inscrire',
+    				'errors' => $errors
+    			)
+    		);
+    }
+    
+    public function welcomeAction() {
+    	
+    		return $this->render(
+    			'foot5x5MainBundle::welcome.html.twig',
+    			array(
+    					'title' => 'Bienvenue'
+    			)
+    		);
     }
 }

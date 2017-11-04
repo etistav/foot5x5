@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityManager;
 use foot5x5\MainBundle\Form\DataTransformer\PlayerToNameTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PlayerDropType extends AbstractType
 {
@@ -28,7 +28,10 @@ class PlayerDropType extends AbstractType
         $builder->addModelTransformer($transformer);
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'invalid_message' => 'The selected player does not exist',

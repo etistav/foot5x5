@@ -639,9 +639,12 @@ class AdminController extends Controller
      * @param integer $id Transaction id
      */
     public function editTransactionAction(Request $request, $id) {
-		$trnRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Transaction');
+		$trnRepo = $this->getDoctrine()->getRepository(Transaction::class);
+		
 		$transaction = $trnRepo->find($id);
 		$previousAmount = $transaction->getAmount();
+		$previousGiver = $transaction->getGiver();
+		$previousReceiver = $transaction->getReceiver();
 		$trnForm = $this->createForm(TransactionType::class, $transaction);
 		
 		$trnForm->handleRequest($request);
@@ -651,19 +654,51 @@ class AdminController extends Controller
 			$em->persist($transaction);
 			$em->flush();
 			
-			// Attention! La modif d'une transaction doit impacter le cashBalance des joueurs concernés
 			$amount = $transaction->getAmount();
 			$giver = $transaction->getGiver();
-			$giver->handleTransaction($amount, $previousAmount, false);
+			$receiver = $transaction->getReceiver();
+			$changedGiverOrReceiver = false;
+			
+			// Update cashBalance for each player involved
+			if ($giver->getName() != $previousGiver->getName()) {
+				$changedGiverOrReceiver = true;
+				$previousGiver->handleTransaction($previousAmount, 0, true);
+				$giver->handleTransaction($amount, 0, false);
+				$em->persist($previousGiver);
+				$em->flush();
+			} else {
+				$giver->handleTransaction($amount, $previousAmount, false);
+			}
+			if ($receiver->getName() != $previousReceiver->getName()) {
+				$changedGiverOrReceiver = true;
+				$previousReceiver->handleTransaction($previousAmount, 0, false);
+				$receiver->handleTransaction($amount, 0, true);
+			} else {
+				$receiver->handleTransaction($amount, $previousAmount, true);
+			}
 			$em->persist($giver);
 			$em->flush();
-			$receiver = $transaction->getReceiver();
-			$receiver->handleTransaction($amount, $previousAmount, true);
 			$em->persist($receiver);
 			$em->flush();
 			
-			// Redirection sur la page d'admin avec gestion du message d'info
-			$this->get('session')->getFlashBag()->add('success', 'La transaction de '.$amount.'€ entre '.$giver->getName().' et '.$receiver->getName().' a bien été modifiée.');
+			// Information message management
+			if ($changedGiverOrReceiver) {
+				$this->get('session')->getFlashBag()
+					->add(
+						'success',
+						'La transaction de '.$previousAmount.'€ entre '.$previousGiver->getName().' et '.$previousReceiver->getName().' a bien été annulée.'
+					);
+				$this->get('session')->getFlashBag()
+					->add(
+						'success',
+						'La transaction de '.$amount.'€ entre '.$giver->getName().' et '.$receiver->getName().' a bien été générée.'
+					);
+			} else {
+				$this->get('session')->getFlashBag()->add(
+					'success',
+					'La transaction entre '.$giver->getName().' et '.$receiver->getName().' a bien été modifiée de '.$previousAmount.'€ à '.$amount.'€.'
+				);
+			}
 			$this->get('session')->set('activeTab', 'finance');
 			return $this->redirect($this->generateUrl('admin_home'));
 		}
@@ -706,7 +741,7 @@ class AdminController extends Controller
         $em->flush();
 
         // Redirection sur la page d'admin avec gestion du message d'info
-        $this->get('session')->getFlashBag()->add('success', 'La transaction de '.$amount.'€ entre '.$giver->getName().' et '.$receiver->getName().' a bien été supprimée.');
+        $this->get('session')->getFlashBag()->add('success', 'La transaction de '.$previousAmount.'€ entre '.$giver->getName().' et '.$receiver->getName().' a bien été supprimée.');
         $this->get('session')->set('activeTab', 'finance');
         return $this->redirect($this->generateUrl('admin_home'));
     }

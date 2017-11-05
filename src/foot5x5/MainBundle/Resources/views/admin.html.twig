@@ -203,17 +203,18 @@
     {% else %}
     <div class="tab-pane fade admin-panel" id="admin-users-panel">
     {% endif %}
-        <div class="admin-button-new col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+        <div class="admin-button-new col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
             <a href="{{ path('add_user') }}"><button type="button" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouvel utilisateur</button></a>
         </div>
         {% if users %}
-        <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+        <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
             <table class="table table-hover table-condensed">
                 <thead class="bg-primary dark-blue-grad">
                     <tr>
                         <th class="col-md-2 admin-left-column">Username</th>
                         <th class="col-md-2 admin-left-column">Role</th>
                         <th class="col-md-2 admin-left-column">Joueur</th>
+                        <th class="col-md-2 admin-left-column">Email</th>
                         <th class="col-md-2 admin-center-column">Edit/Delete</th>
                     </tr>
                 </thead>
@@ -232,6 +233,7 @@
                         {% endif %}
                     </td>
                     <td class="col-md-2 admin-left-column">{{ user.player.name }}</td>
+                    <td class="col-md-2 admin-left-column">{{ user.email }}</td>
                     <td class="col-md-2 admin-center-column">
                         <a href="{{ path('edit_user', {'id':user.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
                         <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#userDialog{{ user.id }}"><span class="glyphicon glyphicon-remove"></span>

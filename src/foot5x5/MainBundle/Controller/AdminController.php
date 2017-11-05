@@ -12,7 +12,6 @@ use foot5x5\UserBundle\Entity\User;
 use foot5x5\MainBundle\Form\PlayerType;
 use foot5x5\MainBundle\Form\ResultType;
 use foot5x5\MainBundle\Form\TransactionType;
-use foot5x5\UserBundle\Form\UserEditType;
 use foot5x5\UserBundle\Form\UserType;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -536,7 +535,10 @@ class AdminController extends Controller
     public function editUserAction(Request $request, $id) {
         $usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
         $user = $usrRepo->find($id);
-        $userForm = $this->createForm(UserEditType::class, $user);
+        $formOptions = array(
+        		"action" => "edit"
+        );
+        $userForm = $this->createForm(UserType::class, $user, $formOptions);
         
         $userForm->handleRequest($request);
         if ($userForm->isSubmitted() && $userForm->isValid()) {

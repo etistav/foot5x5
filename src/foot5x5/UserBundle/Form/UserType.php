@@ -48,6 +48,44 @@ class UserType extends AbstractType
     					'format' => 'dd/MM/yyyy',
     					'years' => range(date('Y'), date('Y')-70)
     			));
+    		} elseif ($options['action'] == "edit") {
+    			$builder
+    			->add('firstname', TextType::class, array(
+    					'label' => 'Prénom'
+    			))
+    			->add('lastname', TextType::class, array(
+    					'label' => 'Nom'
+    			))
+    			->add('birthday', BirthdayType::class, array(
+    					'label' => 'Date de naissance',
+    					'widget' => 'choice',
+    					'placeholder' => array(
+    							'year' => 'yyyy', 'month' => 'mm', 'day' => 'dd',
+    					),
+    					'format' => 'dd/MM/yyyy',
+    					'years' => range(date('Y'), date('Y')-70)
+    			))
+    			->add('username', TextType::class)
+    			->add('email', EmailType::class)
+    			->add('roles', ChoiceType::class, array(
+    					'choices' => array(
+    							'Admin' => 'ROLE_ADMIN',
+    							'Evaluateur' => 'ROLE_EVALUATOR',
+    							'Player' => 'ROLE_USER',
+    					),
+    					'choices_as_values' => true,
+    					'required' => true,
+    					'multiple' => true
+    			))
+    			->add('player', EntityType::class, array(
+    					'class' => 'foot5x5MainBundle:Player',
+    					'choice_label' => 'name',
+    					'multiple' => false
+    			))
+    			->add('file', FileType::class, array(
+    					'label' => 'Photo de profil',
+    					'required' => false
+    			));
     		} else {
     			$builder
     			->add('firstname', TextType::class, array(

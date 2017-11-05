@@ -29,7 +29,7 @@ class Note
     private $evaluator;
 
     /**
-     * @ORM\ManyToOne(targetEntity="foot5x5\MainBundle\Entity\Player")
+     * @ORM\ManyToOne(targetEntity="foot5x5\MainBundle\Entity\Player", inversedBy="notes")
      * @ORM\JoinColumn(name="not_playerId", referencedColumnName="plr_id", nullable=false)
      */
     private $player;

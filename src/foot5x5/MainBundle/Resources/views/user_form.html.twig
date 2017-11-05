@@ -21,43 +21,10 @@
 <div class="well">
 {{ form_start(userForm, { 'attr': {'class': 'form-horizontal'} }) }}
     <div class="form-group">
-        {{ form_label(userForm.firstname, null, { 'label_attr':  {
-            'class': 'col-sm-5 control-label'
-        }}) }}
-        <div class="col-sm-4">
-            {{ form_errors(userForm.firstname) }}
-            {{ form_widget(userForm.firstname, { 'attr':  {
-                'class': 'form-control'
-            }}) }}
-        </div>
-    </div>
-    <div class="form-group">
-        {{ form_label(userForm.lastname, null, { 'label_attr':  {
-            'class': 'col-sm-5 control-label'
-        }}) }}
-        <div class="col-sm-4">
-            {{ form_errors(userForm.lastname) }}
-            {{ form_widget(userForm.lastname, { 'attr':  {
-                'class': 'form-control'
-            }}) }}
-        </div>
-    </div>
-    <div class="form-group">
-        {{ form_label(userForm.birthday, null, { 'label_attr':  {
-            'class': 'col-sm-5 control-label'
-        }}) }}
-        <div class="col-sm-4">
-            {{ form_errors(userForm.birthday) }}
-            {{ form_widget(userForm.birthday, { 'attr':  {
-                'class': 'form-control'
-            }}) }}
-        </div>
-    </div>
-    <div class="form-group">
         {{ form_label(userForm.username, null, { 'label_attr':  {
             'class': 'col-sm-5 control-label'
         }}) }}
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             {{ form_errors(userForm.username) }}
             {{ form_widget(userForm.username, { 'attr':  {
                 'class': 'form-control'
@@ -69,7 +36,7 @@
         {{ form_label(userForm.password.first, null, { 'label_attr':  {
             'class': 'col-sm-5 control-label'
         }}) }}
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             {{ form_widget(userForm.password.first, { 'attr':  {
                 'class': 'form-control'
             }}) }}
@@ -79,7 +46,7 @@
         {{ form_label(userForm.password.second, null, { 'label_attr':  {
             'class': 'col-sm-5 control-label'
         }}) }}
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             {{ form_widget(userForm.password.second, { 'attr':  {
                 'class': 'form-control'
             }}) }}
@@ -87,10 +54,60 @@
     </div>
     {% endif %}
     <div class="form-group">
+        {{ form_label(userForm.firstname, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-3">
+            {{ form_errors(userForm.firstname) }}
+            {{ form_widget(userForm.firstname, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(userForm.lastname, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-3">
+            {{ form_errors(userForm.lastname) }}
+            {{ form_widget(userForm.lastname, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(userForm.birthday, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-3 form-inline">
+            {{ form_errors(userForm.birthday) }}
+            {{ form_widget(userForm.birthday.day, { 'attr':  {
+                'class': 'form-control mb-10'
+            }}) }}
+            {{ form_widget(userForm.birthday.month, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+            {{ form_widget(userForm.birthday.year, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(userForm.email, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-3">
+            {{ form_errors(userForm.email) }}
+            {{ form_widget(userForm.email, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
         {{ form_label(userForm.roles, null, { 'label_attr':  {
             'class': 'col-sm-5 control-label'
         }}) }}
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             {{ form_errors(userForm.roles) }}
             {{ form_widget(userForm.roles, { 'attr':  {
                 'class': 'form-control'
@@ -101,7 +118,7 @@
         {{ form_label(userForm.player, null, { 'label_attr':  {
             'class': 'col-sm-5 control-label'
         }}) }}
-        <div class="matchPlayers col-sm-2">
+        <div class="matchPlayers col-sm-3">
             {{ form_errors(userForm.player) }}
             {{ form_widget(userForm.player, { 'attr':  {
                 'class': 'form-control'
@@ -112,7 +129,7 @@
         {{ form_label(userForm.file, null, { 'label_attr':  {
             'class': 'col-sm-5 control-label'
         }}) }}
-        <div class="matchPlayers col-sm-2">
+        <div class="col-sm-5">
             {{ form_errors(userForm.file) }}
             {{ form_widget(userForm.file, { 'attr':  {
                 'class': 'form-control'

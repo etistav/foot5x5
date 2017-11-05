@@ -6,6 +6,13 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class UserType extends AbstractType
 {
@@ -15,24 +22,24 @@ class UserType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-    		if ($options['action'] = "register") {
+    		if ($options['action'] == "register") {
     			$builder
-    			->add('firstname', 'text', array(
+    			->add('firstname', TextType::class, array(
     					'label' => 'Prénom'
     			))
-    			->add('lastname', 'text', array(
+    			->add('lastname', TextType::class, array(
     					'label' => 'Nom'
     			))
-    			->add('username', 'text')
-    			->add('email', 'email')
-    			->add('password', 'repeated', array(
-    					'type'            => 'password',
+    			->add('username', TextType::class)
+    			->add('email', EmailType::class)
+    			->add('password', RepeatedType::class, array(
+    					'type'            => PasswordType::class,
     					'invalid_message' => 'The password fields must match.',
     					'options'         => array('required' => true),
     					'first_options'   => array('label' => 'Password'),
     					'second_options'  => array('label' => 'Repeat password'),
     			))
-    			->add('birthday', 'birthday', array(
+    			->add('birthday', BirthdayType::class, array(
     					'label' => 'Date de naissance',
     					'widget' => 'choice',
     					'placeholder' => array(
@@ -43,22 +50,25 @@ class UserType extends AbstractType
     			));
     		} else {
     			$builder
-    			->add('firstname', 'text', array(
+    			->add('firstname', TextType::class, array(
     					'label' => 'Prénom'
     			))
-    			->add('lastname', 'text', array(
+    			->add('lastname', TextType::class, array(
     					'label' => 'Nom'
     			))
-    			->add('birthday', 'birthday', array(
-    				'label' => 'Date de naissance',
-				'placeholder' => array(
-						'year' => 'Year', 'month' => 'Month', 'day' => 'Day',
-				)
+    			->add('birthday', BirthdayType::class, array(
+    					'label' => 'Date de naissance',
+    					'widget' => 'choice',
+    					'placeholder' => array(
+    							'year' => 'yyyy', 'month' => 'mm', 'day' => 'dd',
+    					),
+    					'format' => 'dd/MM/yyyy',
+    					'years' => range(date('Y'), date('Y')-70)
     			))
-    			->add('username', 'text')
-    			->add('email', 'text')
-    			->add('password', 'repeated', array(
-    					'type'            => 'password',
+    			->add('username', TextType::class)
+    			->add('email', EmailType::class)
+    			->add('password', RepeatedType::class, array(
+    					'type'            => PasswordType::class,
     					'invalid_message' => 'The password fields must match.',
     					'options'         => array('required' => true),
     					'first_options'   => array('label' => 'Password'),
@@ -72,15 +82,14 @@ class UserType extends AbstractType
     					),
     					'choices_as_values' => true,
     					'required' => true,
-    					'multiple' => true,
-    					'expanded' => true
+    					'multiple' => true
     			))
-    			->add('player', 'entity', array(
+    			->add('player', EntityType::class, array(
     					'class' => 'foot5x5MainBundle:Player',
-    					'property' => 'name',
+    					'choice_label' => 'name',
     					'multiple' => false
     			))
-    			->add('file', 'file', array(
+    			->add('file', FileType::class, array(
     					'label' => 'Photo de profil',
     					'required' => false
     			));
@@ -95,13 +104,5 @@ class UserType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'foot5x5\UserBundle\Entity\User'
         ));
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'foot5x5_userbundle_user';
     }
 }

@@ -144,7 +144,7 @@ class AdminController extends Controller
         }
 
         // Création du formulaire associé
-        $matchForm = $this->createForm(new ResultType(), $match);
+        $matchForm = $this->createForm(ResultType::class, $match);
 
         if ($request->getMethod() == 'POST') {
             $matchForm->submit($request);
@@ -200,7 +200,7 @@ class AdminController extends Controller
         $players = $plrRepo->findAll();
         $match = $resRepo->find($id);
         $dateEditedMatch = $match->getDate()->format('d/m/Y');
-        $matchForm = $this->createForm(new ResultType(), $match);
+        $matchForm = $this->createForm(ResultType::class, $match);
 
 
         if ($request->getMethod() == 'POST') {
@@ -369,7 +369,7 @@ class AdminController extends Controller
         $player = new Player();
 
         // Création du formulaire associé
-        $playerForm = $this->createForm(new PlayerType(), $player);
+        $playerForm = $this->createForm(PlayerType::class, $player);
 
         if ($request->getMethod() == 'POST') {
             $playerForm->submit($request);
@@ -407,7 +407,7 @@ class AdminController extends Controller
         $player = $plrRepo->find($id);
 
         // Création du formulaire associé
-        $playerForm = $this->createForm(new PlayerType(), $player);
+        $playerForm = $this->createForm(PlayerType::class, $player);
 
         if ($request->getMethod() == 'POST') {
             $playerForm->submit($request);
@@ -508,33 +508,34 @@ class AdminController extends Controller
         $user = new User();
 
         // Création du formulaire associé
-        $userForm = $this->createForm(new UserType(), $user);
+        $formOptions = array(
+        		"action" => "addUser"
+        );
+        $userForm = $this->createForm(UserType::class, $user, $formOptions);
+        $userForm->handleRequest($request);
 
-        if ($request->getMethod() == 'POST') {
-            $userForm->submit($request);
-            if ($userForm->isValid()) {
-                // Génération d'une valeur aléatoire pour le salt
-                $salt = substr(md5(time()), 0, 23);
-                $user->setSalt($salt);
-
-                // Encodage du mot de passe
-                $factory =$this->get('security.encoder_factory');
-                $encoder = $factory->getEncoder($user);
-                $plainPassword = $user->getPassword();
-                $password = $encoder->encodePassword($plainPassword, $user->getSalt());
-                $user->setPassword($password);
-
-                // Ecriture du user en BDD
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'Le user '.$user->getUsername().' a bien été créé.');
-                $this->get('session')->set('activeTab', 'users');
-                return $this->redirect($this->generateUrl('admin_home'));
-            }
-        }
+		if ($userForm->isSubmitted() && $userForm->isValid()) {
+		    // Génération d'une valeur aléatoire pour le salt
+		    $salt = substr(md5(time()), 0, 23);
+		    $user->setSalt($salt);
+		
+		    // Encodage du mot de passe
+		    $factory =$this->get('security.encoder_factory');
+		    $encoder = $factory->getEncoder($user);
+		    $plainPassword = $user->getPassword();
+		    $password = $encoder->encodePassword($plainPassword, $user->getSalt());
+		    $user->setPassword($password);
+		
+		    // Ecriture du user en BDD
+		    $em = $this->getDoctrine()->getManager();
+		    $em->persist($user);
+		    $em->flush();
+		
+		    // Redirection sur la page d'admin avec gestion du message d'info
+		    $this->get('session')->getFlashBag()->add('success', 'Le user '.$user->getUsername().' a bien été créé.');
+		    $this->get('session')->set('activeTab', 'users');
+		    return $this->redirect($this->generateUrl('admin_home'));
+		}
         return $this->render(
             'foot5x5MainBundle::user_form.html.twig',
             array(
@@ -558,7 +559,7 @@ class AdminController extends Controller
         $user = $usrRepo->find($id);
 
         // Création du formulaire associé
-        $userForm = $this->createForm(new UserEditType(), $user);
+        $userForm = $this->createForm(UserEditType::class, $user);
 
         if ($request->getMethod() == 'POST') {
             $userForm->submit($request);
@@ -622,7 +623,7 @@ class AdminController extends Controller
         $transaction = new Transaction();
 
         // Création du formulaire associé
-        $trnForm = $this->createForm(new TransactionType(), $transaction);
+        $trnForm = $this->createForm(TransactionType::class, $transaction);
 
         if ($request->getMethod() == 'POST') {
             $trnForm->submit($request);
@@ -673,7 +674,7 @@ class AdminController extends Controller
         $previousAmount = $transaction->getAmount();
 
         // Création du formulaire associé
-        $trnForm = $this->createForm(new TransactionType(), $transaction);
+        $trnForm = $this->createForm(TransactionType::class, $transaction);
 
         if ($request->getMethod() == 'POST') {
             $trnForm->submit($request);

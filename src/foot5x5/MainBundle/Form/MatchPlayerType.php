@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use foot5x5\MainBundle\Form\Type\PlayerDropType;
 
 class MatchPlayerType extends AbstractType
 {
@@ -16,14 +17,9 @@ class MatchPlayerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            // ->add('player', 'entity', array(
-            //     'class' => 'foot5x5MainBundle:Player',
-            //     'property' => 'name',
-            //     'multiple' => false
-            // ))
             ->add(
                 'player',
-                'playerDrop',
+                PlayerDropType::class,
                 array(
                     'required' => true
                 )

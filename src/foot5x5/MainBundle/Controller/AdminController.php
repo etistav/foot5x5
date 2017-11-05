@@ -142,33 +142,24 @@ class AdminController extends Controller
         // Création du formulaire associé
         $matchForm = $this->createForm(ResultType::class, $match);
 
-        if ($request->getMethod() == 'POST') {
-            $matchForm->submit($request);
-            if ($matchForm->isValid()) {
+		$matchForm->handleRequest($request);
+		if ($matchForm->isSubmitted() && $matchForm->isValid()) {
+			// Détermination du n° de match
+			$matchNum = $resRepo->findMatchNumber($match);
+			$match->setNum($matchNum);
+			
+			// Création d'un classement pour le trimestre si besoin
+			// $isStandingCreated = $stdRepo->initializeStanding($match->getYear(), $match->getTrimester());
+			
+			// Ecriture du match en BDD
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($match);
+			$em->flush();
 
-                //echo $request->getMethod();
-                // Détermination du n° de match
-                $matchNum = $resRepo->findMatchNumber($match);
-                $match->setNum($matchNum);
-
-                // Création d'un classement pour le trimestre si besoin
-                // $isStandingCreated = $stdRepo->initializeStanding($match->getYear(), $match->getTrimester());
-
-                // Ecriture du match en BDD
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($match);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'Le match n°'.$matchNum.' a bien été créé.');
-                $this->get('session')->set('activeTab', 'results');
-                return $this->redirect($this->generateUrl('admin_home'));
-            }
-            else {
-                echo $match->getNum();
-                echo $request->getMethod();
-                var_dump($_POST);
-            }
+			// Redirection sur la page d'admin avec gestion du message d'info
+			$this->get('session')->getFlashBag()->add('success', 'Le match n°'.$matchNum.' a bien été créé.');
+			$this->get('session')->set('activeTab', 'results');
+			return $this->redirect($this->generateUrl('admin_home'));
         }
         return $this->render(
             'foot5x5MainBundle::match_form.html.twig',
@@ -198,24 +189,20 @@ class AdminController extends Controller
         $dateEditedMatch = $match->getDate()->format('d/m/Y');
         $matchForm = $this->createForm(ResultType::class, $match);
 
+        $matchForm->handleRequest($request);
+        if ($matchForm->isSubmitted() && $matchForm->isValid()) {
+			// Si date modifiée, mise à jour des n° de matchs suivants
+			// TODO gestion n°match si modif date
 
-        if ($request->getMethod() == 'POST') {
-            $matchForm->submit($request);
-            if ($matchForm->isValid()) {
+			// MAJ du match en BDD
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($match);
+			$em->flush();
 
-                // Si date modifiée, mise à jour des n° de matchs suivants
-                // TODO gestion n°match si modif date
-
-                // MAJ du match en BDD
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($match);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'Le match du '.$dateEditedMatch.' a bien été modifié.');
-                $this->get('session')->set('activeTab', 'results');
-                return $this->redirect($this->generateUrl('admin_home'));
-            }
+			// Redirection sur la page d'admin avec gestion du message d'info
+			$this->get('session')->getFlashBag()->add('success', 'Le match du '.$dateEditedMatch.' a bien été modifié.');
+			$this->get('session')->set('activeTab', 'results');
+			return $this->redirect($this->generateUrl('admin_home'));
         }
         return $this->render(
             'foot5x5MainBundle::match_form.html.twig',

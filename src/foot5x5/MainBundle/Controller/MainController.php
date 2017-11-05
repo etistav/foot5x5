@@ -503,33 +503,29 @@ class MainController extends Controller
      */
     public function editPwdAction(Request $request) {
         $user = $this->getUser();
-
-        // Création du formulaire associé
         $userPwdForm = $this->createForm(UserPwdType::class, $user);
 
-        if ($request->getMethod() == 'POST') {
-            $userPwdForm->submit($request);
-            if ($userPwdForm->isValid()) {
-                // Génération d'une valeur aléatoire pour le salt
-                $salt = substr(md5(time()), 0, 23);
-                $user->setSalt($salt);
-
-                // Encodage du mot de passe
-                $factory =$this->get('security.encoder_factory');
-                $encoder = $factory->getEncoder($user);
-                $plainPassword = $user->getPassword();
-                $password = $encoder->encodePassword($plainPassword, $user->getSalt());
-                $user->setPassword($password);
-
-                // Ecriture du user en BDD
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'Ton mot de passe a bien été modifié.');
-                return $this->redirect($this->generateUrl('myprofile'));
-            }
+        $userPwdForm->handleRequest($request);
+        if ($userPwdForm->isSubmitted() && $userPwdForm->isValid()) {
+			// Génération d'une valeur aléatoire pour le salt
+			$salt = substr(md5(time()), 0, 23);
+			$user->setSalt($salt);
+			
+			// Encodage du mot de passe
+			$factory =$this->get('security.encoder_factory');
+			$encoder = $factory->getEncoder($user);
+			$plainPassword = $user->getPassword();
+			$password = $encoder->encodePassword($plainPassword, $user->getSalt());
+			$user->setPassword($password);
+			
+			// Ecriture du user en BDD
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($user);
+			$em->flush();
+			
+			// Redirection sur la page d'admin avec gestion du message d'info
+			$this->get('session')->getFlashBag()->add('success', 'Ton mot de passe a bien été modifié.');
+			return $this->redirect($this->generateUrl('myprofile'));
         }
         return $this->render(
             'foot5x5MainBundle::userpwd_form.html.twig',
@@ -557,7 +553,6 @@ class MainController extends Controller
         $userForm = $this->createForm(UserType::class, $user, $formOptions);
         $errors = array();
         
-        // Handle the submit (will only happen on POST)
         $userForm->handleRequest($request);
         if ($userForm->isSubmitted() && $userForm->isValid()) {
         		// Génération d'une valeur aléatoire pour le salt

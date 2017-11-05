@@ -115,39 +115,15 @@
             <table class="table table-hover table-condensed">
                 <thead class="bg-primary dark-blue-grad">
                     <tr>
-                        <th class="col-md-2 admin-center-column">Année</th>
-                        <th class="col-md-2 admin-center-column">Trimestre</th>
+                        <th class="col-md-4 admin-left-column">Classement</th>
                         <th class="col-md-2 admin-center-column">Calculer</th>
-                        <th class="col-md-2 admin-center-column">Delete</th>
                     </tr>
                 </thead>
                 {% for standing in standings %}
                 <tr>
-                    <td class="col-md-2 admin-center-column">{{ standing.year }}</td>
-                    <td class="col-md-2 admin-center-column"><a class="standingName" href="/standing/{{ standing.id }}">{{ standing.trimName }}</a></td>
+                    <td class="col-md-4 admin-left-column"><a class="standingName" href="/standing/{{ standing.id }}">{{ standing.trimName }} {{ standing.year }}</a></td>
                     <td class="col-md-2 admin-center-column">
                         <a href="{{ path('calc_standing', {'id':standing.id}) }}" class="btn btn-info btn-xs" title="Calculer"><span class="glyphicon glyphicon-refresh"></span></a>
-                    </td>
-                    <td class="col-md-2 admin-center-column">
-                        <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#standingDialog{{ standing.id }}"><span class="glyphicon glyphicon-remove"></span>
-                        </button>
-                        <div class="modal fade" id="standingDialog{{ standing.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title" id="myModalLabel">Confirmation suppression classement</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        Veux-tu vraiment supprimer le classement du T0{{ standing.trimester }} {{ standing.year }} ?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                                        <a href="{{ path('delete_standing', {'id':standing.id}) }}" class="btn btn-danger">Supprimer</a>
-                                    </div>
-                                </div><!-- /.modal-content -->
-                            </div><!-- /.modal-dialog -->
-                        </div><!-- /.modal -->
                     </td>
                 </tr>
                 {% endfor %}

@@ -74,7 +74,7 @@ class MainController extends Controller
         $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
 
         $trimesters = $resRepo->listAllTrimesters();
-        // Alimentation de la combobox trimestre
+        // Populate trimester dropdown
         $trimNames = array();
         $trimIds = array();
         foreach ($trimesters as $trimester) {

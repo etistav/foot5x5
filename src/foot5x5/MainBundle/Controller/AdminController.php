@@ -49,7 +49,7 @@ class AdminController extends Controller
         $users = $usrRepo->findAll();
         $trimesters = $resRepo->listAllTrimesters();
 
-        // Alimentation de la combobox trimestre
+        // Populate trimester dropdown
         $trimNames = array();
         $trimIds = array();
         foreach ($trimesters as $trimester) {
@@ -62,21 +62,17 @@ class AdminController extends Controller
             $trimNames[] = $trimName;
             $trimIds[] = $trimId;
         }
-        $trimNames = array_combine($trimIds, $trimNames);
+        $trimNames = array_combine($trimNames, $trimIds);
         $trimesterForm = $this->createFormBuilder()
             ->add('stdCombo', ChoiceType::class, array(
             		'choices' => $trimNames,
             		'choices_as_values' => true,
-            		'choice_label' => function($trimNames, $key, $index) {
-            			return $trimNames;
-            		},
                 'label' => 'Trimestre'
-                //'placeholder' => 'Choisir...'
             ))
             ->getForm();
 
-        if ($request->getMethod() == 'POST') {
-            $trimesterForm->submit($request);
+		$trimesterForm->handleRequest($request);
+		if ($trimesterForm->isSubmitted()) {
             if ($trimesterForm->isValid()) {
                 $idTrimester = $trimesterForm->get('stdCombo')->getData();
                 $currentYear = substr($idTrimester, 0, 4);

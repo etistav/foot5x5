@@ -147,7 +147,7 @@
             <table class="table table-hover table-condensed">
                 <thead class="bg-primary dark-blue-grad">
                     <tr>
-                        <th class="col-md-2">Nom</th>
+                        <th class="col-md-2 admin-left-column">Nom</th>
                         <th class="col-md-1 admin-center-column">Att</th>
                         <th class="col-md-1 admin-center-column">Def</th>
                         <th class="col-md-1 admin-center-column">Phy</th>
@@ -158,7 +158,7 @@
                 </thead>
                 {% for player in players %}
                 <tr>
-                    <td class="col-md-2"><a class="playerName" href="/player/{{ player.id }}">{{ player.name }}</a></td>
+                    <td class="col-md-2 admin-left-column"><a class="playerName" href="/player/{{ player.id }}">{{ player.name }}</a></td>
                     <td class="col-md-1 admin-center-column">{{ player.valAtt|number_format(1, '.') }}</td>
                     <td class="col-md-1 admin-center-column">{{ player.valDef|number_format(1, '.') }}</td>
                     <td class="col-md-1 admin-center-column">{{ player.valPhy|number_format(1, '.') }}</td>
@@ -211,16 +211,16 @@
             <table class="table table-hover table-condensed">
                 <thead class="bg-primary dark-blue-grad">
                     <tr>
-                        <th class="col-md-2">Username</th>
-                        <th class="col-md-2">Role</th>
-                        <th class="col-md-2">Joueur</th>
+                        <th class="col-md-2 admin-left-column">Username</th>
+                        <th class="col-md-2 admin-left-column">Role</th>
+                        <th class="col-md-2 admin-left-column">Joueur</th>
                         <th class="col-md-2 admin-center-column">Edit/Delete</th>
                     </tr>
                 </thead>
                 {% for user in users %}
                 <tr>
-                    <td class="col-md-2">{{ user.username }}</a></td>
-                    <td class="col-md-2">
+                    <td class="col-md-2 admin-left-column">{{ user.username }}</a></td>
+                    <td class="col-md-2 admin-left-column">
                         {% if 'ROLE_ADMIN' in user.roles %}
                             Admin
                         {% else %}
@@ -231,7 +231,7 @@
                             {% endif %}
                         {% endif %}
                     </td>
-                    <td class="col-md-2">{{ user.player.name }}</td>
+                    <td class="col-md-2 admin-left-column">{{ user.player.name }}</td>
                     <td class="col-md-2 admin-center-column">
                         <a href="{{ path('edit_user', {'id':user.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
                         <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#userDialog{{ user.id }}"><span class="glyphicon glyphicon-remove"></span>
@@ -276,19 +276,19 @@
             <table class="table table-hover table-condensed">
                 <thead class="bg-primary dark-blue-grad">
                     <tr>
-                        <th class="col-md-2">Date</th>
-                        <th class="col-md-2">Donneur</th>
-                        <th class="col-md-2">Receveur</th>
-                        <th class="col-md-1">Montant</th>
+                        <th class="col-md-2 admin-left-column">Date</th>
+                        <th class="col-md-2 admin-left-column">Donneur</th>
+                        <th class="col-md-2 admin-left-column">Receveur</th>
+                        <th class="col-md-1 admin-center-column">Montant</th>
                         <th class="col-md-2 admin-center-column">Edit/Delete</th>
                     </tr>
                 </thead>
                 {% for tran in transactions %}
                 <tr>
-                    <td class="col-md-2">{{ tran.date|date('d/m/Y') }}</a></td>
-                    <td class="col-md-2">{{ tran.giver.name }}</a></td>
-                    <td class="col-md-2">{{ tran.receiver.name }}</a></td>
-                    <td class="col-md-1">{{ tran.amount }} €</a></td>
+                    <td class="col-md-2 admin-left-column">{{ tran.date|date('d/m/Y') }}</a></td>
+                    <td class="col-md-2 admin-left-column">{{ tran.giver.name }}</a></td>
+                    <td class="col-md-2 admin-left-column">{{ tran.receiver.name }}</a></td>
+                    <td class="col-md-1 admin-center-column">{{ tran.amount }} €</a></td>
                     <td class="col-md-2 admin-center-column">
                         <a href="{{ path('edit_transaction', {'id':tran.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
                         <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#tranDialog{{ tran.id }}"><span class="glyphicon glyphicon-remove"></span>

@@ -354,19 +354,17 @@ class AdminController extends Controller
         // Création du formulaire associé
         $playerForm = $this->createForm(PlayerType::class, $player);
 
-        if ($request->getMethod() == 'POST') {
-            $playerForm->submit($request);
-            if ($playerForm->isValid()) {
-                // Ecriture du player en BDD
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($player);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'Le joueur '.$player->getName().' a bien été créé.');
-                $this->get('session')->set('activeTab', 'players');
-                return $this->redirect($this->generateUrl('admin_home'));
-            }
+        $playerForm->handleRequest($request);
+        if ($playerForm->isSubmitted() && $playerForm->isValid()) {
+			// Ecriture du player en BDD
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($player);
+			$em->flush();
+			
+			// Redirection sur la page d'admin avec gestion du message d'info
+			$this->get('session')->getFlashBag()->add('success', 'Le joueur '.$player->getName().' a bien été créé.');
+			$this->get('session')->set('activeTab', 'players');
+			return $this->redirect($this->generateUrl('admin_home'));
         }
         return $this->render(
             'foot5x5MainBundle::player_form.html.twig',
@@ -392,19 +390,17 @@ class AdminController extends Controller
         // Création du formulaire associé
         $playerForm = $this->createForm(PlayerType::class, $player);
 
-        if ($request->getMethod() == 'POST') {
-            $playerForm->submit($request);
-            if ($playerForm->isValid()) {
-                // Ecriture du player en BDD
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($player);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'Le joueur '.$player->getName().' a bien été modifié.');
-                $this->get('session')->set('activeTab', 'players');
-                return $this->redirect($this->generateUrl('admin_home'));
-            }
+        $playerForm->handleRequest($request);
+        if ($playerForm->isSubmitted() && $playerForm->isValid()) {
+			// Ecriture du player en BDD
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($player);
+			$em->flush();
+			
+			// Redirection sur la page d'admin avec gestion du message d'info
+			$this->get('session')->getFlashBag()->add('success', 'Le joueur '.$player->getName().' a bien été modifié.');
+			$this->get('session')->set('activeTab', 'players');
+			return $this->redirect($this->generateUrl('admin_home'));
         }
         return $this->render(
             'foot5x5MainBundle::player_form.html.twig',
@@ -540,24 +536,19 @@ class AdminController extends Controller
     public function editUserAction(Request $request, $id) {
         $usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
         $user = $usrRepo->find($id);
-
-        // Création du formulaire associé
         $userForm = $this->createForm(UserEditType::class, $user);
-
-        if ($request->getMethod() == 'POST') {
-            $userForm->submit($request);
-            if ($userForm->isValid()) {
-
-                // Ecriture du user en BDD
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'Le user '.$user->getUsername().' a bien été modifié.');
-                $this->get('session')->set('activeTab', 'users');
-                return $this->redirect($this->generateUrl('admin_home'));
-            }
+        
+        $userForm->handleRequest($request);
+        if ($userForm->isSubmitted() && $userForm->isValid()) {
+			// Ecriture du user en BDD
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($user);
+			$em->flush();
+			
+			// Redirection sur la page d'admin avec gestion du message d'info
+			$this->get('session')->getFlashBag()->add('success', 'Le user '.$user->getUsername().' a bien été modifié.');
+			$this->get('session')->set('activeTab', 'users');
+			return $this->redirect($this->generateUrl('admin_home'));
         }
         return $this->render(
             'foot5x5MainBundle::user_form.html.twig',
@@ -603,46 +594,42 @@ class AdminController extends Controller
      * @param Request $request
      */
     public function addTransactionAction(Request $request) {
-        $transaction = new Transaction();
-
-        // Création du formulaire associé
-        $trnForm = $this->createForm(TransactionType::class, $transaction);
-
-        if ($request->getMethod() == 'POST') {
-            $trnForm->submit($request);
-            if ($trnForm->isValid()) {
-                // Ecriture du user en BDD
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($transaction);
-                $em->flush();
-
-                // Attention! La création d'une transaction doit impacter le cashBalance des joueurs concernés
-                $previousAmount = 0;
-                $amount = $transaction->getAmount();
-                $giver = $transaction->getGiver();
-                $giver->handleTransaction($amount, $previousAmount, false);
-                $em->persist($giver);
-                $em->flush();
-                $receiver = $transaction->getReceiver();
-                $receiver->handleTransaction($amount, $previousAmount, true);
-                $em->persist($receiver);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'La transaction de '.$amount.'€ entre '.$giver->getName().' et '.$receiver->getName().' a bien été créée.');
-                $this->get('session')->set('activeTab', 'finance');
-                return $this->redirect($this->generateUrl('admin_home'));
-            }
-        }
-        return $this->render(
-            'foot5x5MainBundle::transaction_form.html.twig',
-            array(
-                'title' => 'Nouvelle Transaction',
-                'buttonLabel' => 'Créer',
-                'transaction' => $transaction,
-                'trnForm' => $trnForm->createView()
-            )
-        );
+		$transaction = new Transaction();
+		$trnForm = $this->createForm(TransactionType::class, $transaction);
+		
+		$trnForm->handleRequest($request);
+		if ($trnForm->isSubmitted() && $trnForm->isValid()) {
+			// Ecriture du user en BDD
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($transaction);
+			$em->flush();
+			
+			// Attention! La création d'une transaction doit impacter le cashBalance des joueurs concernés
+			$previousAmount = 0;
+			$amount = $transaction->getAmount();
+			$giver = $transaction->getGiver();
+			$giver->handleTransaction($amount, $previousAmount, false);
+			$em->persist($giver);
+			$em->flush();
+			$receiver = $transaction->getReceiver();
+			$receiver->handleTransaction($amount, $previousAmount, true);
+			$em->persist($receiver);
+			$em->flush();
+			
+			// Redirection sur la page d'admin avec gestion du message d'info
+			$this->get('session')->getFlashBag()->add('success', 'La transaction de '.$amount.'€ entre '.$giver->getName().' et '.$receiver->getName().' a bien été créée.');
+			$this->get('session')->set('activeTab', 'finance');
+			return $this->redirect($this->generateUrl('admin_home'));
+		}
+		return $this->render(
+			'foot5x5MainBundle::transaction_form.html.twig',
+			array(
+				'title' => 'Nouvelle Transaction',
+				'buttonLabel' => 'Créer',
+				'transaction' => $transaction,
+				'trnForm' => $trnForm->createView()
+			)
+		);
     }
 
     /**
@@ -652,47 +639,43 @@ class AdminController extends Controller
      * @param integer $id Transaction id
      */
     public function editTransactionAction(Request $request, $id) {
-        $trnRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Transaction');
-        $transaction = $trnRepo->find($id);
-        $previousAmount = $transaction->getAmount();
-
-        // Création du formulaire associé
-        $trnForm = $this->createForm(TransactionType::class, $transaction);
-
-        if ($request->getMethod() == 'POST') {
-            $trnForm->submit($request);
-            if ($trnForm->isValid()) {
-                // Modification de la transaction en BDD
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($transaction);
-                $em->flush();
-
-                // Attention! La modif d'une transaction doit impacter le cashBalance des joueurs concernés
-                $amount = $transaction->getAmount();
-                $giver = $transaction->getGiver();
-                $giver->handleTransaction($amount, $previousAmount, false);
-                $em->persist($giver);
-                $em->flush();
-                $receiver = $transaction->getReceiver();
-                $receiver->handleTransaction($amount, $previousAmount, true);
-                $em->persist($receiver);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'La transaction de '.$amount.'€ entre '.$giver->getName().' et '.$receiver->getName().' a bien été modifiée.');
-                $this->get('session')->set('activeTab', 'finance');
-                return $this->redirect($this->generateUrl('admin_home'));
-            }
-        }
-        return $this->render(
-            'foot5x5MainBundle::transaction_form.html.twig',
-            array(
-                'title' => 'Modification Transaction',
-                'buttonLabel' => 'Enregistrer',
-                'transaction' => $transaction,
-                'trnForm' => $trnForm->createView()
-            )
-        );
+		$trnRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Transaction');
+		$transaction = $trnRepo->find($id);
+		$previousAmount = $transaction->getAmount();
+		$trnForm = $this->createForm(TransactionType::class, $transaction);
+		
+		$trnForm->handleRequest($request);
+		if ($trnForm->isSubmitted() && $trnForm->isValid()) {
+			// Modification de la transaction en BDD
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($transaction);
+			$em->flush();
+			
+			// Attention! La modif d'une transaction doit impacter le cashBalance des joueurs concernés
+			$amount = $transaction->getAmount();
+			$giver = $transaction->getGiver();
+			$giver->handleTransaction($amount, $previousAmount, false);
+			$em->persist($giver);
+			$em->flush();
+			$receiver = $transaction->getReceiver();
+			$receiver->handleTransaction($amount, $previousAmount, true);
+			$em->persist($receiver);
+			$em->flush();
+			
+			// Redirection sur la page d'admin avec gestion du message d'info
+			$this->get('session')->getFlashBag()->add('success', 'La transaction de '.$amount.'€ entre '.$giver->getName().' et '.$receiver->getName().' a bien été modifiée.');
+			$this->get('session')->set('activeTab', 'finance');
+			return $this->redirect($this->generateUrl('admin_home'));
+		}
+		return $this->render(
+			'foot5x5MainBundle::transaction_form.html.twig',
+			array(
+				'title' => 'Modification Transaction',
+				'buttonLabel' => 'Enregistrer',
+				'transaction' => $transaction,
+				'trnForm' => $trnForm->createView()
+			)
+		);
     }
 
     /**

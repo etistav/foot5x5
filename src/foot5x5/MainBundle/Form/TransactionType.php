@@ -5,6 +5,9 @@ namespace foot5x5\MainBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use foot5x5\MainBundle\Form\Type\DatePickerType;
 
 class TransactionType extends AbstractType
 {
@@ -15,20 +18,20 @@ class TransactionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('date', 'datePicker', array())
-            ->add('giver', 'entity', array(
+            ->add('date', DatePickerType::class, array())
+            ->add('giver', EntityType::class, array(
                 'class' => 'foot5x5MainBundle:Player',
                 'label' => 'Donneur',
-                'property' => 'name',
+                'choice_label' => 'name',
                 'multiple' => false
             ))
-            ->add('receiver', 'entity', array(
+            ->add('receiver', EntityType::class, array(
                 'class' => 'foot5x5MainBundle:Player',
                 'label' => 'Receveur',
-                'property' => 'name',
+                'choice_label' => 'name',
                 'multiple' => false
             ))
-            ->add('amount', 'number', array(
+            ->add('amount', NumberType::class, array(
                 'label' => 'Montant en €'
             ))
         ;
@@ -44,11 +47,4 @@ class TransactionType extends AbstractType
         ));
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'foot5x5_mainbundle_transaction';
-    }
 }

@@ -6,7 +6,10 @@ namespace foot5x5\MainBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\DataTransformer\IntegerToLocalizedStringTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 
 class PlayerType extends AbstractType
@@ -18,30 +21,30 @@ class PlayerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 'text', array(
+            ->add('name', TextType::class, array(
                 'label' => 'Nom'
             ))
-            ->add('valAtt', 'number', array(
+            ->add('valAtt', NumberType::class, array(
                 'label' => 'Note Attaque',
-                'precision' => '2',
+                'scale' => 2,
                 'rounding_mode' => IntegerToLocalizedStringTransformer::ROUND_HALFUP
             ))
-            ->add('valDef', 'number', array(
+            ->add('valDef', NumberType::class, array(
                 'label' => 'Note Défense',
-                'precision' => '2',
+                'scale' => 2,
                 'rounding_mode' => IntegerToLocalizedStringTransformer::ROUND_HALFUP
             ))
-            ->add('valPhy', 'number', array(
+            ->add('valPhy', NumberType::class, array(
                 'label' => 'Note Physique',
-                'precision' => '2',
+                'scale' => 2,
                 'rounding_mode' => IntegerToLocalizedStringTransformer::ROUND_HALFUP
             ))
-            ->add('cashBalance', 'number', array(
+            ->add('cashBalance', NumberType::class, array(
                 'label' => 'Solde en €',
-                'precision' => '2',
+                'scale' => 2,
                 'rounding_mode' => IntegerToLocalizedStringTransformer::ROUND_HALFUP
             ))
-            ->add('isActive', 'checkbox', array(
+            ->add('isActive', CheckboxType::class, array(
                 'label' => 'En activité',
                 'required' => false
             ))
@@ -49,20 +52,13 @@ class PlayerType extends AbstractType
     }
     
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'foot5x5\MainBundle\Entity\Player'
         ));
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'foot5x5_mainbundle_player';
-    }
 }

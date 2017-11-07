@@ -4,9 +4,10 @@ namespace foot5x5\MainBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
-use foot5x5\MainBundle\Form\MatchPlayerType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use foot5x5\MainBundle\Form\Type\DatePickerType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class ResultType extends AbstractType
 {
@@ -17,13 +18,13 @@ class ResultType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('scoreTeamA', 'number')
-            ->add('scoreTeamB', 'number')
-            ->add('date', 'datePicker', array())
-            ->add('matchPlayers', 'collection', array(
-                'type' => new MatchPlayerType(),
+            ->add('scoreTeamA', NumberType::class)
+            ->add('scoreTeamB', NumberType::class)
+            ->add('date', DatePickerType::class, array())
+            ->add('matchPlayers', CollectionType::class, array(
+                'entry_type' => MatchPlayerType::class,
                 'label' => false,
-                'options' => array(
+                'entry_options' => array(
                     'label' => false
                 )
             ))
@@ -31,20 +32,12 @@ class ResultType extends AbstractType
     }
     
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'foot5x5\MainBundle\Entity\Result'
         ));
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'foot5x5_mainbundle_result';
     }
 }

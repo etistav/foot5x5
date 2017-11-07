@@ -21,16 +21,16 @@
 #}
 
 
-{# id = foot5x5_mainbundle_result_matchPlayers_0_player #}
+{# id = result_matchPlayers_0_player #}
 {% block playerDrop_widget %}
     {% spaceless %}
-        <li id="matchPlayers_{{ id|slice(39, 1) }}" class="player-droppable ui-state-default">{{ value }}</li>
-        <input type="hidden" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+        <li id="matchPlayers_{{ id|slice(20, 1) }}" class="player-droppable ui-state-default">{{ value }}</li>
+        <input type="hidden" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}"{% endif %}/>
     {% endspaceless %}
 {% endblock playerDrop_widget %}
 
 
-{# id = foot5x5_mainbundle_note_valAtt _valDef _valPhy#}
+{# id = note_valAtt _valDef _valPhy#}
 {% block sliderNote_widget %}
     {% spaceless %}
         {% set sliderId = id ~ "_slider" %}
@@ -38,7 +38,7 @@
             <div id="{{ sliderId }}" class="slider-note"></div>
         </div>
         <div class="col-sm-1">
-            <input type="text" id="{{ id }}" name="{{ id|slice(0, 23) }}[{{ name }}]" readonly required="required" class="form-control" rows="2" value="{{ value }}">
+            <input type="text" id="{{ id }}" name="{{ id|slice(0, 4) }}[{{ name }}]" readonly required="required" class="form-control" rows="2" value="{{ value }}">
         </div>
     {% endspaceless %}
 {% endblock sliderNote_widget %}

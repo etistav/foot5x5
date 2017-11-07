@@ -2,14 +2,23 @@
 
 namespace foot5x5\MainBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
 use foot5x5\MainBundle\Entity\Note;
+use foot5x5\UserBundle\Entity\User;
 use foot5x5\MainBundle\Form\NoteType;
 use foot5x5\MainBundle\Form\RandomDrawType;
+use foot5x5\UserBundle\Form\UserType;
 use foot5x5\UserBundle\Form\UserPwdType;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class MainController extends Controller
 {
+	/**
+	 * Management of the home page
+	 */
     public function indexAction() {
 
         $mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
@@ -51,7 +60,12 @@ class MainController extends Controller
 		);
     }
 
-    public function resultsAction() {
+    /**
+     * Management of the 'results' view
+     *
+     * @param Request $request
+     */
+    public function resultsAction(Request $request) {
 
         $mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
@@ -60,7 +74,7 @@ class MainController extends Controller
         $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
 
         $trimesters = $resRepo->listAllTrimesters();
-        // Alimentation de la combobox trimestre
+        // Populate trimester dropdown
         $trimNames = array();
         $trimIds = array();
         foreach ($trimesters as $trimester) {
@@ -69,18 +83,17 @@ class MainController extends Controller
             $trimNames[] = $trimName;
             $trimIds[] = $trimId;
         }
-        $trimNames = array_combine($trimIds, $trimNames);
+        $trimNames = array_combine($trimNames, $trimIds);
         $trimesterForm = $this->createFormBuilder()
-            ->add('stdCombo', 'choice', array(
+            ->add('stdCombo', ChoiceType::class, array(
                 'choices' => $trimNames,
+            		'choices_as_values' => true,
                 'label' => 'Trimestre'
-                //'placeholder' => 'Choisir...'
             ))
             ->getForm();
-
-        $request = $this->get('request');
-        if ($request->getMethod() == 'POST') {
-            $trimesterForm->submit($request);
+		
+		$trimesterForm->handleRequest($request);
+		if ($trimesterForm->isSubmitted()) {
             if ($trimesterForm->isValid()) {
                 $idTrimester = $trimesterForm->get('stdCombo')->getData();
                 $currentYear = substr($idTrimester, 0, 4);
@@ -125,7 +138,12 @@ class MainController extends Controller
         );
     }
 
-    public function standingsAction() {
+    /**
+     * Management of the 'standings' view
+     *
+     * @param Request $request
+     */
+    public function standingsAction(Request $request) {
 
         $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
         $standings = $stdRepo->findAll();
@@ -133,29 +151,26 @@ class MainController extends Controller
         $idStanding = $lastStanding->getId();
         $standingsName = array();
         $standingsId = array();
+        $standingsNames = array();
         foreach ($standings as $standing) {
             $standingsName[] = $standing->getName();
             $standingsId[] = $standing->getId();
         }
-        $standingsName = array_combine($standingsId, $standingsName);
+        $standingsNames = array_combine($standingsName, $standingsId);
         $standingForm = $this->createFormBuilder()
-            ->add('stdCombo', 'choice', array(
-                'choices' => $standingsName,
+            ->add('stdCombo', ChoiceType::class, array(
+            		'choices' => $standingsNames,
+            		'choices_as_values' => true,
                 'label' => 'Choix'
-                //'placeholder' => 'Choisir...'
             ))
             ->getForm();
 
-        $request = $this->get('request');
-        if ($request->getMethod() == 'POST') {
-            $standingForm->submit($request);
-            if ($standingForm->isValid()) {
-                $idStanding = $standingForm->get('stdCombo')->getData();
-            }
+        $standingForm->handleRequest($request);
+        if ($standingForm->isSubmitted() && $standingForm->isValid()) {
+        		$idStanding = $standingForm->get('stdCombo')->getData();
         }
         
         $standing = $stdRepo->find($idStanding);
-        //$rankings = $app['dao.ranking']->listAllByStanding($idStanding);
 
         return $this->render(
             'foot5x5MainBundle::standing.html.twig',
@@ -167,6 +182,9 @@ class MainController extends Controller
         );
     }
 
+    /**
+     * Management of the 'players' view
+     */
     public function playersAction() {
         $mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
@@ -230,6 +248,9 @@ class MainController extends Controller
         );
     }
 
+    /**
+     * Management of the 'notes' view
+     */
     public function notesAction() {
 
         $user = $this->getUser();
@@ -245,7 +266,13 @@ class MainController extends Controller
         );
     }
 
-    public function editNoteAction($id) {
+    /**
+     * Management of the 'edit notes' view
+     *
+     * @param Request $request
+     * @param integer $id id du joueur modifié
+     */
+    public function editNoteAction(Request $request, $id) {
 
         $user = $this->getUser();
         $notRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Note');
@@ -262,26 +289,23 @@ class MainController extends Controller
         }
 
         // Création du formulaire associé
-        $noteForm = $this->createForm(new NoteType(), $note);
+        $noteForm = $this->createForm(NoteType::class, $note);
 
-        $request = $this->get('request');
-        if ($request->getMethod() == 'POST') {
-            $noteForm->submit($request);
-            if ($noteForm->isValid()) {
-                /// MAJ des notes du joueur pour l'utilisateur connecté
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($note);
-                $em->flush();
+        $noteForm->handleRequest($request);
+        if ($noteForm->isSubmitted() && $noteForm->isValid()) {
+        		// MAJ des notes du joueur pour l'utilisateur connecté
+        		$em = $this->getDoctrine()->getManager();
+        		$em->persist($note);
+        		$em->flush();
 
-                // MAJ des notes globales du joueur
-                $player = $notRepo->updateNotesPlayer($player);
-                $em->persist($player);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'Les notes de '.$player->getName().' ont bien été modifiées.');
-                return $this->redirect($this->generateUrl('notes'));
-            }
+        		// MAJ des notes globales du joueur
+        		$player = $notRepo->updateNotesPlayer($player);
+        		$em->persist($player);
+        		$em->flush();
+        	
+        		// Redirection sur la page d'admin avec gestion du message d'info
+        		$this->get('session')->getFlashBag()->add('success', 'Les notes de '.$player->getName().' ont bien été modifiées.');
+        		return $this->redirect($this->generateUrl('notes'));
         }
         return $this->render(
             'foot5x5MainBundle::note_form.html.twig',
@@ -294,6 +318,11 @@ class MainController extends Controller
         );
     }
 
+    /**
+     * Handle the removal of players' notes
+     *
+     * @param integer $id id du joueur modifié
+     */
     public function deleteNoteAction($id) {
         $user = $this->getUser();
         $notRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Note');
@@ -326,7 +355,12 @@ class MainController extends Controller
         return $this->redirect($this->generateUrl('notes'));
     }
 
-    public function randomDrawAction() {
+    /**
+     * Management of the 'random draw' view
+     *
+     * @param Request $request
+     */
+    public function randomDrawAction(Request $request) {
     
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
@@ -334,55 +368,52 @@ class MainController extends Controller
         $matchPlayers = array();
         $selectedPlayersList = array();
 
-        $randomDrawForm= $this->createForm(new RandomDrawType(), $players);
+        $randomDrawForm= $this->createForm(RandomDrawType::class, $players);
         
-        $request = $this->get('request');
-        if ($request->getMethod() == 'POST') {
-            $randomDrawForm->submit($request);
-            if ($randomDrawForm->isValid()) {
-                $selectedPlayersString = $randomDrawForm->get('selectedPlayers')->getData();
-                $selectedPlayersList = explode(",", $selectedPlayersString);
-                $nbSelectedPlayers = count($selectedPlayersList);
-                if ($nbSelectedPlayers == 10) {
-                    $IsRandomOK = false;
-                    $nbDraw=0;
-                    $selectedPlayers = array();
-                    foreach ($selectedPlayersList as $selectedPlayerName) {
-                        $selectedPlayers[] = $plrRepo->findOneByName($selectedPlayerName);
-                    }
-                    while ((!$IsRandomOK) or ($nbDraw >= 10)) {
-                        $nbDraw++;
-                        $sumAvgTeamA = 0;
-                        $sumAvgTeamB = 0;
-                        $matchPlayers = $mplRepo->randomDraw($selectedPlayers);
-                        for ($i=0; $i < 10; $i++) {
-                            $team = $matchPlayers[$i]->getTeam();
-                            switch ($team) {
-                                case 'A':
-                                    $sumAvgTeamA += $matchPlayers[$i]->getPlayer()->getValAvg();
-                                    break;
-                                case 'B':
-                                    $sumAvgTeamB += $matchPlayers[$i]->getPlayer()->getValAvg();
-                                    break;
-                                default:
-                                    $this->get('session')->getFlashBag()->add('warning', 'Pas de team définie pour '.$matchPlayers[$i]->getPlayer()->getName());
-                                    break;
-                            }
-                        }
-                        if (abs($sumAvgTeamA-$sumAvgTeamB) <= 2) {
-                            $IsRandomOK = true;
-                        }
-                    }
-                    $this->get('session')->getFlashBag()->add('success', 'Tirage au sort effectué!');
-                } else {
-                    if ($nbSelectedPlayers > 10) {
-                        $this->get('session')->getFlashBag()->add('warning', 'Trop de joueurs sélectionnés : '.$nbSelectedPlayers);
-                    } else {
-                        $this->get('session')->getFlashBag()->add('warning', 'Nombre de joueurs sélectionnés insuffisant : '.$nbSelectedPlayers);
-                    }
-                }
-            }
-        }
+        $randomDrawForm->handleRequest($request);
+		if ($randomDrawForm->isSubmitted() && $randomDrawForm->isValid()) {
+			$selectedPlayersString = $randomDrawForm->get('selectedPlayers')->getData();
+			$selectedPlayersList = explode(",", $selectedPlayersString);
+			$nbSelectedPlayers = count($selectedPlayersList);
+			if ($nbSelectedPlayers == 10) {
+				$IsRandomOK = false;
+				$nbDraw=0;
+				$selectedPlayers = array();
+				foreach ($selectedPlayersList as $selectedPlayerName) {
+					$selectedPlayers[] = $plrRepo->findOneByName($selectedPlayerName);
+				}
+				while ((!$IsRandomOK) or ($nbDraw >= 10)) {
+					$nbDraw++;
+					$sumAvgTeamA = 0;
+					$sumAvgTeamB = 0;
+					$matchPlayers = $mplRepo->randomDraw($selectedPlayers);
+					for ($i=0; $i < 10; $i++) {
+						$team = $matchPlayers[$i]->getTeam();
+						switch ($team) {
+							case 'A':
+								$sumAvgTeamA += $matchPlayers[$i]->getPlayer()->getValAvg();
+								break;
+							case 'B':
+								$sumAvgTeamB += $matchPlayers[$i]->getPlayer()->getValAvg();
+								break;
+							default:
+								$this->get('session')->getFlashBag()->add('warning', 'Pas de team définie pour '.$matchPlayers[$i]->getPlayer()->getName());
+								break;
+						}
+					}
+					if (abs($sumAvgTeamA-$sumAvgTeamB) <= 2) {
+						$IsRandomOK = true;
+					}
+				}
+				$this->get('session')->getFlashBag()->add('success', 'Tirage au sort effectué!');
+			} else {
+				if ($nbSelectedPlayers > 10) {
+					$this->get('session')->getFlashBag()->add('warning', 'Trop de joueurs sélectionnés : '.$nbSelectedPlayers);
+				} else {
+					$this->get('session')->getFlashBag()->add('warning', 'Nombre de joueurs sélectionnés insuffisant : '.$nbSelectedPlayers);
+				}
+			}
+		}
 
         return $this->render(
             'foot5x5MainBundle::randomDraw.html.twig',
@@ -396,6 +427,9 @@ class MainController extends Controller
         );
     }
 
+    /**
+     * Management of the 'finance' view
+     */
     public function financesAction() {
 
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
@@ -418,6 +452,9 @@ class MainController extends Controller
         );
     }
 
+    /**
+     * Management of the 'user profile' view
+     */
     public function profileAction() {
         
         $user = $this->getUser();
@@ -459,36 +496,36 @@ class MainController extends Controller
         );
     }
 
-    public function editPwdAction() {
+    /**
+     * Management of the 'edit password' view
+     *
+     * @param Request $request
+     */
+    public function editPwdAction(Request $request) {
         $user = $this->getUser();
+        $userPwdForm = $this->createForm(UserPwdType::class, $user);
 
-        // Création du formulaire associé
-        $userPwdForm = $this->createForm(new UserPwdType(), $user);
-
-        $request = $this->get('request');
-        if ($request->getMethod() == 'POST') {
-            $userPwdForm->submit($request);
-            if ($userPwdForm->isValid()) {
-                // Génération d'une valeur aléatoire pour le salt
-                $salt = substr(md5(time()), 0, 23);
-                $user->setSalt($salt);
-
-                // Encodage du mot de passe
-                $factory =$this->get('security.encoder_factory');
-                $encoder = $factory->getEncoder($user);
-                $plainPassword = $user->getPassword();
-                $password = $encoder->encodePassword($plainPassword, $user->getSalt());
-                $user->setPassword($password);
-
-                // Ecriture du user en BDD
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'Ton mot de passe a bien été modifié.');
-                return $this->redirect($this->generateUrl('myprofile'));
-            }
+        $userPwdForm->handleRequest($request);
+        if ($userPwdForm->isSubmitted() && $userPwdForm->isValid()) {
+			// Génération d'une valeur aléatoire pour le salt
+			$salt = substr(md5(time()), 0, 23);
+			$user->setSalt($salt);
+			
+			// Encodage du mot de passe
+			$factory =$this->get('security.encoder_factory');
+			$encoder = $factory->getEncoder($user);
+			$plainPassword = $user->getPassword();
+			$password = $encoder->encodePassword($plainPassword, $user->getSalt());
+			$user->setPassword($password);
+			
+			// Ecriture du user en BDD
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($user);
+			$em->flush();
+			
+			// Redirection sur la page d'admin avec gestion du message d'info
+			$this->get('session')->getFlashBag()->add('success', 'Ton mot de passe a bien été modifié.');
+			return $this->redirect($this->generateUrl('myprofile'));
         }
         return $this->render(
             'foot5x5MainBundle::userpwd_form.html.twig',
@@ -499,5 +536,72 @@ class MainController extends Controller
                 'userPwdForm' => $userPwdForm->createView()
             )
         );
+    }
+
+    /**
+     * Management of the 'register' view
+     *
+     * @param Request $request
+     */
+    public function registerAction(Request $request) {
+    	
+        // Build the form
+        $user = new User();
+        $formOptions = array(
+        		"action" => "register"
+        );
+        $userForm = $this->createForm(UserType::class, $user, $formOptions);
+        $errors = array();
+        
+        $userForm->handleRequest($request);
+        if ($userForm->isSubmitted() && $userForm->isValid()) {
+        		// Génération d'une valeur aléatoire pour le salt
+        		$salt = substr(md5(time()), 0, 23);
+        		$user->setSalt($salt);
+        		
+        		// Encodage du mot de passe
+        		$factory =$this->get('security.encoder_factory');
+        		$encoder = $factory->getEncoder($user);
+        		$plainPassword = $user->getPassword();
+        		$password = $encoder->encodePassword($plainPassword, $user->getSalt());
+        		$user->setPassword($password);
+    		
+    		    // Save the user
+    		    $em = $this->getDoctrine()->getManager();
+    		    $em->persist($user);
+    		    $em->flush();
+    		
+    		    // TODO send email
+    		    // ...
+        	    
+        	    // Redirect to home page with message management
+        	    $this->get('session')->getFlashBag()->add('success', 'Le user '.$user->getUsername().' a bien été créé.');
+        	    return $this->redirect($this->generateUrl('register'));
+        	    // return $this->redirect($this->generateUrl('foot5x5_main_homepage'));
+        	
+    		    //return $this->redirectToRoute('foot5x5_main_homepage');
+        }
+        
+        return $this->render(
+    			'foot5x5MainBundle::register.html.twig',
+    			array(
+    				'userForm' => $userForm->createView(),
+    				'title' => 'S\'inscrire',
+    				'errors' => $errors
+    			)
+    		);
+    }
+
+    /**
+     * Management of the 'welcome' view
+     */
+    public function welcomeAction() {
+    	
+    		return $this->render(
+    			'foot5x5MainBundle::welcome.html.twig',
+    			array(
+    					'title' => 'Bienvenue'
+    			)
+    		);
     }
 }

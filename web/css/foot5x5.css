@@ -72,6 +72,22 @@ div#content {
 }
 
 /* ------------------------- */
+/*   WELCOME                 */
+/* ------------------------- */
+
+div#welcome-buttons {
+    text-align: center;
+}
+div#welcome-buttons a button {
+	margin-right: 50px;
+    margin-left: 50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+	height: 150px;
+	width: 250px;
+}
+
+/* ------------------------- */
 /*   TRIM FORM               */
 /* ------------------------- */
 
@@ -781,9 +797,13 @@ tr#finances-totalCredits td {
 .admin-table > table > tbody > tr:hover > td {
    background-color: #FFFFFF;
 }
+.admin-left-column {
+	text-align: left;
+	padding-left: 1em !important;
+}
 .admin-right-column {
-	text-align: right;
-	padding-right: 5px;
+    text-align: right;
+    padding-right: 5px;
 }
 .admin-center-column {
 	text-align: center;

@@ -124,19 +124,19 @@
         });
         $("#random-draw-submit").button().click(function(event) {
             $(function() {
-                var hdnValue = $('#foot5x5_mainbundle_randomdraw_selectedPlayers').val();
+                var hdnValue = $('#random_draw_selectedPlayers').val();
                 if(hdnValue != '') {
-                    $('#foot5x5_mainbundle_randomdraw_selectedPlayers').val('');
+                    $('#random_draw_selectedPlayers').val('');
                 }
                 $("#players-selectable li.ui-selected", this).each(function(hdnValue) {
                     var selectedValue=$(this).text();
-                    hdnValue = $('#foot5x5_mainbundle_randomdraw_selectedPlayers').val();
+                    hdnValue = $('#random_draw_selectedPlayers').val();
                     if(hdnValue != '') {
-                        $('#foot5x5_mainbundle_randomdraw_selectedPlayers').val(hdnValue +','+selectedValue);
+                        $('#random_draw_selectedPlayers').val(hdnValue +','+selectedValue);
                     } else {
-                        $('#foot5x5_mainbundle_randomdraw_selectedPlayers').val(selectedValue);
+                        $('#random_draw_selectedPlayers').val(selectedValue);
                     }
-                    hdnValue = $('#foot5x5_mainbundle_randomdraw_selectedPlayers').val();
+                    hdnValue = $('#random_draw_selectedPlayers').val();
                 });
             });
         });

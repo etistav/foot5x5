@@ -2,33 +2,31 @@
 
 namespace foot5x5\MainBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-
 use foot5x5\MainBundle\Entity\MatchPlayer;
-use foot5x5\MainBundle\Entity\Param;
 use foot5x5\MainBundle\Entity\Player;
 use foot5x5\MainBundle\Entity\Ranking;
 use foot5x5\MainBundle\Entity\Result;
-use foot5x5\MainBundle\Entity\Standing;
 use foot5x5\MainBundle\Entity\Transaction;
 use foot5x5\UserBundle\Entity\User;
 
 use foot5x5\MainBundle\Form\PlayerType;
 use foot5x5\MainBundle\Form\ResultType;
 use foot5x5\MainBundle\Form\TransactionType;
-use foot5x5\UserBundle\Form\UserEditType;
 use foot5x5\UserBundle\Form\UserType;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\HttpFoundation\Request;
 
 class AdminController extends Controller
 {
     /**
-     * Contrôleur pour la gestion de la page d'administration
+     * Management of the admin home page
      * 
+     * @param Request $request
      */
-    public function indexAction() {
+    public function indexAction(Request $request) {
 
-        $mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
         $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
@@ -36,7 +34,7 @@ class AdminController extends Controller
         $usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
 
         // Gestion de l'onglet actif en session et réinitialisation
-        $session = $this->getRequest()->getSession();
+        $session = $request->getSession();
         if ($session->get('activeTab') == '') {
             $activeTab = 'results';
         } else {
@@ -50,7 +48,7 @@ class AdminController extends Controller
         $users = $usrRepo->findAll();
         $trimesters = $resRepo->listAllTrimesters();
 
-        // Alimentation de la combobox trimestre
+        // Populate trimester dropdown
         $trimNames = array();
         $trimIds = array();
         foreach ($trimesters as $trimester) {
@@ -63,18 +61,17 @@ class AdminController extends Controller
             $trimNames[] = $trimName;
             $trimIds[] = $trimId;
         }
-        $trimNames = array_combine($trimIds, $trimNames);
+        $trimNames = array_combine($trimNames, $trimIds);
         $trimesterForm = $this->createFormBuilder()
-            ->add('stdCombo', 'choice', array(
-                'choices' => $trimNames,
+            ->add('stdCombo', ChoiceType::class, array(
+            		'choices' => $trimNames,
+            		'choices_as_values' => true,
                 'label' => 'Trimestre'
-                //'placeholder' => 'Choisir...'
             ))
             ->getForm();
 
-        $request = $this->get('request');
-        if ($request->getMethod() == 'POST') {
-            $trimesterForm->bind($request);
+		$trimesterForm->handleRequest($request);
+		if ($trimesterForm->isSubmitted()) {
             if ($trimesterForm->isValid()) {
                 $idTrimester = $trimesterForm->get('stdCombo')->getData();
                 $currentYear = substr($idTrimester, 0, 4);
@@ -110,63 +107,58 @@ class AdminController extends Controller
      ***********************************/
 
     /**
-     * Contrôleur pour l'action de création d'un nouveau match.
+     * Management of the 'add match' view
      * 
+     * @param Request $request
      */
-    public function addMatchAction() {
+    public function addMatchAction(Request $request) {
         $match = new Result();
 
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
-        $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
+        // $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
 
         $players = $plrRepo->findAll();
+        $matchPlayerA = array();
+        $matchPlayerB = array();
+        
+        
         // Initialisation de 5 joueurs dans chaque équipe
         for ($i = 1; $i <= 5; $i++) {
             $matchPlayerA[$i] = new MatchPlayer();
-            $playerA = $plrRepo->find(2 * $i - 1);
+            // $playerA = $plrRepo->find(2 * $i - 1);
             // $matchPlayerA[$i]->setPlayer($playerA);
             $matchPlayerA[$i]->setTeam('A');
             $match->addMatchPlayer($matchPlayerA[$i]);
 
             $matchPlayerB[$i] = new MatchPlayer();
-            $playerB = $plrRepo->find(2 * $i);
+            // $playerB = $plrRepo->find(2 * $i);
             // $matchPlayerB[$i]->setPlayer($playerB);
             $matchPlayerB[$i]->setTeam('B');
             $match->addMatchPlayer($matchPlayerB[$i]);
         }
 
         // Création du formulaire associé
-        $matchForm = $this->createForm(new ResultType(), $match);
+        $matchForm = $this->createForm(ResultType::class, $match);
 
-        $request = $this->get('request');
-        if ($request->getMethod() == 'POST') {
-            $matchForm->bind($request);
-            if ($matchForm->isValid()) {
+		$matchForm->handleRequest($request);
+		if ($matchForm->isSubmitted() && $matchForm->isValid()) {
+			// Détermination du n° de match
+			$matchNum = $resRepo->findMatchNumber($match);
+			$match->setNum($matchNum);
+			
+			// Création d'un classement pour le trimestre si besoin
+			// $isStandingCreated = $stdRepo->initializeStanding($match->getYear(), $match->getTrimester());
+			
+			// Ecriture du match en BDD
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($match);
+			$em->flush();
 
-                //echo $request->getMethod();
-                // Détermination du n° de match
-                $matchNum = $resRepo->findMatchNumber($match);
-                $match->setNum($matchNum);
-
-                // Création d'un classement pour le trimestre si besoin
-                $isStandingCreated = $stdRepo->initializeStanding($match->getYear(), $match->getTrimester());
-
-                // Ecriture du match en BDD
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($match);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'Le match n°'.$matchNum.' a bien été créé.');
-                $this->get('session')->set('activeTab', 'results');
-                return $this->redirect($this->generateUrl('admin_home'));
-            }
-            else {
-                echo $match->getNum();
-                echo $request->getMethod();
-                var_dump($_POST);
-            }
+			// Redirection sur la page d'admin avec gestion du message d'info
+			$this->get('session')->getFlashBag()->add('success', 'Le match n°'.$matchNum.' a bien été créé.');
+			$this->get('session')->set('activeTab', 'results');
+			return $this->redirect($this->generateUrl('admin_home'));
         }
         return $this->render(
             'foot5x5MainBundle::match_form.html.twig',
@@ -181,11 +173,12 @@ class AdminController extends Controller
     }
 
     /**
-     * Contrôleur pour l'action de modification d'un match.
+     * Management of the 'edit match' view
      *
+     * @param Request $request
      * @param integer $id match id
      */
-    public function editMatchAction($id) {
+    public function editMatchAction(Request $request, $id) {
 
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
@@ -193,26 +186,22 @@ class AdminController extends Controller
         $players = $plrRepo->findAll();
         $match = $resRepo->find($id);
         $dateEditedMatch = $match->getDate()->format('d/m/Y');
-        $matchForm = $this->createForm(new ResultType(), $match);
+        $matchForm = $this->createForm(ResultType::class, $match);
 
-        $request = $this->get('request');
-        if ($request->getMethod() == 'POST') {
-            $matchForm->bind($request);
-            if ($matchForm->isValid()) {
+        $matchForm->handleRequest($request);
+        if ($matchForm->isSubmitted() && $matchForm->isValid()) {
+			// Si date modifiée, mise à jour des n° de matchs suivants
+			// TODO gestion n°match si modif date
 
-                // Si date modifiée, mise à jour des n° de matchs suivants
-                // TODO...
+			// MAJ du match en BDD
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($match);
+			$em->flush();
 
-                // MAJ du match en BDD
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($match);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'Le match du '.$dateEditedMatch.' a bien été modifié.');
-                $this->get('session')->set('activeTab', 'results');
-                return $this->redirect($this->generateUrl('admin_home'));
-            }
+			// Redirection sur la page d'admin avec gestion du message d'info
+			$this->get('session')->getFlashBag()->add('success', 'Le match du '.$dateEditedMatch.' a bien été modifié.');
+			$this->get('session')->set('activeTab', 'results');
+			return $this->redirect($this->generateUrl('admin_home'));
         }
         return $this->render(
             'foot5x5MainBundle::match_form.html.twig',
@@ -227,7 +216,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Contrôleur pour l'action de suppression d'un match.
+     * Handle the removal of a match
      *
      * @param integer $id match id
      */
@@ -256,7 +245,7 @@ class AdminController extends Controller
      ***********************************/
 
     /**
-     * Contrôleur pour l'action de calcul d'un classement.
+     * Handle the calculation of a standing
      *
      * @param integer $id Standing id
      */
@@ -354,30 +343,27 @@ class AdminController extends Controller
      ***********************************/
 
     /**
-     * Contrôleur pour l'action de création d'un nouveau joueur.
+     * Management of the 'add player' view
      * 
+     * @param Request $request
      */
-    public function addPlayerAction() {
+    public function addPlayerAction(Request $request) {
         $player = new Player();
-        $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
 
         // Création du formulaire associé
-        $playerForm = $this->createForm(new PlayerType(), $player);
+        $playerForm = $this->createForm(PlayerType::class, $player);
 
-        $request = $this->get('request');
-        if ($request->getMethod() == 'POST') {
-            $playerForm->bind($request);
-            if ($playerForm->isValid()) {
-                // Ecriture du player en BDD
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($player);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'Le joueur '.$player->getName().' a bien été créé.');
-                $this->get('session')->set('activeTab', 'players');
-                return $this->redirect($this->generateUrl('admin_home'));
-            }
+        $playerForm->handleRequest($request);
+        if ($playerForm->isSubmitted() && $playerForm->isValid()) {
+			// Ecriture du player en BDD
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($player);
+			$em->flush();
+			
+			// Redirection sur la page d'admin avec gestion du message d'info
+			$this->get('session')->getFlashBag()->add('success', 'Le joueur '.$player->getName().' a bien été créé.');
+			$this->get('session')->set('activeTab', 'players');
+			return $this->redirect($this->generateUrl('admin_home'));
         }
         return $this->render(
             'foot5x5MainBundle::player_form.html.twig',
@@ -391,31 +377,29 @@ class AdminController extends Controller
     }
 
     /**
-     * Contrôleur pour l'action de modification d'un joueur.
+     * Management of the 'edit match' view
      *
+     * @param Request $request
      * @param integer $id Player id
      */
-    public function editPlayerAction($id) {
+    public function editPlayerAction(Request $request, $id) {
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $player = $plrRepo->find($id);
 
         // Création du formulaire associé
-        $playerForm = $this->createForm(new PlayerType(), $player);
+        $playerForm = $this->createForm(PlayerType::class, $player);
 
-        $request = $this->get('request');
-        if ($request->getMethod() == 'POST') {
-            $playerForm->bind($request);
-            if ($playerForm->isValid()) {
-                // Ecriture du player en BDD
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($player);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'Le joueur '.$player->getName().' a bien été modifié.');
-                $this->get('session')->set('activeTab', 'players');
-                return $this->redirect($this->generateUrl('admin_home'));
-            }
+        $playerForm->handleRequest($request);
+        if ($playerForm->isSubmitted() && $playerForm->isValid()) {
+			// Ecriture du player en BDD
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($player);
+			$em->flush();
+			
+			// Redirection sur la page d'admin avec gestion du message d'info
+			$this->get('session')->getFlashBag()->add('success', 'Le joueur '.$player->getName().' a bien été modifié.');
+			$this->get('session')->set('activeTab', 'players');
+			return $this->redirect($this->generateUrl('admin_home'));
         }
         return $this->render(
             'foot5x5MainBundle::player_form.html.twig',
@@ -429,7 +413,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Contrôleur pour l'action de suppression d'un joueur.
+     * Handle the removal of a player
      *
      * @param integer $id Player id
      */
@@ -454,7 +438,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Contrôleur pour la mise à jour du solde d'un joueur.
+     * Contrôller to handle the update of one player's balance
      *
      * @param integer $id Player id
      * @param string $operation 'credit' or 'debit'
@@ -494,42 +478,42 @@ class AdminController extends Controller
      ***********************************/
 
     /**
-     * Contrôleur pour l'action de création d'un nouvel utilisateur.
+     * Management of the 'add user' view
      * 
+     * @param Request $request
      */
-    public function addUserAction() {
+    public function addUserAction(Request $request) {
         $user = new User();
-        $usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
 
         // Création du formulaire associé
-        $userForm = $this->createForm(new UserType(), $user);
+        $formOptions = array(
+        		"action" => "addUser"
+        );
+        $userForm = $this->createForm(UserType::class, $user, $formOptions);
+        $userForm->handleRequest($request);
 
-        $request = $this->get('request');
-        if ($request->getMethod() == 'POST') {
-            $userForm->bind($request);
-            if ($userForm->isValid()) {
-                // Génération d'une valeur aléatoire pour le salt
-                $salt = substr(md5(time()), 0, 23);
-                $user->setSalt($salt);
-
-                // Encodage du mot de passe
-                $factory =$this->get('security.encoder_factory');
-                $encoder = $factory->getEncoder($user);
-                $plainPassword = $user->getPassword();
-                $password = $encoder->encodePassword($plainPassword, $user->getSalt());
-                $user->setPassword($password);
-
-                // Ecriture du user en BDD
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'Le user '.$user->getUsername().' a bien été créé.');
-                $this->get('session')->set('activeTab', 'users');
-                return $this->redirect($this->generateUrl('admin_home'));
-            }
-        }
+		if ($userForm->isSubmitted() && $userForm->isValid()) {
+		    // Génération d'une valeur aléatoire pour le salt
+		    $salt = substr(md5(time()), 0, 23);
+		    $user->setSalt($salt);
+		
+		    // Encodage du mot de passe
+		    $factory =$this->get('security.encoder_factory');
+		    $encoder = $factory->getEncoder($user);
+		    $plainPassword = $user->getPassword();
+		    $password = $encoder->encodePassword($plainPassword, $user->getSalt());
+		    $user->setPassword($password);
+		
+		    // Ecriture du user en BDD
+		    $em = $this->getDoctrine()->getManager();
+		    $em->persist($user);
+		    $em->flush();
+		
+		    // Redirection sur la page d'admin avec gestion du message d'info
+		    $this->get('session')->getFlashBag()->add('success', 'Le user '.$user->getUsername().' a bien été créé.');
+		    $this->get('session')->set('activeTab', 'users');
+		    return $this->redirect($this->generateUrl('admin_home'));
+		}
         return $this->render(
             'foot5x5MainBundle::user_form.html.twig',
             array(
@@ -543,32 +527,30 @@ class AdminController extends Controller
     }
 
     /**
-     * Contrôleur pour l'action de modification d'un utilisateur.
+     * Management of the 'edit user' view
      *
+     * @param Request $request
      * @param integer $id User id
      */
-    public function editUserAction($id) {
+    public function editUserAction(Request $request, $id) {
         $usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
         $user = $usrRepo->find($id);
-
-        // Création du formulaire associé
-        $userForm = $this->createForm(new UserEditType(), $user);
-
-        $request = $this->get('request');
-        if ($request->getMethod() == 'POST') {
-            $userForm->bind($request);
-            if ($userForm->isValid()) {
-
-                // Ecriture du user en BDD
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'Le user '.$user->getUsername().' a bien été modifié.');
-                $this->get('session')->set('activeTab', 'users');
-                return $this->redirect($this->generateUrl('admin_home'));
-            }
+        $formOptions = array(
+        		"action" => "edit"
+        );
+        $userForm = $this->createForm(UserType::class, $user, $formOptions);
+        
+        $userForm->handleRequest($request);
+        if ($userForm->isSubmitted() && $userForm->isValid()) {
+			// Ecriture du user en BDD
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($user);
+			$em->flush();
+			
+			// Redirection sur la page d'admin avec gestion du message d'info
+			$this->get('session')->getFlashBag()->add('success', 'Le user '.$user->getUsername().' a bien été modifié.');
+			$this->get('session')->set('activeTab', 'users');
+			return $this->redirect($this->generateUrl('admin_home'));
         }
         return $this->render(
             'foot5x5MainBundle::user_form.html.twig',
@@ -583,7 +565,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Contrôleur pour l'action de suppression d'un utilisateur.
+     * Handle the removal of a user
      *
      * @param integer $id User id
      */
@@ -609,107 +591,132 @@ class AdminController extends Controller
      ***********************************/
 
     /**
-     * Contrôleur pour l'action de création d'un nouvel transaction.
+     * Management of the 'add transaction' view
      * 
+     * @param Request $request
      */
-    public function addTransactionAction() {
-        $transaction = new Transaction();
-        $trnRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Transaction');
-        $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
-
-        // Création du formulaire associé
-        $trnForm = $this->createForm(new TransactionType(), $transaction);
-
-        $request = $this->get('request');
-        if ($request->getMethod() == 'POST') {
-            $trnForm->bind($request);
-            if ($trnForm->isValid()) {
-                // Ecriture du user en BDD
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($transaction);
-                $em->flush();
-
-                // Attention! La création d'une transaction doit impacter le cashBalance des joueurs concernés
-                $previousAmount = 0;
-                $amount = $transaction->getAmount();
-                $giver = $transaction->getGiver();
-                $giver->handleTransaction($amount, $previousAmount, false);
-                $em->persist($giver);
-                $em->flush();
-                $receiver = $transaction->getReceiver();
-                $receiver->handleTransaction($amount, $previousAmount, true);
-                $em->persist($receiver);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'La transaction de '.$amount.'€ entre '.$giver->getName().' et '.$receiver->getName().' a bien été créée.');
-                $this->get('session')->set('activeTab', 'finance');
-                return $this->redirect($this->generateUrl('admin_home'));
-            }
-        }
-        return $this->render(
-            'foot5x5MainBundle::transaction_form.html.twig',
-            array(
-                'title' => 'Nouvelle Transaction',
-                'buttonLabel' => 'Créer',
-                'transaction' => $transaction,
-                'trnForm' => $trnForm->createView()
-            )
-        );
+    public function addTransactionAction(Request $request) {
+		$transaction = new Transaction();
+		$trnForm = $this->createForm(TransactionType::class, $transaction);
+		
+		$trnForm->handleRequest($request);
+		if ($trnForm->isSubmitted() && $trnForm->isValid()) {
+			// Ecriture du user en BDD
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($transaction);
+			$em->flush();
+			
+			// Attention! La création d'une transaction doit impacter le cashBalance des joueurs concernés
+			$previousAmount = 0;
+			$amount = $transaction->getAmount();
+			$giver = $transaction->getGiver();
+			$giver->handleTransaction($amount, $previousAmount, false);
+			$em->persist($giver);
+			$em->flush();
+			$receiver = $transaction->getReceiver();
+			$receiver->handleTransaction($amount, $previousAmount, true);
+			$em->persist($receiver);
+			$em->flush();
+			
+			// Redirection sur la page d'admin avec gestion du message d'info
+			$this->get('session')->getFlashBag()->add('success', 'La transaction de '.$amount.'€ entre '.$giver->getName().' et '.$receiver->getName().' a bien été créée.');
+			$this->get('session')->set('activeTab', 'finance');
+			return $this->redirect($this->generateUrl('admin_home'));
+		}
+		return $this->render(
+			'foot5x5MainBundle::transaction_form.html.twig',
+			array(
+				'title' => 'Nouvelle Transaction',
+				'buttonLabel' => 'Créer',
+				'transaction' => $transaction,
+				'trnForm' => $trnForm->createView()
+			)
+		);
     }
 
     /**
-     * Contrôleur pour l'action de modification d'un transaction.
+     * Management of the 'edit transaction' view
      *
+     * @param Request $request
      * @param integer $id Transaction id
      */
-    public function editTransactionAction($id) {
-        $trnRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Transaction');
-        $transaction = $trnRepo->find($id);
-        $previousAmount = $transaction->getAmount();
-
-        // Création du formulaire associé
-        $trnForm = $this->createForm(new TransactionType(), $transaction);
-
-        $request = $this->get('request');
-        if ($request->getMethod() == 'POST') {
-            $trnForm->bind($request);
-            if ($trnForm->isValid()) {
-                // Modification de la transaction en BDD
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($transaction);
-                $em->flush();
-
-                // Attention! La modif d'une transaction doit impacter le cashBalance des joueurs concernés
-                $amount = $transaction->getAmount();
-                $giver = $transaction->getGiver();
-                $giver->handleTransaction($amount, $previousAmount, false);
-                $em->persist($giver);
-                $em->flush();
-                $receiver = $transaction->getReceiver();
-                $receiver->handleTransaction($amount, $previousAmount, true);
-                $em->persist($receiver);
-                $em->flush();
-
-                // Redirection sur la page d'admin avec gestion du message d'info
-                $this->get('session')->getFlashBag()->add('success', 'La transaction de '.$amount.'€ entre '.$giver->getName().' et '.$receiver->getName().' a bien été modifiée.');
-                $this->get('session')->set('activeTab', 'finance');
-                return $this->redirect($this->generateUrl('admin_home'));
-            }
-        }
-        return $this->render(
-            'foot5x5MainBundle::transaction_form.html.twig',
-            array(
-                'title' => 'Modification Transaction',
-                'buttonLabel' => 'Enregistrer',
-                'transaction' => $transaction,
-                'trnForm' => $trnForm->createView()
-            )
-        );
+    public function editTransactionAction(Request $request, $id) {
+		$trnRepo = $this->getDoctrine()->getRepository(Transaction::class);
+		
+		$transaction = $trnRepo->find($id);
+		$previousAmount = $transaction->getAmount();
+		$previousGiver = $transaction->getGiver();
+		$previousReceiver = $transaction->getReceiver();
+		$trnForm = $this->createForm(TransactionType::class, $transaction);
+		
+		$trnForm->handleRequest($request);
+		if ($trnForm->isSubmitted() && $trnForm->isValid()) {
+			// Modification de la transaction en BDD
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($transaction);
+			$em->flush();
+			
+			$amount = $transaction->getAmount();
+			$giver = $transaction->getGiver();
+			$receiver = $transaction->getReceiver();
+			$changedGiverOrReceiver = false;
+			
+			// Update cashBalance for each player involved
+			if ($giver->getName() != $previousGiver->getName()) {
+				$changedGiverOrReceiver = true;
+				$previousGiver->handleTransaction($previousAmount, 0, true);
+				$giver->handleTransaction($amount, 0, false);
+				$em->persist($previousGiver);
+				$em->flush();
+			} else {
+				$giver->handleTransaction($amount, $previousAmount, false);
+			}
+			if ($receiver->getName() != $previousReceiver->getName()) {
+				$changedGiverOrReceiver = true;
+				$previousReceiver->handleTransaction($previousAmount, 0, false);
+				$receiver->handleTransaction($amount, 0, true);
+			} else {
+				$receiver->handleTransaction($amount, $previousAmount, true);
+			}
+			$em->persist($giver);
+			$em->flush();
+			$em->persist($receiver);
+			$em->flush();
+			
+			// Information message management
+			if ($changedGiverOrReceiver) {
+				$this->get('session')->getFlashBag()
+					->add(
+						'success',
+						'La transaction de '.$previousAmount.'€ entre '.$previousGiver->getName().' et '.$previousReceiver->getName().' a bien été annulée.'
+					);
+				$this->get('session')->getFlashBag()
+					->add(
+						'success',
+						'La transaction de '.$amount.'€ entre '.$giver->getName().' et '.$receiver->getName().' a bien été générée.'
+					);
+			} else {
+				$this->get('session')->getFlashBag()->add(
+					'success',
+					'La transaction entre '.$giver->getName().' et '.$receiver->getName().' a bien été modifiée de '.$previousAmount.'€ à '.$amount.'€.'
+				);
+			}
+			$this->get('session')->set('activeTab', 'finance');
+			return $this->redirect($this->generateUrl('admin_home'));
+		}
+		return $this->render(
+			'foot5x5MainBundle::transaction_form.html.twig',
+			array(
+				'title' => 'Modification Transaction',
+				'buttonLabel' => 'Enregistrer',
+				'transaction' => $transaction,
+				'trnForm' => $trnForm->createView()
+			)
+		);
     }
 
     /**
-     * Contrôleur pour l'action de suppression d'une transaction.
+     * Handle the removal of a transaction
      *
      * @param integer $id Transaction id
      */
@@ -736,7 +743,7 @@ class AdminController extends Controller
         $em->flush();
 
         // Redirection sur la page d'admin avec gestion du message d'info
-        $this->get('session')->getFlashBag()->add('success', 'La transaction de '.$amount.'€ entre '.$giver->getName().' et '.$receiver->getName().' a bien été supprimée.');
+        $this->get('session')->getFlashBag()->add('success', 'La transaction de '.$previousAmount.'€ entre '.$giver->getName().' et '.$receiver->getName().' a bien été supprimée.');
         $this->get('session')->set('activeTab', 'finance');
         return $this->redirect($this->generateUrl('admin_home'));
     }

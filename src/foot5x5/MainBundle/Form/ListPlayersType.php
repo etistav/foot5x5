@@ -4,11 +4,7 @@
 namespace foot5x5\MainBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\DataTransformer\IntegerToLocalizedStringTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
-use foot5x5\MainBundle\Form\PlayerType;
 
 class ListPlayersType extends AbstractType
 {

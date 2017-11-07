@@ -1,0 +1,21 @@
+foot5x5_main:
+    resource: "@foot5x5MainBundle/Resources/config/routing.yml"
+    prefix:   /
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+
+login:
+    path:  /login
+    defaults:
+        _controller: foot5x5UserBundle:Security:login
+
+login_check:
+    path: /login_check
+
+logout:
+    path: /logout
+
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.xml"

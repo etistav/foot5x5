@@ -12,7 +12,7 @@ set :repo_url, "git@github.com:etistav/foot5x5.git"
 # ssh footxfrsil@ssh.cluster011.ovh.net
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, "www"
+set :deploy_to, "/home/footxfrsil"
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh

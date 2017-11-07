@@ -738,3 +738,662 @@ Permission denied (publickey).
   INFO [fd2eac46] Running /usr/bin/env mkdir -p www/shared/web/uploads as footxfrsil@ssh.cluster011.ovh.net
  DEBUG [fd2eac46] Command: /usr/bin/env mkdir -p www/shared/web/uploads
   INFO [fd2eac46] Finished in 0.024 seconds with exit status 0 (successful).
+  INFO ---------------------------------------------------------------------------
+  INFO START 2017-11-07 01:24:21 +0100 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [70080e48] Running /usr/bin/env mkdir -p /home/footxfrsil/tmp as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [70080e48] Command: /usr/bin/env mkdir -p /home/footxfrsil/tmp
+  INFO [70080e48] Finished in 0.227 seconds with exit status 0 (successful).
+ DEBUG Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 0.0%
+  INFO Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 100.0%
+  INFO [04a5ba5a] Running /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [04a5ba5a] Command: /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh
+  INFO [04a5ba5a] Finished in 0.020 seconds with exit status 0 (successful).
+  INFO [b2963e7e] Running /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [b2963e7e] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD )
+ DEBUG [b2963e7e] 	d8a83ffbe4df6b51d3f445172d0b01368d2cbade	HEAD
+  INFO [b2963e7e] Finished in 1.388 seconds with exit status 0 (successful).
+  INFO [b2e20a87] Running /usr/bin/env mkdir -p www/shared www/releases as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [b2e20a87] Command: /usr/bin/env mkdir -p www/shared www/releases
+  INFO [b2e20a87] Finished in 0.021 seconds with exit status 0 (successful).
+  INFO [cdf1aeca] Running /usr/bin/env mkdir -p www/shared/web/uploads as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [cdf1aeca] Command: /usr/bin/env mkdir -p www/shared/web/uploads
+  INFO [cdf1aeca] Finished in 0.030 seconds with exit status 0 (successful).
+ DEBUG [4bedd851] Running [ -f www/current/REVISION ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [4bedd851] Command: [ -f www/current/REVISION ]
+ DEBUG [4bedd851] Finished in 0.019 seconds with exit status 1 (failed).
+ DEBUG [d2ed8ea7] Running [ -f www/repo/HEAD ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [d2ed8ea7] Command: [ -f www/repo/HEAD ]
+ DEBUG [d2ed8ea7] Finished in 0.018 seconds with exit status 1 (failed).
+ DEBUG [9065ace7] Running if test ! -d www; then echo "Directory does not exist 'www'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [9065ace7] Command: if test ! -d www; then echo "Directory does not exist 'www'" 1>&2; false; fi
+ DEBUG [9065ace7] Finished in 0.017 seconds with exit status 0 (successful).
+  INFO [b6ec9db0] Running /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git www/repo as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [b6ec9db0] Command: cd www && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git www/repo )
+ DEBUG [b6ec9db0] 	Cloning into bare repository www/repo...
+  INFO [b6ec9db0] Finished in 2.816 seconds with exit status 0 (successful).
+ DEBUG [cfd88c5a] Running if test ! -d www/repo; then echo "Directory does not exist 'www/repo'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [cfd88c5a] Command: if test ! -d www/repo; then echo "Directory does not exist 'www/repo'" 1>&2; false; fi
+ DEBUG [cfd88c5a] 	Directory does not exist 'www/repo'
+  INFO ---------------------------------------------------------------------------
+  INFO START 2017-11-07 01:41:24 +0100 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [f4831c8a] Running /usr/bin/env mkdir -p /home/footxfrsil/tmp as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [f4831c8a] Command: /usr/bin/env mkdir -p /home/footxfrsil/tmp
+  INFO [f4831c8a] Finished in 0.235 seconds with exit status 0 (successful).
+ DEBUG Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 0.0%
+  INFO Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 100.0%
+  INFO [c4c3ad78] Running /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [c4c3ad78] Command: /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh
+  INFO [c4c3ad78] Finished in 0.019 seconds with exit status 0 (successful).
+  INFO [e3c2f5e8] Running /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [e3c2f5e8] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD )
+ DEBUG [e3c2f5e8] 	d8a83ffbe4df6b51d3f445172d0b01368d2cbade	HEAD
+  INFO [e3c2f5e8] Finished in 1.453 seconds with exit status 0 (successful).
+  INFO [13c03145] Running /usr/bin/env mkdir -p www/shared www/releases as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [13c03145] Command: /usr/bin/env mkdir -p www/shared www/releases
+  INFO [13c03145] Finished in 0.025 seconds with exit status 0 (successful).
+  INFO [28b4494c] Running /usr/bin/env mkdir -p www/shared/web/uploads as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [28b4494c] Command: /usr/bin/env mkdir -p www/shared/web/uploads
+  INFO [28b4494c] Finished in 0.021 seconds with exit status 0 (successful).
+ DEBUG [9b137d81] Running [ -f www/current/REVISION ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [9b137d81] Command: [ -f www/current/REVISION ]
+ DEBUG [9b137d81] Finished in 0.019 seconds with exit status 1 (failed).
+ DEBUG [52ac5ee7] Running [ -f www/repo/HEAD ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [52ac5ee7] Command: [ -f www/repo/HEAD ]
+ DEBUG [52ac5ee7] Finished in 0.018 seconds with exit status 1 (failed).
+ DEBUG [65df2b4a] Running if test ! -d www; then echo "Directory does not exist 'www'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [65df2b4a] Command: if test ! -d www; then echo "Directory does not exist 'www'" 1>&2; false; fi
+ DEBUG [65df2b4a] Finished in 0.017 seconds with exit status 0 (successful).
+  INFO [024c5c0d] Running /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git www/repo as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [024c5c0d] Command: cd www && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git www/repo )
+ DEBUG [024c5c0d] 	fatal: destination path 'www/repo' already exists and is not an empty directory.
+  INFO ---------------------------------------------------------------------------
+  INFO START 2017-11-07 01:43:53 +0100 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [0068baf8] Running /usr/bin/env mkdir -p /home/footxfrsil/tmp as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [0068baf8] Command: /usr/bin/env mkdir -p /home/footxfrsil/tmp
+  INFO [0068baf8] Finished in 0.213 seconds with exit status 0 (successful).
+ DEBUG Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 0.0%
+  INFO Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 100.0%
+  INFO [ce68f675] Running /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [ce68f675] Command: /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh
+  INFO [ce68f675] Finished in 0.019 seconds with exit status 0 (successful).
+  INFO [e917a2c4] Running /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [e917a2c4] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD )
+ DEBUG [e917a2c4] 	d8a83ffbe4df6b51d3f445172d0b01368d2cbade	HEAD
+  INFO [e917a2c4] Finished in 2.253 seconds with exit status 0 (successful).
+  INFO [16abaaeb] Running /usr/bin/env mkdir -p www/shared www/releases as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [16abaaeb] Command: /usr/bin/env mkdir -p www/shared www/releases
+  INFO [16abaaeb] Finished in 0.021 seconds with exit status 0 (successful).
+  INFO [4abd9f87] Running /usr/bin/env mkdir -p www/shared/web/uploads as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [4abd9f87] Command: /usr/bin/env mkdir -p www/shared/web/uploads
+  INFO [4abd9f87] Finished in 0.021 seconds with exit status 0 (successful).
+ DEBUG [d0b7af01] Running [ -f www/current/REVISION ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [d0b7af01] Command: [ -f www/current/REVISION ]
+ DEBUG [d0b7af01] Finished in 0.018 seconds with exit status 1 (failed).
+ DEBUG [38413b5b] Running [ -f www/repo/HEAD ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [38413b5b] Command: [ -f www/repo/HEAD ]
+ DEBUG [38413b5b] Finished in 0.018 seconds with exit status 1 (failed).
+ DEBUG [c61bbf91] Running if test ! -d www; then echo "Directory does not exist 'www'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [c61bbf91] Command: if test ! -d www; then echo "Directory does not exist 'www'" 1>&2; false; fi
+ DEBUG [c61bbf91] Finished in 0.018 seconds with exit status 0 (successful).
+  INFO [19a899c8] Running /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git www/repo as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [19a899c8] Command: cd www && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git www/repo )
+ DEBUG [19a899c8] 	fatal: destination path 'www/repo' already exists and is not an empty directory.
+  INFO ---------------------------------------------------------------------------
+  INFO START 2017-11-07 01:53:26 +0100 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [e0b22a88] Running /usr/bin/env mkdir -p /home/footxfrsil/tmp as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [e0b22a88] Command: /usr/bin/env mkdir -p /home/footxfrsil/tmp
+  INFO [e0b22a88] Finished in 0.217 seconds with exit status 0 (successful).
+ DEBUG Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 0.0%
+  INFO Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 100.0%
+  INFO [eeba9dd6] Running /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [eeba9dd6] Command: /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh
+  INFO [eeba9dd6] Finished in 0.019 seconds with exit status 0 (successful).
+  INFO [b85e0a8a] Running /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [b85e0a8a] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD )
+ DEBUG [b85e0a8a] 	d8a83ffbe4df6b51d3f445172d0b01368d2cbade	HEAD
+  INFO [b85e0a8a] Finished in 1.378 seconds with exit status 0 (successful).
+  INFO [e0320582] Running /usr/bin/env mkdir -p www/shared www/releases as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [e0320582] Command: /usr/bin/env mkdir -p www/shared www/releases
+  INFO [e0320582] Finished in 0.025 seconds with exit status 0 (successful).
+  INFO [cfa08d76] Running /usr/bin/env mkdir -p www/shared/web/uploads as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [cfa08d76] Command: /usr/bin/env mkdir -p www/shared/web/uploads
+  INFO [cfa08d76] Finished in 0.020 seconds with exit status 0 (successful).
+ DEBUG [b7550888] Running [ -f www/current/REVISION ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [b7550888] Command: [ -f www/current/REVISION ]
+ DEBUG [b7550888] Finished in 0.018 seconds with exit status 1 (failed).
+ DEBUG [c4bff026] Running [ -f www/repo/HEAD ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [c4bff026] Command: [ -f www/repo/HEAD ]
+ DEBUG [c4bff026] Finished in 0.018 seconds with exit status 1 (failed).
+ DEBUG [f8b740b2] Running if test ! -d www; then echo "Directory does not exist 'www'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [f8b740b2] Command: if test ! -d www; then echo "Directory does not exist 'www'" 1>&2; false; fi
+ DEBUG [f8b740b2] Finished in 0.018 seconds with exit status 0 (successful).
+  INFO [1734f32d] Running /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git www/repo as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [1734f32d] Command: cd www && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git www/repo )
+ DEBUG [1734f32d] 	fatal: destination path 'www/repo' already exists and is not an empty directory.
+  INFO ---------------------------------------------------------------------------
+  INFO START 2017-11-07 13:40:57 +0100 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [92ebdd1c] Running /usr/bin/env mkdir -p /home/footxfrsil/tmp as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [92ebdd1c] Command: /usr/bin/env mkdir -p /home/footxfrsil/tmp
+  INFO [92ebdd1c] Finished in 0.289 seconds with exit status 0 (successful).
+ DEBUG Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 0.0%
+  INFO Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 100.0%
+  INFO [108e2e83] Running /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [108e2e83] Command: /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh
+  INFO [108e2e83] Finished in 0.023 seconds with exit status 0 (successful).
+  INFO [24fc2bd3] Running /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [24fc2bd3] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD )
+ DEBUG [24fc2bd3] 	d8a83ffbe4df6b51d3f445172d0b01368d2cbade	HEAD
+  INFO [24fc2bd3] Finished in 1.481 seconds with exit status 0 (successful).
+  INFO [64a04df9] Running /usr/bin/env mkdir -p www/shared www/releases as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [64a04df9] Command: /usr/bin/env mkdir -p www/shared www/releases
+  INFO [64a04df9] Finished in 0.087 seconds with exit status 0 (successful).
+  INFO [c1ff1f1f] Running /usr/bin/env mkdir -p www/shared/web/uploads as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [c1ff1f1f] Command: /usr/bin/env mkdir -p www/shared/web/uploads
+  INFO [c1ff1f1f] Finished in 0.119 seconds with exit status 0 (successful).
+ DEBUG [d0350be4] Running [ -f www/current/REVISION ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [d0350be4] Command: [ -f www/current/REVISION ]
+ DEBUG [d0350be4] Finished in 0.018 seconds with exit status 1 (failed).
+ DEBUG [829e696a] Running [ -f www/repo/HEAD ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [829e696a] Command: [ -f www/repo/HEAD ]
+ DEBUG [829e696a] Finished in 0.019 seconds with exit status 1 (failed).
+ DEBUG [4d13d161] Running if test ! -d www; then echo "Directory does not exist 'www'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [4d13d161] Command: if test ! -d www; then echo "Directory does not exist 'www'" 1>&2; false; fi
+ DEBUG [4d13d161] Finished in 0.020 seconds with exit status 0 (successful).
+  INFO [5a8678eb] Running /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git www/repo as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [5a8678eb] Command: cd www && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git www/repo )
+ DEBUG [5a8678eb] 	fatal: destination path 'www/repo' already exists and is not an empty directory.
+  INFO ---------------------------------------------------------------------------
+  INFO START 2017-11-07 13:46:03 +0100 cap production cache:repo:purge
+  INFO ---------------------------------------------------------------------------
+  INFO ---------------------------------------------------------------------------
+  INFO START 2017-11-07 13:47:23 +0100 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [5ffd43cc] Running /usr/bin/env mkdir -p /home/footxfrsil/tmp as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [5ffd43cc] Command: /usr/bin/env mkdir -p /home/footxfrsil/tmp
+  INFO [5ffd43cc] Finished in 0.252 seconds with exit status 0 (successful).
+ DEBUG Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 0.0%
+  INFO Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 100.0%
+  INFO [cce6734f] Running /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [cce6734f] Command: /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh
+  INFO [cce6734f] Finished in 0.027 seconds with exit status 0 (successful).
+  INFO [8b3cf6ff] Running /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [8b3cf6ff] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD )
+ DEBUG [8b3cf6ff] 	d8a83ffbe4df6b51d3f445172d0b01368d2cbade	HEAD
+  INFO [8b3cf6ff] Finished in 1.416 seconds with exit status 0 (successful).
+  INFO [076fce78] Running /usr/bin/env mkdir -p www/shared www/releases as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [076fce78] Command: /usr/bin/env mkdir -p www/shared www/releases
+  INFO [076fce78] Finished in 0.023 seconds with exit status 0 (successful).
+  INFO [8a99912f] Running /usr/bin/env mkdir -p www/shared/web/uploads as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [8a99912f] Command: /usr/bin/env mkdir -p www/shared/web/uploads
+  INFO [8a99912f] Finished in 0.022 seconds with exit status 0 (successful).
+ DEBUG [f0a96b22] Running [ -f www/current/REVISION ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [f0a96b22] Command: [ -f www/current/REVISION ]
+ DEBUG [f0a96b22] Finished in 0.018 seconds with exit status 1 (failed).
+ DEBUG [f91406b6] Running [ -f www/repo/HEAD ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [f91406b6] Command: [ -f www/repo/HEAD ]
+ DEBUG [f91406b6] Finished in 0.018 seconds with exit status 1 (failed).
+ DEBUG [0b1feb71] Running if test ! -d www; then echo "Directory does not exist 'www'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [0b1feb71] Command: if test ! -d www; then echo "Directory does not exist 'www'" 1>&2; false; fi
+ DEBUG [0b1feb71] Finished in 0.019 seconds with exit status 0 (successful).
+  INFO [c5e15380] Running /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git www/repo as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [c5e15380] Command: cd www && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git www/repo )
+ DEBUG [c5e15380] 	fatal: destination path 'www/repo' already exists and is not an empty directory.
+  INFO ---------------------------------------------------------------------------
+  INFO START 2017-11-07 13:48:39 +0100 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [8265dcf0] Running /usr/bin/env mkdir -p /home/footxfrsil/tmp as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [8265dcf0] Command: /usr/bin/env mkdir -p /home/footxfrsil/tmp
+  INFO [8265dcf0] Finished in 0.203 seconds with exit status 0 (successful).
+ DEBUG Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 0.0%
+  INFO Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 100.0%
+  INFO [7352b6e4] Running /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [7352b6e4] Command: /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh
+  INFO [7352b6e4] Finished in 0.019 seconds with exit status 0 (successful).
+  INFO [bb6ae398] Running /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [bb6ae398] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD )
+ DEBUG [bb6ae398] 	d8a83ffbe4df6b51d3f445172d0b01368d2cbade	HEAD
+  INFO [bb6ae398] Finished in 1.325 seconds with exit status 0 (successful).
+  INFO [7a51f9ec] Running /usr/bin/env mkdir -p www/shared www/releases as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [7a51f9ec] Command: /usr/bin/env mkdir -p www/shared www/releases
+  INFO [7a51f9ec] Finished in 0.026 seconds with exit status 0 (successful).
+  INFO [e5f1f4a7] Running /usr/bin/env mkdir -p www/shared/web/uploads as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [e5f1f4a7] Command: /usr/bin/env mkdir -p www/shared/web/uploads
+  INFO [e5f1f4a7] Finished in 0.020 seconds with exit status 0 (successful).
+ DEBUG [e6ee5e41] Running [ -f www/current/REVISION ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [e6ee5e41] Command: [ -f www/current/REVISION ]
+ DEBUG [e6ee5e41] Finished in 0.018 seconds with exit status 1 (failed).
+ DEBUG [3e69d1e5] Running [ -f www/repo/HEAD ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [3e69d1e5] Command: [ -f www/repo/HEAD ]
+ DEBUG [3e69d1e5] Finished in 0.018 seconds with exit status 1 (failed).
+ DEBUG [21f24be2] Running if test ! -d www; then echo "Directory does not exist 'www'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [21f24be2] Command: if test ! -d www; then echo "Directory does not exist 'www'" 1>&2; false; fi
+ DEBUG [21f24be2] Finished in 0.018 seconds with exit status 0 (successful).
+  INFO [348c1b09] Running /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git www/repo as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [348c1b09] Command: cd www && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git www/repo )
+ DEBUG [348c1b09] 	fatal: destination path 'www/repo' already exists and is not an empty directory.
+  INFO ---------------------------------------------------------------------------
+  INFO START 2017-11-07 13:50:18 +0100 cap production deploy:check
+  INFO ---------------------------------------------------------------------------
+  INFO [f446b84a] Running /usr/bin/env mkdir -p /home/footxfrsil/tmp as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [f446b84a] Command: /usr/bin/env mkdir -p /home/footxfrsil/tmp
+  INFO [f446b84a] Finished in 0.233 seconds with exit status 0 (successful).
+ DEBUG Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 0.0%
+  INFO Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 100.0%
+  INFO [265c7cc0] Running /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [265c7cc0] Command: /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh
+  INFO [265c7cc0] Finished in 0.021 seconds with exit status 0 (successful).
+  INFO [5955a80d] Running /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [5955a80d] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD )
+ DEBUG [5955a80d] 	d8a83ffbe4df6b51d3f445172d0b01368d2cbade	HEAD
+  INFO [5955a80d] Finished in 1.388 seconds with exit status 0 (successful).
+  INFO [7f19b398] Running /usr/bin/env mkdir -p www/shared www/releases as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [7f19b398] Command: /usr/bin/env mkdir -p www/shared www/releases
+  INFO [7f19b398] Finished in 0.036 seconds with exit status 0 (successful).
+  INFO [442d66b0] Running /usr/bin/env mkdir -p www/shared/web/uploads as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [442d66b0] Command: /usr/bin/env mkdir -p www/shared/web/uploads
+  INFO [442d66b0] Finished in 0.028 seconds with exit status 0 (successful).
+  INFO ---------------------------------------------------------------------------
+  INFO START 2017-11-07 13:54:00 +0100 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [2e375236] Running /usr/bin/env mkdir -p /home/footxfrsil/tmp as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [2e375236] Command: /usr/bin/env mkdir -p /home/footxfrsil/tmp
+  INFO [2e375236] Finished in 0.621 seconds with exit status 0 (successful).
+ DEBUG Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 0.0%
+  INFO Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 100.0%
+  INFO [4d0dde76] Running /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [4d0dde76] Command: /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh
+  INFO [4d0dde76] Finished in 0.020 seconds with exit status 0 (successful).
+  INFO [660bcd14] Running /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [660bcd14] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD )
+ DEBUG [660bcd14] 	d8a83ffbe4df6b51d3f445172d0b01368d2cbade	HEAD
+  INFO [660bcd14] Finished in 3.010 seconds with exit status 0 (successful).
+  INFO [e6610c6a] Running /usr/bin/env mkdir -p shared releases as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [e6610c6a] Command: /usr/bin/env mkdir -p shared releases
+  INFO [e6610c6a] Finished in 0.025 seconds with exit status 0 (successful).
+  INFO [b1ecee57] Running /usr/bin/env mkdir -p shared/web/uploads as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [b1ecee57] Command: /usr/bin/env mkdir -p shared/web/uploads
+  INFO [b1ecee57] Finished in 0.021 seconds with exit status 0 (successful).
+ DEBUG [319fb1f7] Running [ -f current/REVISION ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [319fb1f7] Command: [ -f current/REVISION ]
+ DEBUG [319fb1f7] Finished in 0.018 seconds with exit status 1 (failed).
+ DEBUG [2fd6b580] Running [ -f repo/HEAD ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [2fd6b580] Command: [ -f repo/HEAD ]
+ DEBUG [2fd6b580] Finished in 0.018 seconds with exit status 1 (failed).
+ DEBUG [a9aae82c] Running if test ! -d; then echo "Directory does not exist ''" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [a9aae82c] Command: if test ! -d; then echo "Directory does not exist ''" 1>&2; false; fi
+ DEBUG [a9aae82c] Finished in 0.018 seconds with exit status 0 (successful).
+  INFO [882335fe] Running /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git repo as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [882335fe] Command: cd  && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git repo )
+ DEBUG [882335fe] 	Cloning into bare repository repo...
+  INFO [882335fe] Finished in 3.830 seconds with exit status 0 (successful).
+ DEBUG [e5de16f3] Running if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [e5de16f3] Command: if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi
+ DEBUG [e5de16f3] Finished in 0.018 seconds with exit status 0 (successful).
+  INFO [0b4f6ce5] Running /usr/bin/env git remote set-url origin git@github.com:etistav/foot5x5.git as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [0b4f6ce5] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git remote set-url origin git@github.com:etistav/foot5x5.git )
+  INFO [0b4f6ce5] Finished in 0.025 seconds with exit status 0 (successful).
+  INFO [c96cf3ca] Running /usr/bin/env git remote update --prune as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [c96cf3ca] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git remote update --prune )
+ DEBUG [c96cf3ca] 	Fetching origin
+  INFO [c96cf3ca] Finished in 1.363 seconds with exit status 0 (successful).
+ DEBUG [ff6d3769] Running if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [ff6d3769] Command: if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi
+ DEBUG [ff6d3769] Finished in 0.022 seconds with exit status 0 (successful).
+  INFO [66bf434d] Running /usr/bin/env mkdir -p releases/20171107125404 as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [66bf434d] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env mkdir -p releases/20171107125404 )
+  INFO [66bf434d] Finished in 0.020 seconds with exit status 0 (successful).
+  INFO [6d6ee410] Running /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C releases/20171107125404 as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [6d6ee410] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C releases/20171107125404 )
+  INFO [6d6ee410] Finished in 0.854 seconds with exit status 0 (successful).
+ DEBUG [889cf29b] Running if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [889cf29b] Command: if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi
+ DEBUG [889cf29b] Finished in 0.018 seconds with exit status 0 (successful).
+ DEBUG [e97a29e2] Running /usr/bin/env git rev-list --max-count=1 master as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [e97a29e2] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git rev-list --max-count=1 master )
+ DEBUG [e97a29e2] 	d8a83ffbe4df6b51d3f445172d0b01368d2cbade
+ DEBUG [e97a29e2] Finished in 0.020 seconds with exit status 0 (successful).
+ DEBUG [7e20f2ea] Running if test ! -d releases/20171107125404; then echo "Directory does not exist 'releases/20171107125404'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [7e20f2ea] Command: if test ! -d releases/20171107125404; then echo "Directory does not exist 'releases/20171107125404'" 1>&2; false; fi
+ DEBUG [7e20f2ea] 	Directory does not exist 'releases/20171107125404'
+  INFO ---------------------------------------------------------------------------
+  INFO START 2017-11-07 14:14:20 +0100 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [f75b9e39] Running /usr/bin/env mkdir -p /home/footxfrsil/tmp as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [f75b9e39] Command: /usr/bin/env mkdir -p /home/footxfrsil/tmp
+  INFO [f75b9e39] Finished in 0.228 seconds with exit status 0 (successful).
+ DEBUG Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 0.0%
+  INFO Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 100.0%
+  INFO [67bf31d7] Running /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [67bf31d7] Command: /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh
+  INFO [67bf31d7] Finished in 0.020 seconds with exit status 0 (successful).
+  INFO [4a522838] Running /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [4a522838] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD )
+ DEBUG [4a522838] 	d8a83ffbe4df6b51d3f445172d0b01368d2cbade	HEAD
+  INFO [4a522838] Finished in 1.392 seconds with exit status 0 (successful).
+  INFO [e11c52c2] Running /usr/bin/env mkdir -p foot5x5/shared foot5x5/releases as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [e11c52c2] Command: /usr/bin/env mkdir -p foot5x5/shared foot5x5/releases
+  INFO [e11c52c2] Finished in 0.040 seconds with exit status 0 (successful).
+  INFO [32e69dc4] Running /usr/bin/env mkdir -p foot5x5/shared/web/uploads as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [32e69dc4] Command: /usr/bin/env mkdir -p foot5x5/shared/web/uploads
+  INFO [32e69dc4] Finished in 0.021 seconds with exit status 0 (successful).
+ DEBUG [cc70b847] Running [ -f foot5x5/current/REVISION ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [cc70b847] Command: [ -f foot5x5/current/REVISION ]
+ DEBUG [cc70b847] Finished in 0.018 seconds with exit status 1 (failed).
+ DEBUG [4e420e34] Running [ -f foot5x5/repo/HEAD ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [4e420e34] Command: [ -f foot5x5/repo/HEAD ]
+ DEBUG [4e420e34] Finished in 0.018 seconds with exit status 1 (failed).
+ DEBUG [8ea9f53b] Running if test ! -d foot5x5; then echo "Directory does not exist 'foot5x5'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [8ea9f53b] Command: if test ! -d foot5x5; then echo "Directory does not exist 'foot5x5'" 1>&2; false; fi
+ DEBUG [8ea9f53b] Finished in 0.018 seconds with exit status 0 (successful).
+  INFO [d0966f66] Running /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git foot5x5/repo as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [d0966f66] Command: cd foot5x5 && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git foot5x5/repo )
+ DEBUG [d0966f66] 	Cloning into bare repository foot5x5/repo...
+  INFO [d0966f66] Finished in 2.438 seconds with exit status 0 (successful).
+ DEBUG [142d10f0] Running if test ! -d foot5x5/repo; then echo "Directory does not exist 'foot5x5/repo'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [142d10f0] Command: if test ! -d foot5x5/repo; then echo "Directory does not exist 'foot5x5/repo'" 1>&2; false; fi
+ DEBUG [142d10f0] 	Directory does not exist 'foot5x5/repo'
+  INFO ---------------------------------------------------------------------------
+  INFO START 2017-11-07 14:14:35 +0100 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [b64bda27] Running /usr/bin/env mkdir -p /home/footxfrsil/tmp as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [b64bda27] Command: /usr/bin/env mkdir -p /home/footxfrsil/tmp
+  INFO [b64bda27] Finished in 0.202 seconds with exit status 0 (successful).
+ DEBUG Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 0.0%
+  INFO Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 100.0%
+  INFO [403ab061] Running /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [403ab061] Command: /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh
+  INFO [403ab061] Finished in 0.020 seconds with exit status 0 (successful).
+  INFO [3eb0ec2c] Running /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [3eb0ec2c] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD )
+ DEBUG [3eb0ec2c] 	d8a83ffbe4df6b51d3f445172d0b01368d2cbade	HEAD
+  INFO [3eb0ec2c] Finished in 1.336 seconds with exit status 0 (successful).
+  INFO [a70ae7ae] Running /usr/bin/env mkdir -p foot5x5/shared foot5x5/releases as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [a70ae7ae] Command: /usr/bin/env mkdir -p foot5x5/shared foot5x5/releases
+  INFO [a70ae7ae] Finished in 0.021 seconds with exit status 0 (successful).
+  INFO [4be0a259] Running /usr/bin/env mkdir -p foot5x5/shared/web/uploads as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [4be0a259] Command: /usr/bin/env mkdir -p foot5x5/shared/web/uploads
+  INFO [4be0a259] Finished in 0.021 seconds with exit status 0 (successful).
+ DEBUG [8e8205eb] Running [ -f foot5x5/current/REVISION ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [8e8205eb] Command: [ -f foot5x5/current/REVISION ]
+ DEBUG [8e8205eb] Finished in 0.017 seconds with exit status 1 (failed).
+ DEBUG [abfe7381] Running [ -f foot5x5/repo/HEAD ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [abfe7381] Command: [ -f foot5x5/repo/HEAD ]
+ DEBUG [abfe7381] Finished in 0.018 seconds with exit status 1 (failed).
+ DEBUG [ae1c2d62] Running if test ! -d foot5x5; then echo "Directory does not exist 'foot5x5'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [ae1c2d62] Command: if test ! -d foot5x5; then echo "Directory does not exist 'foot5x5'" 1>&2; false; fi
+ DEBUG [ae1c2d62] Finished in 0.018 seconds with exit status 0 (successful).
+  INFO [3f5aa6d1] Running /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git foot5x5/repo as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [3f5aa6d1] Command: cd foot5x5 && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git foot5x5/repo )
+ DEBUG [3f5aa6d1] 	fatal: destination path 'foot5x5/repo' already exists and is not an empty directory.
+  INFO ---------------------------------------------------------------------------
+  INFO START 2017-11-07 14:16:12 +0100 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [20a43e0a] Running /usr/bin/env mkdir -p /home/footxfrsil/tmp as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [20a43e0a] Command: /usr/bin/env mkdir -p /home/footxfrsil/tmp
+  INFO [20a43e0a] Finished in 0.204 seconds with exit status 0 (successful).
+ DEBUG Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 0.0%
+  INFO Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 100.0%
+  INFO [2fec1521] Running /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [2fec1521] Command: /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh
+  INFO [2fec1521] Finished in 0.021 seconds with exit status 0 (successful).
+  INFO [2343688a] Running /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [2343688a] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD )
+ DEBUG [2343688a] 	d8a83ffbe4df6b51d3f445172d0b01368d2cbade	HEAD
+  INFO [2343688a] Finished in 1.425 seconds with exit status 0 (successful).
+  INFO [28617671] Running /usr/bin/env mkdir -p shared releases as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [28617671] Command: /usr/bin/env mkdir -p shared releases
+  INFO [28617671] Finished in 0.024 seconds with exit status 0 (successful).
+  INFO [2a612c41] Running /usr/bin/env mkdir -p shared/web/uploads as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [2a612c41] Command: /usr/bin/env mkdir -p shared/web/uploads
+  INFO [2a612c41] Finished in 0.025 seconds with exit status 0 (successful).
+ DEBUG [aae45450] Running [ -f current/REVISION ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [aae45450] Command: [ -f current/REVISION ]
+ DEBUG [aae45450] Finished in 0.019 seconds with exit status 1 (failed).
+ DEBUG [f37a40b4] Running [ -f repo/HEAD ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [f37a40b4] Command: [ -f repo/HEAD ]
+ DEBUG [f37a40b4] Finished in 0.020 seconds with exit status 1 (failed).
+ DEBUG [826c778b] Running if test ! -d; then echo "Directory does not exist ''" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [826c778b] Command: if test ! -d; then echo "Directory does not exist ''" 1>&2; false; fi
+ DEBUG [826c778b] Finished in 0.019 seconds with exit status 0 (successful).
+  INFO [3148ccbb] Running /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git repo as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [3148ccbb] Command: cd  && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git clone --mirror git@github.com:etistav/foot5x5.git repo )
+ DEBUG [3148ccbb] 	Cloning into bare repository repo...
+  INFO [3148ccbb] Finished in 2.865 seconds with exit status 0 (successful).
+ DEBUG [82942e09] Running if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [82942e09] Command: if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi
+ DEBUG [82942e09] Finished in 0.019 seconds with exit status 0 (successful).
+  INFO [b4bb3e87] Running /usr/bin/env git remote set-url origin git@github.com:etistav/foot5x5.git as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [b4bb3e87] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git remote set-url origin git@github.com:etistav/foot5x5.git )
+  INFO [b4bb3e87] Finished in 0.024 seconds with exit status 0 (successful).
+  INFO [cf2778b9] Running /usr/bin/env git remote update --prune as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [cf2778b9] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git remote update --prune )
+ DEBUG [cf2778b9] 	Fetching origin
+  INFO [cf2778b9] Finished in 1.361 seconds with exit status 0 (successful).
+ DEBUG [6ebae862] Running if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [6ebae862] Command: if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi
+ DEBUG [6ebae862] Finished in 0.024 seconds with exit status 0 (successful).
+  INFO [dbb3bff1] Running /usr/bin/env mkdir -p releases/20171107131614 as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [dbb3bff1] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env mkdir -p releases/20171107131614 )
+  INFO [dbb3bff1] Finished in 0.020 seconds with exit status 0 (successful).
+  INFO [89f1cfb9] Running /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C releases/20171107131614 as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [89f1cfb9] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C releases/20171107131614 )
+  INFO [89f1cfb9] Finished in 1.652 seconds with exit status 0 (successful).
+ DEBUG [a925cf6c] Running if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [a925cf6c] Command: if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi
+ DEBUG [a925cf6c] Finished in 0.017 seconds with exit status 0 (successful).
+ DEBUG [bd0abf74] Running /usr/bin/env git rev-list --max-count=1 master as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [bd0abf74] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git rev-list --max-count=1 master )
+ DEBUG [bd0abf74] 	d8a83ffbe4df6b51d3f445172d0b01368d2cbade
+ DEBUG [bd0abf74] Finished in 0.021 seconds with exit status 0 (successful).
+ DEBUG [44d63d58] Running if test ! -d releases/20171107131614; then echo "Directory does not exist 'releases/20171107131614'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [44d63d58] Command: if test ! -d releases/20171107131614; then echo "Directory does not exist 'releases/20171107131614'" 1>&2; false; fi
+ DEBUG [44d63d58] 	Directory does not exist 'releases/20171107131614'
+  INFO ---------------------------------------------------------------------------
+  INFO START 2017-11-07 14:16:54 +0100 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [ae18d702] Running /usr/bin/env mkdir -p /home/footxfrsil/tmp as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [ae18d702] Command: /usr/bin/env mkdir -p /home/footxfrsil/tmp
+  INFO [ae18d702] Finished in 0.238 seconds with exit status 0 (successful).
+ DEBUG Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 0.0%
+  INFO Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 100.0%
+  INFO [7ecc46b1] Running /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [7ecc46b1] Command: /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh
+  INFO [7ecc46b1] Finished in 0.023 seconds with exit status 0 (successful).
+  INFO [ce9e2307] Running /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [ce9e2307] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD )
+ DEBUG [ce9e2307] 	d8a83ffbe4df6b51d3f445172d0b01368d2cbade	HEAD
+  INFO [ce9e2307] Finished in 1.402 seconds with exit status 0 (successful).
+  INFO [45185857] Running /usr/bin/env mkdir -p shared releases as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [45185857] Command: /usr/bin/env mkdir -p shared releases
+  INFO [45185857] Finished in 0.020 seconds with exit status 0 (successful).
+  INFO [faa1fc30] Running /usr/bin/env mkdir -p shared/web/uploads as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [faa1fc30] Command: /usr/bin/env mkdir -p shared/web/uploads
+  INFO [faa1fc30] Finished in 0.023 seconds with exit status 0 (successful).
+ DEBUG [0d49b57b] Running [ -f current/REVISION ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [0d49b57b] Command: [ -f current/REVISION ]
+ DEBUG [0d49b57b] Finished in 0.019 seconds with exit status 1 (failed).
+ DEBUG [87ed2a6c] Running [ -f repo/HEAD ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [87ed2a6c] Command: [ -f repo/HEAD ]
+ DEBUG [87ed2a6c] Finished in 0.019 seconds with exit status 0 (successful).
+  INFO The repository mirror is at repo
+ DEBUG [4b8d4ce5] Running if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [4b8d4ce5] Command: if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi
+ DEBUG [4b8d4ce5] Finished in 0.018 seconds with exit status 0 (successful).
+  INFO [426c902b] Running /usr/bin/env git remote set-url origin git@github.com:etistav/foot5x5.git as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [426c902b] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git remote set-url origin git@github.com:etistav/foot5x5.git )
+  INFO [426c902b] Finished in 0.046 seconds with exit status 0 (successful).
+  INFO [9214243e] Running /usr/bin/env git remote update --prune as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [9214243e] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git remote update --prune )
+ DEBUG [9214243e] 	Fetching origin
+  INFO [9214243e] Finished in 1.433 seconds with exit status 0 (successful).
+ DEBUG [3960bcd0] Running if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [3960bcd0] Command: if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi
+ DEBUG [3960bcd0] Finished in 0.019 seconds with exit status 0 (successful).
+  INFO [3122f0ec] Running /usr/bin/env mkdir -p releases/20171107131656 as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [3122f0ec] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env mkdir -p releases/20171107131656 )
+  INFO [3122f0ec] Finished in 0.045 seconds with exit status 0 (successful).
+  INFO [b2961d6a] Running /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C releases/20171107131656 as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [b2961d6a] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C releases/20171107131656 )
+  INFO [b2961d6a] Finished in 3.109 seconds with exit status 0 (successful).
+ DEBUG [1e63e313] Running if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [1e63e313] Command: if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi
+ DEBUG [1e63e313] Finished in 0.020 seconds with exit status 0 (successful).
+ DEBUG [bb71c418] Running /usr/bin/env git rev-list --max-count=1 master as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [bb71c418] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git rev-list --max-count=1 master )
+ DEBUG [bb71c418] 	d8a83ffbe4df6b51d3f445172d0b01368d2cbade
+ DEBUG [bb71c418] Finished in 0.026 seconds with exit status 0 (successful).
+ DEBUG [638e00ff] Running if test ! -d releases/20171107131656; then echo "Directory does not exist 'releases/20171107131656'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [638e00ff] Command: if test ! -d releases/20171107131656; then echo "Directory does not exist 'releases/20171107131656'" 1>&2; false; fi
+ DEBUG [638e00ff] 	Directory does not exist 'releases/20171107131656'
+  INFO ---------------------------------------------------------------------------
+  INFO START 2017-11-07 14:24:15 +0100 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [bc5e5956] Running /usr/bin/env mkdir -p /home/footxfrsil/tmp as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [bc5e5956] Command: /usr/bin/env mkdir -p /home/footxfrsil/tmp
+  INFO [6bf6b7eb] Running /usr/bin/env #<StringIO:0x007fc68a85f248> /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [6bf6b7eb] Command: /usr/bin/env #<StringIO:0x007fc68a85f248> /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh
+  INFO [5b32bb77] Running /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [5b32bb77] Command: /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh
+  INFO [93f38fa9] Running /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [93f38fa9] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD )
+  INFO [9c2d6836] Running /usr/bin/env mkdir -p shared releases as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [9c2d6836] Command: /usr/bin/env mkdir -p shared releases
+  INFO [9ea534ea] Running /usr/bin/env mkdir -p shared/web/uploads as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [9ea534ea] Command: /usr/bin/env mkdir -p shared/web/uploads
+ DEBUG [4d8bca7e] Running [ -f current/REVISION ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [4d8bca7e] Command: [ -f current/REVISION ]
+ DEBUG [4514f7de] Running /usr/bin/env cat current/REVISION 2>/dev/null as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [4514f7de] Command: /usr/bin/env cat current/REVISION 2>/dev/null
+ DEBUG [d9130c1b] Running [ -f repo/HEAD ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [d9130c1b] Command: [ -f repo/HEAD ]
+  INFO The repository mirror is at repo
+ DEBUG [6f8c4860] Running if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [6f8c4860] Command: if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi
+  INFO [c705fe2c] Running /usr/bin/env git remote set-url origin git@github.com:etistav/foot5x5.git as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [c705fe2c] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git remote set-url origin git@github.com:etistav/foot5x5.git )
+  INFO [700e5a29] Running /usr/bin/env git remote update --prune as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [700e5a29] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git remote update --prune )
+ DEBUG [f531f7b4] Running if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [f531f7b4] Command: if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi
+  INFO [63f92af3] Running /usr/bin/env mkdir -p releases/20171107132415 as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [63f92af3] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env mkdir -p releases/20171107132415 )
+  INFO [c44f986b] Running /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C releases/20171107132415 as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [c44f986b] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C releases/20171107132415 )
+ DEBUG [342a8d2a] Running if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [342a8d2a] Command: if test ! -d repo; then echo "Directory does not exist 'repo'" 1>&2; false; fi
+ DEBUG [f29153e2] Running /usr/bin/env git rev-list --max-count=1 master as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [f29153e2] Command: cd repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git rev-list --max-count=1 master )
+ DEBUG [a7ebd2e5] Running if test ! -d releases/20171107132415; then echo "Directory does not exist 'releases/20171107132415'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [a7ebd2e5] Command: if test ! -d releases/20171107132415; then echo "Directory does not exist 'releases/20171107132415'" 1>&2; false; fi
+  INFO [72b2ff83] Running /usr/bin/env echo "" >> REVISION as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [72b2ff83] Command: cd releases/20171107132415 && /usr/bin/env echo "" >> REVISION
+  INFO [a828c55d] Running /usr/bin/env mkdir -p releases/20171107132415/web as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [a828c55d] Command: /usr/bin/env mkdir -p releases/20171107132415/web
+ DEBUG [4814d0d6] Running [ -L releases/20171107132415/web/uploads ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [4814d0d6] Command: [ -L releases/20171107132415/web/uploads ]
+  INFO [55a8f2c7] Running /usr/bin/env ln -s releases/20171107132415 releases/current as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [55a8f2c7] Command: /usr/bin/env ln -s releases/20171107132415 releases/current
+  INFO [5756f720] Running /usr/bin/env mv releases/current . as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [5756f720] Command: /usr/bin/env mv releases/current .
+ DEBUG [682d9990] Running /usr/bin/env ls -x releases as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [682d9990] Command: /usr/bin/env ls -x releases
+ DEBUG [fe0481dc] Running if test ! -d releases; then echo "Directory does not exist 'releases'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [fe0481dc] Command: if test ! -d releases; then echo "Directory does not exist 'releases'" 1>&2; false; fi
+  INFO [c8619272] Running /usr/bin/env echo "Branch master (at ) deployed as release 20171107132415 by Eti" >> revisions.log as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [c8619272] Command: cd releases && /usr/bin/env echo "Branch master (at ) deployed as release 20171107132415 by Eti" >> revisions.log
+  INFO ---------------------------------------------------------------------------
+  INFO START 2017-11-07 14:26:19 +0100 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [c4a80dee] Running /usr/bin/env mkdir -p /home/footxfrsil/tmp as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [c4a80dee] Command: /usr/bin/env mkdir -p /home/footxfrsil/tmp
+  INFO [c4a80dee] Finished in 0.245 seconds with exit status 0 (successful).
+ DEBUG Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 0.0%
+  INFO Uploading /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh 100.0%
+  INFO [2092a2cb] Running /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [2092a2cb] Command: /usr/bin/env chmod 700 /home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh
+  INFO [2092a2cb] Finished in 0.020 seconds with exit status 0 (successful).
+  INFO [0ffe71c3] Running /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [0ffe71c3] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git ls-remote git@github.com:etistav/foot5x5.git HEAD )
+ DEBUG [0ffe71c3] 	d8a83ffbe4df6b51d3f445172d0b01368d2cbade	HEAD
+  INFO [0ffe71c3] Finished in 1.370 seconds with exit status 0 (successful).
+  INFO [7af5f825] Running /usr/bin/env mkdir -p /home/footxfrsil/shared /home/footxfrsil/releases as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [7af5f825] Command: /usr/bin/env mkdir -p /home/footxfrsil/shared /home/footxfrsil/releases
+  INFO [7af5f825] Finished in 0.021 seconds with exit status 0 (successful).
+  INFO [b642620b] Running /usr/bin/env mkdir -p /home/footxfrsil/shared/web/uploads as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [b642620b] Command: /usr/bin/env mkdir -p /home/footxfrsil/shared/web/uploads
+  INFO [b642620b] Finished in 0.026 seconds with exit status 0 (successful).
+ DEBUG [231295cf] Running [ -f /home/footxfrsil/current/REVISION ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [231295cf] Command: [ -f /home/footxfrsil/current/REVISION ]
+ DEBUG [231295cf] Finished in 0.018 seconds with exit status 1 (failed).
+ DEBUG [dddb4e4b] Running [ -f /home/footxfrsil/repo/HEAD ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [dddb4e4b] Command: [ -f /home/footxfrsil/repo/HEAD ]
+ DEBUG [dddb4e4b] Finished in 0.019 seconds with exit status 0 (successful).
+  INFO The repository mirror is at /home/footxfrsil/repo
+ DEBUG [20372c43] Running if test ! -d /home/footxfrsil/repo; then echo "Directory does not exist '/home/footxfrsil/repo'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [20372c43] Command: if test ! -d /home/footxfrsil/repo; then echo "Directory does not exist '/home/footxfrsil/repo'" 1>&2; false; fi
+ DEBUG [20372c43] Finished in 0.024 seconds with exit status 0 (successful).
+  INFO [760c50db] Running /usr/bin/env git remote set-url origin git@github.com:etistav/foot5x5.git as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [760c50db] Command: cd /home/footxfrsil/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git remote set-url origin git@github.com:etistav/foot5x5.git )
+  INFO [760c50db] Finished in 0.039 seconds with exit status 0 (successful).
+  INFO [afea9d8c] Running /usr/bin/env git remote update --prune as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [afea9d8c] Command: cd /home/footxfrsil/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git remote update --prune )
+ DEBUG [afea9d8c] 	Fetching origin
+  INFO [afea9d8c] Finished in 1.374 seconds with exit status 0 (successful).
+ DEBUG [2c7d5afc] Running if test ! -d /home/footxfrsil/repo; then echo "Directory does not exist '/home/footxfrsil/repo'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [2c7d5afc] Command: if test ! -d /home/footxfrsil/repo; then echo "Directory does not exist '/home/footxfrsil/repo'" 1>&2; false; fi
+ DEBUG [2c7d5afc] Finished in 0.018 seconds with exit status 0 (successful).
+  INFO [bb74b9ce] Running /usr/bin/env mkdir -p /home/footxfrsil/releases/20171107132621 as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [bb74b9ce] Command: cd /home/footxfrsil/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env mkdir -p /home/footxfrsil/releases/20171107132621 )
+  INFO [bb74b9ce] Finished in 0.030 seconds with exit status 0 (successful).
+  INFO [490a45e6] Running /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C /home/footxfrsil/releases/20171107132621 as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [490a45e6] Command: cd /home/footxfrsil/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C /home/footxfrsil/releases/20171107132621 )
+  INFO [490a45e6] Finished in 1.508 seconds with exit status 0 (successful).
+ DEBUG [b99b23b2] Running if test ! -d /home/footxfrsil/repo; then echo "Directory does not exist '/home/footxfrsil/repo'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [b99b23b2] Command: if test ! -d /home/footxfrsil/repo; then echo "Directory does not exist '/home/footxfrsil/repo'" 1>&2; false; fi
+ DEBUG [b99b23b2] Finished in 0.018 seconds with exit status 0 (successful).
+ DEBUG [c6c9a0c9] Running /usr/bin/env git rev-list --max-count=1 master as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [c6c9a0c9] Command: cd /home/footxfrsil/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/home/footxfrsil/tmp/git-ssh-foot5x5-production-Eti.sh" ; /usr/bin/env git rev-list --max-count=1 master )
+ DEBUG [c6c9a0c9] 	d8a83ffbe4df6b51d3f445172d0b01368d2cbade
+ DEBUG [c6c9a0c9] Finished in 0.020 seconds with exit status 0 (successful).
+ DEBUG [cf38c202] Running if test ! -d /home/footxfrsil/releases/20171107132621; then echo "Directory does not exist '/home/footxfrsil/releases/20171107132621'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [cf38c202] Command: if test ! -d /home/footxfrsil/releases/20171107132621; then echo "Directory does not exist '/home/footxfrsil/releases/20171107132621'" 1>&2; false; fi
+ DEBUG [cf38c202] Finished in 0.019 seconds with exit status 0 (successful).
+  INFO [d1162520] Running /usr/bin/env echo "d8a83ffbe4df6b51d3f445172d0b01368d2cbade" >> REVISION as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [d1162520] Command: cd /home/footxfrsil/releases/20171107132621 && /usr/bin/env echo "d8a83ffbe4df6b51d3f445172d0b01368d2cbade" >> REVISION
+  INFO [d1162520] Finished in 0.023 seconds with exit status 0 (successful).
+  INFO [0a4c111f] Running /usr/bin/env mkdir -p /home/footxfrsil/releases/20171107132621/web as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [0a4c111f] Command: /usr/bin/env mkdir -p /home/footxfrsil/releases/20171107132621/web
+  INFO [0a4c111f] Finished in 0.019 seconds with exit status 0 (successful).
+ DEBUG [9678e31c] Running [ -L /home/footxfrsil/releases/20171107132621/web/uploads ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [9678e31c] Command: [ -L /home/footxfrsil/releases/20171107132621/web/uploads ]
+ DEBUG [9678e31c] Finished in 0.018 seconds with exit status 1 (failed).
+ DEBUG [f352c16e] Running [ -d /home/footxfrsil/releases/20171107132621/web/uploads ] as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [f352c16e] Command: [ -d /home/footxfrsil/releases/20171107132621/web/uploads ]
+ DEBUG [f352c16e] Finished in 0.019 seconds with exit status 0 (successful).
+  INFO [5e031eba] Running /usr/bin/env rm -rf /home/footxfrsil/releases/20171107132621/web/uploads as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [5e031eba] Command: /usr/bin/env rm -rf /home/footxfrsil/releases/20171107132621/web/uploads
+  INFO [5e031eba] Finished in 0.055 seconds with exit status 0 (successful).
+  INFO [1c7868ef] Running /usr/bin/env ln -s /home/footxfrsil/shared/web/uploads /home/footxfrsil/releases/20171107132621/web/uploads as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [1c7868ef] Command: /usr/bin/env ln -s /home/footxfrsil/shared/web/uploads /home/footxfrsil/releases/20171107132621/web/uploads
+  INFO [1c7868ef] Finished in 0.036 seconds with exit status 0 (successful).
+  INFO [3e0b3f60] Running /usr/bin/env ln -s /home/footxfrsil/releases/20171107132621 /home/footxfrsil/releases/current as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [3e0b3f60] Command: /usr/bin/env ln -s /home/footxfrsil/releases/20171107132621 /home/footxfrsil/releases/current
+  INFO [3e0b3f60] Finished in 0.021 seconds with exit status 0 (successful).
+  INFO [274d0b17] Running /usr/bin/env mv /home/footxfrsil/releases/current /home/footxfrsil as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [274d0b17] Command: /usr/bin/env mv /home/footxfrsil/releases/current /home/footxfrsil
+  INFO [274d0b17] Finished in 0.033 seconds with exit status 0 (successful).
+ DEBUG [b210a7c5] Running /usr/bin/env ls -x /home/footxfrsil/releases as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [b210a7c5] Command: /usr/bin/env ls -x /home/footxfrsil/releases
+ DEBUG [b210a7c5] 	20171107132621
+ DEBUG [b210a7c5] Finished in 0.020 seconds with exit status 0 (successful).
+ DEBUG [476167e4] Running if test ! -d /home/footxfrsil/releases; then echo "Directory does not exist '/home/footxfrsil/releases'" 1>&2; false; fi as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [476167e4] Command: if test ! -d /home/footxfrsil/releases; then echo "Directory does not exist '/home/footxfrsil/releases'" 1>&2; false; fi
+ DEBUG [476167e4] Finished in 0.018 seconds with exit status 0 (successful).
+  INFO [c7ce5feb] Running /usr/bin/env echo "Branch master (at d8a83ffbe4df6b51d3f445172d0b01368d2cbade) deployed as release 20171107132621 by Eti" >> /home/footxfrsil/revisions.log as footxfrsil@ssh.cluster011.ovh.net
+ DEBUG [c7ce5feb] Command: cd /home/footxfrsil/releases && /usr/bin/env echo "Branch master (at d8a83ffbe4df6b51d3f445172d0b01368d2cbade) deployed as release 20171107132621 by Eti" >> /home/footxfrsil/revisions.log
+  INFO [c7ce5feb] Finished in 0.020 seconds with exit status 0 (successful).

@@ -85,10 +85,26 @@ set :linked_dirs, -> { [fetch(:log_path), fetch(:upload_path)] }
 #
 set :file_permissions_paths, -> { fetch(:symfony_directory_structure) == 2 ? [fetch(:log_path), fetch(:cache_path)] : [fetch(:var_path)] }
 # Method used to set permissions (:chmod, :acl, or :chown)
-set :permission_method, false
+set :permission_method, :chmod
 
-set :composer_install_flags, '--prefer-dist --no-interaction --quiet --optimize-autoloader'
+set :composer_install_flags, '--prefer-dist --no-interaction --optimize-autoloader'
 
-
+# SSHKit.config.command_map[:composer] = "~/composer"
+SSHKit.config.command_map[:composer] = "/usr/local/php5.6/bin/php #{shared_path.join("composer.phar")}"
 
 after 'deploy:updated', 'symfony:assets:install'
+
+namespace :deploy do
+	
+	after :starting, 'composer:install_executable'
+
+#	after :updating, 'symfony:set_permissions'
+
+	after :updated, :composer do
+		on roles(:web) do
+			within release_path do
+				execute :composer, :install
+			end
+		end
+	end
+end

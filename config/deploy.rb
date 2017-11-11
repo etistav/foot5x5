@@ -83,7 +83,7 @@ set :linked_dirs, -> { [fetch(:log_path), fetch(:upload_path)] }
 #
 # Configure capistrano/file-permissions defaults
 #
-set :file_permissions_paths, -> { fetch(:symfony_directory_structure) == 2 ? ["/home/footxfrsil/current/" + fetch(:log_path), "/home/footxfrsil/current/" + fetch(:cache_path)] : [fetch(:var_path)] }
+set :file_permissions_paths, -> { fetch(:symfony_directory_structure) == 2 ? [fetch(:log_path), fetch(:cache_path)] : [fetch(:var_path)] }
 set :file_permissions_users, ["www-data"]
 # Method used to set permissions (:chmod, :acl, or :chown)
 set :permission_method, :acl
@@ -98,7 +98,7 @@ SSHKit.config.command_map[:php] = "/usr/local/php5.6/bin/php"
 
 before "deploy:updated", "symfony:set_permissions"
 
-# namespace :deploy do
+namespace :deploy do
 
 #	after :updating, :create_cache_dir do
 #		on roles(:web) do
@@ -128,4 +128,20 @@ before "deploy:updated", "symfony:set_permissions"
 #			end
 #		end
 #	end
-#end
+
+	desc "Change 'current' symlink to relative path"
+	task :create_symlink do
+		on roles(:app) do
+			
+			info "Modifying symlink to be relative"
+			execute "rm -d #{current_path}"
+			info "Deleted current symlink"
+	        execute "cd #{deploy_to} && ln -s ./releases/#{File.basename release_path} current"
+	        info "Created relative current symlink"
+
+	    end
+	end
+
+end
+
+after :deploy, "deploy:create_symlink"

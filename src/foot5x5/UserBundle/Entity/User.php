@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * User
@@ -14,6 +15,14 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @ORM\Table(name="t_users")
  * @ORM\Entity(repositoryClass="foot5x5\UserBundle\Entity\UserRepository")
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity(
+ *     fields="username",
+ *     message="Désolé mais ce pseudo est déjà utilisé"
+ * )
+ * @UniqueEntity(
+ *     fields="email",
+ *     message="Il y a déjà un compte créé pour cet adresse mail"
+ * )
  */
 class User implements UserInterface, \Serializable
 {
@@ -106,7 +115,7 @@ class User implements UserInterface, \Serializable
      * 
      * @ORM\Column(name="usr_email", type="string", nullable=true)
      * @Assert\Email(
-     *     message = "The email '{{ value }}' is not a valid email.",
+     *     message = "L'adresse mail '{{ value }}' n'est pas valide.",
      *     checkMX = true
      * )
      */
@@ -454,6 +463,9 @@ class User implements UserInterface, \Serializable
      */
     public function preRemoveUpload()
     {
+	    	if (null === $this->file) {
+	    		return;
+	    	}
         $this->tempFilename = $this->getUploadRootDir().'/profilePic_'.$this->id.'.'.$this->file->guessExtension();
     }
 

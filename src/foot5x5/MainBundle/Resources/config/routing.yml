@@ -11,7 +11,7 @@ login:
 register:
     path:     /register
     defaults:
-        _controller: foot5x5MainBundle:Main:register
+        _controller: foot5x5UserBundle:Registration:register
 
 register_check:
     path:     /register_check
@@ -19,7 +19,7 @@ register_check:
 welcome:
     path:     /welcome
     defaults:
-        _controller: foot5x5MainBundle:Main:welcome
+        _controller: foot5x5UserBundle:Registration:welcome
 
 myprofile:
     path:     /profile

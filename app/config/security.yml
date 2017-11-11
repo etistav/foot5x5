@@ -1,0 +1,37 @@
+#jms_security_extra:
+#    secure_all_services: false
+#    expressions: true
+
+security:
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext
+        foot5x5\UserBundle\Entity\User: sha512
+
+    role_hierarchy:
+        ROLE_ADMIN:       [ROLE_USER, ROLE_EVALUATOR]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        main:
+            entity: { class: foot5x5\UserBundle\Entity\User, property: username }
+
+    firewalls:
+        dev:
+            pattern:        ^/(_(profiler|wdt)|css|images|js)/
+            security:       false
+        main:
+            pattern:        ^/
+            anonymous:      true
+            provider:       main
+            form_login:
+                login_path: login
+                check_path: login_check
+            logout:
+                path:       logout
+                target:     /
+            remember_me:
+                key:        %secret% #paramètre de parameters.yml
+
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

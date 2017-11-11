@@ -1,0 +1,14 @@
+# Variables d'environnement utiles au bon fonctionnement de Symfony2 sous OVH (selon openclassrooms.com)
+SetEnv SHORT_OPEN_TAGS 0
+SetEnv REGISTER_GLOBALS 0
+SetEnv MAGIC_QUOTES 0
+SetEnv SESSION_AUTOSTART 0
+SetEnv ZEND_OPTIMIZER 1
+SetEnv PHP_VER 5_3
+
+# EAD - 28/07/2016 - Prendre en compte le dossier web pour les url
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ web/$1 [QSA,L]
+</IfModule>

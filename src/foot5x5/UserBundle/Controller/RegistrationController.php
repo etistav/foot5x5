@@ -18,6 +18,10 @@ class RegistrationController extends Controller
 	 */
 	public function registerAction(Request $request)
 	{
+		// If the user is already authenticated, redirection to the homepage
+		if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+			return $this->redirect($this->generateUrl('foot5x5_main_homepage'));
+		}
 		
 		// Build the form
 		$user = new User();

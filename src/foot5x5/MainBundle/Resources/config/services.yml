@@ -15,14 +15,14 @@ services:
     # Gestion de l'affichage du playerDrop pour un champ player dans un formulaire
     foot5x5.playerDrop:
         class: foot5x5\MainBundle\Form\Type\PlayerDropType
-        arguments: ['foot5x5\MainBundle\Entity\Player', @doctrine.orm.entity_manager]
+        arguments: ['foot5x5\MainBundle\Entity\Player', "@doctrine.orm.entity_manager"]
         tags:
             - { name: form.type, alias: playerDrop }
 
     # Gestion de l'affichage du sliderNote pour un champ note dans un formulaire
     foot5x5.sliderNote:
         class: foot5x5\MainBundle\Form\Type\SliderNoteType
-        arguments: ['foot5x5\MainBundle\Entity\Note', @doctrine.orm.entity_manager]
+        arguments: ['foot5x5\MainBundle\Entity\Note', "@doctrine.orm.entity_manager"]
         tags:
             - { name: form.type, alias: sliderNote }
 

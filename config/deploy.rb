@@ -83,28 +83,49 @@ set :linked_dirs, -> { [fetch(:log_path), fetch(:upload_path)] }
 #
 # Configure capistrano/file-permissions defaults
 #
-set :file_permissions_paths, -> { fetch(:symfony_directory_structure) == 2 ? [fetch(:log_path), fetch(:cache_path)] : [fetch(:var_path)] }
+set :file_permissions_paths, -> { fetch(:symfony_directory_structure) == 2 ? ["/home/footxfrsil/current/" + fetch(:log_path), "/home/footxfrsil/current/" + fetch(:cache_path)] : [fetch(:var_path)] }
+set :file_permissions_users, ["www-data"]
 # Method used to set permissions (:chmod, :acl, or :chown)
-set :permission_method, :chmod
+set :permission_method, :acl
 
-set :composer_install_flags, '--prefer-dist --no-interaction --optimize-autoloader'
+set :composer_install_flags, '--prefer-dist --no-interaction --quiet --optimize-autoloader'
 
 # SSHKit.config.command_map[:composer] = "~/composer"
 SSHKit.config.command_map[:composer] = "/usr/local/php5.6/bin/php #{shared_path.join("composer.phar")}"
+SSHKit.config.command_map[:php] = "/usr/local/php5.6/bin/php"
 
-after 'deploy:updated', 'symfony:assets:install'
+# after 'deploy:updated', 'symfony:assets:install'
 
-namespace :deploy do
+before "deploy:updated", "symfony:set_permissions"
+
+# namespace :deploy do
+
+#	after :updating, :create_cache_dir do
+#		on roles(:web) do
+#			within release_path do
+#				execute :mkdir, "-pv", fetch(:cache_path)
+#			end
+#		end
+#	end
 	
-	after :starting, 'composer:install_executable'
+#	after :starting, 'composer:install_executable'
+
+
+#	before :updated, :permissions do
+#		on roles(:web) do
+#			within release_path do
+#				execute :chmod, '777', '-R', fetch(:cache_path)
+#			end
+#		end
+#	end
 
 #	after :updating, 'symfony:set_permissions'
 
-	after :updated, :composer do
-		on roles(:web) do
-			within release_path do
-				execute :composer, :install
-			end
-		end
-	end
-end
+#	after :updated, :composer do
+#		on roles(:web) do
+#			within release_path do
+#				execute :composer, :install, fetch(:composer_install_flags) 
+#			end
+#		end
+#	end
+#end

@@ -4,12 +4,17 @@
 
 {% block content %}
 <h2 class="text-center">{{ block('title') }}</h2>
+{% for flashMessage in app.session.flashbag.get('success') %}
+<div class="alert alert-success">
+    {{ flashMessage }}
+</div>
+{% endfor %}
 <div class="well col-sm-12">
     <div id="welcome-buttons" class="col-sm-4 col-sm-offset-4">
         <a href="{{ path('create_community') }}"><button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Créer une communauté</button></a>
         <a href="{{ path('welcome') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-chevron-right"></span> Rejoindre une communauté</button></a>
     </div>
-    {% if communities is defined %}
+    {% if communities is not empty %}
     <div id="welcome-communities" class="col-sm-4 col-sm-offset-4">
         <h3>Vos communautés</h3>
         <ul class="list-group">
@@ -17,6 +22,10 @@
                 <a href="{{ path('select_community', {'id':community.id}) }}"><li class="list-group-item">{{ community.name }}</li></a>
             {% endfor %}
         </ul>
+    </div>
+    {% else %}
+    <div class="alert alert-warning col-sm-6 col-sm-offset-3">
+        <span>Vous n'appartenez à aucune communauté pour le moment.</span>
     </div>
     {% endif %}
 </div>

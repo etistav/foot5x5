@@ -30,14 +30,16 @@ class UserType extends AbstractType
     			->add('lastname', TextType::class, array(
     					'label' => 'Nom'
     			))
-    			->add('username', TextType::class)
+    			->add('username', TextType::class, array(
+    					'label' => 'Pseudo'
+    			))
     			->add('email', EmailType::class)
     			->add('password', RepeatedType::class, array(
     					'type'            => PasswordType::class,
     					'invalid_message' => 'The password fields must match.',
     					'options'         => array('required' => true),
-    					'first_options'   => array('label' => 'Password'),
-    					'second_options'  => array('label' => 'Repeat password'),
+    					'first_options'   => array('label' => 'Mot de passe'),
+    					'second_options'  => array('label' => 'Confirmer mot de passe'),
     			))
     			->add('birthday', BirthdayType::class, array(
     					'label' => 'Date de naissance',

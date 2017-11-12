@@ -55,11 +55,12 @@ nav.navbar-custom div.container div#navbar-collapse-target ul.navbar-nav li a:ho
 nav.navbar-custom div.container div.navbar-header a.navbar-brand:hover {
 	color: #99CCFF;
 }
-ul.navbar-right li.dropdown.open a.dropdown-toggle {
-	background-color: #4F5261;
+li.dropdown.open a.dropdown-toggle, 
+li.dropdown.open a.dropdown-toggle:hover {
+	background-color: #4F5261 !important;
 }
-ul.navbar-right li.dropdown.open ul.dropdown-menu,
-ul.navbar-right li.dropdown.open ul.dropdown-menu li a {
+li.dropdown.open ul.dropdown-menu,
+li.dropdown.open ul.dropdown-menu li a {
 	background-color: #191950;
 }
 

@@ -33,9 +33,6 @@ class RegistrationController extends Controller
 		$userForm->handleRequest($request);
 		if ($userForm->isSubmitted() && $userForm->isValid()) {
 			
-			// Check if username already exists
-			// $usrRepo->findOneBy($user->getUsername());
-			
 			// Génération d'une valeur aléatoire pour le salt
 			$salt = substr(md5(time()), 0, 23);
 			$user->setSalt($salt);
@@ -61,11 +58,7 @@ class RegistrationController extends Controller
 			$this->get('session')->set('main', serialize($token));
 			
 			// Redirect to welcome page with message management
-			$this->get('session')->getFlashBag()->add('success', 'Le user '.$user->getUsername().' a bien été créé.');
 			return $this->redirect($this->generateUrl('welcome'));
-			// return $this->redirect($this->generateUrl('foot5x5_main_homepage'));
-			
-			//return $this->redirectToRoute('foot5x5_main_homepage');
 		}
 		return $this->render(
 				'foot5x5UserBundle::register.html.twig',

@@ -36,6 +36,7 @@ class User implements UserInterface, \Serializable
         $this->profilePicture = 'profilePic_default.png';
         $this->subscriptionDate = new \DateTime();
         $this->userRoles = array();
+        $this->roles = array('ROLE_USER');
     }
 
 

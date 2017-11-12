@@ -9,11 +9,6 @@
     {{ flashMessage }}
 </div>
 {% endfor %}
-{#% if form_errors(userForm.password.first) %}
-<div class="alert alert-danger">
-    {{ form_errors(userForm.password.first) }}
-</div>
-{% endif %#}
 {% if not userForm.vars.valid %}
 <div class="alert alert-danger"><ul>
 {% for child in userForm.children %}

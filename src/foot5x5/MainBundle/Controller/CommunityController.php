@@ -72,7 +72,11 @@ class CommunityController extends Controller
 	 */
 	public function selectAction(Request $request, $id) {
 		
+		$cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+		$community = $cmnRepo->find($id);
+
 		$this->get('session')->set('community', $id);
+		$this->get('session')->set('community_name', $community->getName());
 		return $this->redirect($this->generateUrl('community_home'));
 	}
 	
@@ -94,6 +98,9 @@ class CommunityController extends Controller
 		$resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
 		$rnkRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Ranking');
 		$stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
+		$cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+		
+		$community = $cmnRepo->find($communityId);
 		
 		// Retrieve the last result for the community
 		$lastResult = $resRepo->findLastMatch($communityId);

@@ -27,6 +27,7 @@ class CommunityController extends Controller
 			// Get connected user and save him as the creator of the community
 			$user = $this->getUser();
 			$community->setCreatorUserId($user);
+			$user->setCommunity($community);
 			
 			// Generate
 			$password = $cmnRepo->generatePassword();
@@ -38,9 +39,9 @@ class CommunityController extends Controller
 			$em->flush();
 			
 			$role = new Roles();
-			$role->setCommunityId($community);
-			$role->setUserId($user);
-			$role->setRoles('ROLE_ADMIN');
+			$role->setCommunity($community);
+			$role->setUser($user);
+			$role->setRole('ROLE_ADMIN');
 			$em->persist($role);
 			$em->flush();
 			
@@ -60,9 +61,31 @@ class CommunityController extends Controller
 	}
 	
 	/**
-	 * Management of the home page of a community
+	 * Selection of a community
+	 * 
+	 * @param Request $request
+	 * @param integer $id community ID
 	 */
-	public function homeAction() {
+	public function selectAction(Request $request, $id) {
+		
+		$this->get('session')->set('community', $id);
+		return $this->redirect($this->generateUrl('community_home'));
+	}
+	
+	/**
+	 * Management of the home page of a community
+	 * 
+	 * @param Request $request
+	 */
+	public function homeAction(Request $request) {
+		
+		// $user = $this->getUser();
+		// $community = $user->getCommunity();
+		/*
+		if (!isset($community)) {
+			return $this->redirect($this->generateUrl('welcome'));
+		}
+		*/
 		
 		$mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
 		$plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');

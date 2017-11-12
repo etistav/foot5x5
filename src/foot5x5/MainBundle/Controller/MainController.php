@@ -4,6 +4,7 @@ namespace foot5x5\MainBundle\Controller;
 
 
 use foot5x5\MainBundle\Entity\Note;
+use foot5x5\MainBundle\Entity\Roles;
 use foot5x5\UserBundle\Entity\User;
 use foot5x5\MainBundle\Form\NoteType;
 use foot5x5\MainBundle\Form\RandomDrawType;
@@ -22,42 +23,33 @@ class MainController extends Controller
 	 * Management of the home page
 	 */
     public function indexAction() {
-
-        $mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
-        $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
-        $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
-        $rnkRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Ranking');
-        $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
-        
-        $lastResult = $resRepo->findLastMatch();
-        $matchPlayers = $mplRepo->findBy(array('match' => $lastResult), array('team' => 'ASC'));
-
-        $lastStandingId = $stdRepo->findLastStanding()->getId();
-        $lastStanding = $stdRepo->find($lastStandingId);
-        
-        $players = $plrRepo->findAllActives();
-        $ranks = array();
-        $currentForms = array();
-        $currentSeries = array();
-        $globalResults = array();
-        foreach ($players as $player) {
-            $playerId = $player->getId();
-            $ranks[$playerId] = $rnkRepo->findRankInStanding($lastStanding, $player);
-            $currentForms[$playerId] = $mplRepo->getCurrentForm($player);
-            $currentSeries[$playerId] = $mplRepo->getCurrentSerie($player);
-            $globalResults[$playerId] = $mplRepo->getAllResultsForPlayer($player);
-        }
-
-        return $this->render(
-			'foot5x5MainBundle::index.html.twig',
+	    	// Check if user already authenticated
+	    	if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+	    		return $this->redirect($this->generateUrl('community_home'));
+	    	} else {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
+    }
+    
+    /**
+     * Management of the 'welcome' view
+     */
+    public function welcomeAction() {
+		$user = $this->get('security.token_storage')->getToken()->getUser();
+		$username = $user->getFirstname();
+		
+		// $rol_repo = $this->getDoctrine()->getRepository(Roles::class);
+		// $communities = $rol_repo->findByUser();
+		$userRoles = $user->getUserRoles();
+		foreach ($userRoles as $userRole) {
+			$communities[] = $userRole->getCommunity();
+		}
+		
+		return $this->render(
+			'foot5x5UserBundle::welcome.html.twig',
 			array(
-				'lastResult' => $lastResult,
-				'matchPlayers' => $matchPlayers,
-				'lastStanding' => $lastStanding,
-                'ranks'        => $ranks,
-                'currentForms' => $currentForms,
-                'currentSeries' => $currentSeries,
-                'globalResults' => $globalResults
+				'title' => 'Bienvenue '.$username. ' !',
+				'communities' => $communities
 			)
 		);
     }

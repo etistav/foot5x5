@@ -75,19 +75,4 @@ class RegistrationController extends Controller
 				)
 		);
 	}
-	
-	/**
-	 * Management of the 'welcome' view
-	 */
-	public function welcomeAction() {
-		
-		$username = $this->get('security.token_storage')->getToken()->getUser()->getFirstname();
-		
-		return $this->render(
-				'foot5x5UserBundle::welcome.html.twig',
-				array(
-						'title' => 'Bienvenue '.$username. ' !'
-				)
-				);
-	}
 }

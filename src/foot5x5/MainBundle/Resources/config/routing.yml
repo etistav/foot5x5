@@ -19,15 +19,20 @@ register_check:
 welcome:
     path:     /welcome
     defaults:
-        _controller: foot5x5UserBundle:Registration:welcome
+        _controller: foot5x5MainBundle:Main:welcome
 
 create_community:
     path:     /community/create
     defaults:
         _controller: foot5x5MainBundle:Community:create
 
+select_community:
+    path:     /community/select/{id}
+    defaults:
+        _controller: foot5x5MainBundle:Community:select
+
 community_home:
-    path:     /community/{id}/home
+    path:     /community/home
     defaults:
         _controller: foot5x5MainBundle:Community:home
 

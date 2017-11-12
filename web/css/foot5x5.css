@@ -76,15 +76,14 @@ div#content {
 /* ------------------------- */
 
 div#welcome-buttons {
-    text-align: center;
+    /*text-align: center;*/
 }
 div#welcome-buttons a button {
-	margin-right: 50px;
-    margin-left: 50px;
     margin-top: 10px;
     margin-bottom: 10px;
-	height: 150px;
-	width: 250px;
+    margin-right: 20px;
+	height: 70px;
+	width: 100%;
 }
 
 /* ------------------------- */

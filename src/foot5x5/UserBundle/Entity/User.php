@@ -8,6 +8,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use foot5x5\MainBundle\Entity\Community;
+use foot5x5\MainBundle\Entity\Roles;
 
 /**
  * User
@@ -33,7 +35,7 @@ class User implements UserInterface, \Serializable
     {
         $this->profilePicture = 'profilePic_default.png';
         $this->subscriptionDate = new \DateTime();
-        $this->roles = array();
+        $this->userRoles = array();
     }
 
 
@@ -136,6 +138,14 @@ class User implements UserInterface, \Serializable
     private $file;
     
     private $tempFilename;
+    
+    /**
+     * @var Roles
+     * 
+     * @ORM\OneToMany(targetEntity="foot5x5\MainBundle\Entity\Roles", mappedBy="user")
+     */
+    private $userRoles;
+    
 
     /**
      * Get id
@@ -236,7 +246,7 @@ class User implements UserInterface, \Serializable
      */
     public function getRoles()
     {
-        return $this->roles;
+		return $this->roles;
     }
 
     public function eraseCredentials()
@@ -543,5 +553,61 @@ class User implements UserInterface, \Serializable
     public function getEmail()
     {
         return $this->email;
+    }
+    
+    
+    /**
+     * Set community
+     *
+     * @param Community $community
+     * @return User
+     */
+    public function setCommunity($community)
+    {
+    		$this->community = $community;
+    		return $this;
+    }
+    
+    /**
+     * Get community
+     *
+     * @return Community
+     */
+    public function getCommunity()
+    {
+    		return $this->community;
+    }
+
+    /**
+     * Add userRoles
+     *
+     * @param \foot5x5\MainBundle\Entity\Roles $userRoles
+     * @return User
+     */
+    public function addUserRole(\foot5x5\MainBundle\Entity\Roles $userRoles)
+    {
+        $this->userRoles[] = $userRoles;
+
+        return $this;
+    }
+
+    /**
+     * Remove userRoles
+     *
+     * @param \foot5x5\MainBundle\Entity\Roles $userRoles
+     */
+    public function removeUserRole(\foot5x5\MainBundle\Entity\Roles $userRoles)
+    {
+        $this->userRoles->removeElement($userRoles);
+    }
+
+    /**
+     * Get userRoles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUserRoles()
+    {
+        return $this->userRoles;
     }
 }

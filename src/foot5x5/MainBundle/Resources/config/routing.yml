@@ -3,6 +3,11 @@ foot5x5_main_homepage:
     defaults:
         _controller: foot5x5MainBundle:Main:index
 
+home:
+    path:     /home
+    defaults:
+        _controller: foot5x5MainBundle:Main:home
+
 register:
     path:     /register
     defaults:

@@ -1,0 +1,15 @@
+{% extends "foot5x5MainBundle::layout.html.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h2 class="text-center">{{ block('title') }}</h2>
+<div class="col-sm-12">
+	<div id="home-buttons" class="col-sm-4 col-sm-offset-4">
+		<img src="{{ 'logoFoot5x5_001d.png'  | imagine_filter('avatar_200') }}" alt="Foot5x5_logo" class="img-responsive"/>
+		<a href="{{ path('login') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-chevron-right"></span> Connexion</button></a>
+		<a href="{{ path('register') }}"><button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> S'inscrire</button></a>
+	</div>
+</div>
+
+{% endblock %}

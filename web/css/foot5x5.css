@@ -74,18 +74,20 @@ div#content {
 }
 
 /* ------------------------- */
-/*   WELCOME                 */
+/*   WELCOME / HOME          */
 /* ------------------------- */
 
-div#welcome-buttons {
-    /*text-align: center;*/
-}
-div#welcome-buttons a button {
+div#welcome-buttons a button,
+div#home-buttons a button {
     margin-top: 10px;
     margin-bottom: 10px;
     margin-right: 20px;
 	height: 70px;
 	width: 100%;
+}
+div#home-buttons img {
+	margin: auto;
+	margin-bottom: 2em;
 }
 
 /* ------------------------- */

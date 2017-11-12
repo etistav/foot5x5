@@ -30,8 +30,22 @@ class MainController extends Controller
 		if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
 			return $this->redirect($this->generateUrl('community_home'));
 		} else {
-			return $this->redirect($this->generateUrl('welcome'));
+			return $this->redirect($this->generateUrl('home'));
 		}
+	}
+
+	public function homeAction()
+	{
+		// Check if user already authenticated
+		if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+			return $this->redirect($this->generateUrl('community_home'));
+		} 
+		return $this->render(
+			'foot5x5MainBundle::home.html.twig',
+			array(
+				'title' => 'Bienvenue sur foot5x5.fr !'
+			)
+		);
 	}
 	
 	/**

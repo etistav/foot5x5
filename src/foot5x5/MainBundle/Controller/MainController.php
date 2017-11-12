@@ -21,25 +21,34 @@ class MainController extends Controller
 {
 	/**
 	 * Management of the home page
+	 * 
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
 	 */
-    public function indexAction() {
-	    	// Check if user already authenticated
-	    	if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-	    		return $this->redirect($this->generateUrl('community_home'));
-	    	} else {
-	    		return $this->redirect($this->generateUrl('welcome'));
-	    	}
-    }
-    
-    /**
-     * Management of the 'welcome' view
-     */
-    public function welcomeAction() {
+	public function indexAction()
+	{
+		// Check if user already authenticated
+		if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+			return $this->redirect($this->generateUrl('community_home'));
+		} else {
+			return $this->redirect($this->generateUrl('welcome'));
+		}
+	}
+	
+	/**
+	 * Management of the 'welcome' view
+	 * 
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function welcomeAction()
+	{
+		// Init community variables in session
+		$this->get('session')->remove('community');
+		$this->get('session')->remove('community_name');
+		
 		$user = $this->get('security.token_storage')->getToken()->getUser();
 		$username = $user->getFirstname();
 		
-		// $rol_repo = $this->getDoctrine()->getRepository(Roles::class);
-		// $communities = $rol_repo->findByUser();
+		$communities = array();
 		$userRoles = $user->getUserRoles();
 		foreach ($userRoles as $userRole) {
 			$communities[] = $userRole->getCommunity();

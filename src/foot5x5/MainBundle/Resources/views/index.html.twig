@@ -1,6 +1,6 @@
 {% extends "foot5x5MainBundle::layout.html.twig" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}{{app.session.get('community_name')}}{% endblock %}
 
 {% block content %}
 

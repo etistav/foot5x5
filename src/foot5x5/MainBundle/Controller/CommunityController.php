@@ -79,13 +79,10 @@ class CommunityController extends Controller
 	 */
 	public function homeAction(Request $request) {
 		
-		// $user = $this->getUser();
-		// $community = $user->getCommunity();
-		/*
-		if (!isset($community)) {
+		$communityId = $this->get('session')->get('community');
+		if (!isset($communityId)) {
 			return $this->redirect($this->generateUrl('welcome'));
 		}
-		*/
 		
 		$mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
 		$plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
@@ -93,36 +90,46 @@ class CommunityController extends Controller
 		$rnkRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Ranking');
 		$stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
 		
-		$lastResult = $resRepo->findLastMatch();
-		$matchPlayers = $mplRepo->findBy(array('match' => $lastResult), array('team' => 'ASC'));
+		// Retrieve the last result for the community
+		$lastResult = $resRepo->findLastMatch($communityId);
+		if (isset($lastResult)) {
+			$matchPlayers = $mplRepo->findBy(array('match' => $lastResult), array('team' => 'ASC'));
+		} else {
+			$matchPlayers = array();
+		}
 		
-		$lastStandingId = $stdRepo->findLastStanding()->getId();
-		$lastStanding = $stdRepo->find($lastStandingId);
+		// Retrieve the last standing for the community
+		$lastStanding = $stdRepo->findLastStanding($communityId);
+		if (isset($lastStanding)) {
+			$lastStanding = $stdRepo->find($lastStanding->getId());
+		}
 		
 		$players = $plrRepo->findAllActives();
 		$ranks = array();
 		$currentForms = array();
 		$currentSeries = array();
 		$globalResults = array();
-		foreach ($players as $player) {
-			$playerId = $player->getId();
-			$ranks[$playerId] = $rnkRepo->findRankInStanding($lastStanding, $player);
-			$currentForms[$playerId] = $mplRepo->getCurrentForm($player);
-			$currentSeries[$playerId] = $mplRepo->getCurrentSerie($player);
-			$globalResults[$playerId] = $mplRepo->getAllResultsForPlayer($player);
+		if (isset($lastStanding)) {
+			foreach ($players as $player) {
+				$playerId = $player->getId();
+				$ranks[$playerId] = $rnkRepo->findRankInStanding($lastStanding, $player);
+				$currentForms[$playerId] = $mplRepo->getCurrentForm($player);
+				$currentSeries[$playerId] = $mplRepo->getCurrentSerie($player);
+				$globalResults[$playerId] = $mplRepo->getAllResultsForPlayer($player);
+			}
 		}
 		
 		return $this->render(
-				'foot5x5MainBundle::index.html.twig',
-				array(
-						'lastResult' => $lastResult,
-						'matchPlayers' => $matchPlayers,
-						'lastStanding' => $lastStanding,
-						'ranks'        => $ranks,
-						'currentForms' => $currentForms,
-						'currentSeries' => $currentSeries,
-						'globalResults' => $globalResults
-				)
-				);
+			'foot5x5MainBundle::index.html.twig',
+			array(
+				'lastResult' => $lastResult,
+				'matchPlayers' => $matchPlayers,
+				'lastStanding' => $lastStanding,
+				'ranks'        => $ranks,
+				'currentForms' => $currentForms,
+				'currentSeries' => $currentSeries,
+				'globalResults' => $globalResults
+			)
+		);
 	}
 }

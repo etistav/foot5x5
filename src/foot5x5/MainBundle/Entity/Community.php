@@ -5,6 +5,7 @@ namespace foot5x5\MainBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Community
@@ -25,6 +26,9 @@ class Community
 	{
 		$this->dateOfCreation = new \DateTime();
 		// $this->password=bin2hex(random_bytes(10));
+		$this->results = new ArrayCollection();
+		$this->standings = new ArrayCollection();
+		$this->players = new ArrayCollection();
 	}
 	
     /**
@@ -65,6 +69,21 @@ class Community
      * @ORM\Column(name="cmn_pwd", type="string", length=10)
      */
     private $password;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="foot5x5\MainBundle\Entity\Result", mappedBy="community")
+     */
+    private $results;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="foot5x5\MainBundle\Entity\Standing", mappedBy="community")
+     */
+    private $standings;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="foot5x5\MainBundle\Entity\Player", mappedBy="community")
+     */
+    private $players;
 
     /**
      * Get id
@@ -166,5 +185,104 @@ class Community
     public function getPassword()
     {
         return $this->password;
+    }
+
+    /**
+     * Add results
+     *
+     * @param \foot5x5\MainBundle\Entity\Result $results
+     * @return Community
+     */
+    public function addResult(\foot5x5\MainBundle\Entity\Result $results)
+    {
+        $this->results[] = $results;
+
+        return $this;
+    }
+
+    /**
+     * Remove results
+     *
+     * @param \foot5x5\MainBundle\Entity\Result $results
+     */
+    public function removeResult(\foot5x5\MainBundle\Entity\Result $results)
+    {
+        $this->results->removeElement($results);
+    }
+
+    /**
+     * Get results
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getResults()
+    {
+        return $this->results;
+    }
+
+    /**
+     * Add standings
+     *
+     * @param \foot5x5\MainBundle\Entity\Standing $standings
+     * @return Community
+     */
+    public function addStanding(\foot5x5\MainBundle\Entity\Standing $standings)
+    {
+        $this->standings[] = $standings;
+
+        return $this;
+    }
+
+    /**
+     * Remove standings
+     *
+     * @param \foot5x5\MainBundle\Entity\Standing $standings
+     */
+    public function removeStanding(\foot5x5\MainBundle\Entity\Standing $standings)
+    {
+        $this->standings->removeElement($standings);
+    }
+
+    /**
+     * Get standings
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getStandings()
+    {
+        return $this->standings;
+    }
+
+    /**
+     * Add players
+     *
+     * @param \foot5x5\MainBundle\Entity\Player $players
+     * @return Community
+     */
+    public function addPlayer(\foot5x5\MainBundle\Entity\Player $players)
+    {
+        $this->players[] = $players;
+
+        return $this;
+    }
+
+    /**
+     * Remove players
+     *
+     * @param \foot5x5\MainBundle\Entity\Player $players
+     */
+    public function removePlayer(\foot5x5\MainBundle\Entity\Player $players)
+    {
+        $this->players->removeElement($players);
+    }
+
+    /**
+     * Get players
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPlayers()
+    {
+        return $this->players;
     }
 }

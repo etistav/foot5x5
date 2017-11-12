@@ -4,6 +4,7 @@ namespace foot5x5\MainBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
+use Symfony\Component\Validator\Constraints\Null;
 
 /**
  * ResultRepository
@@ -13,14 +14,20 @@ use Doctrine\ORM\NoResultException;
  */
 class ResultRepository extends EntityRepository
 {
-    public function findLastMatch() {
-    	$qb = $this->createQueryBuilder('res');
-    	$qb->addOrderBy('res.year', 'DESC')
-    		->addOrderBy('res.trimester', 'DESC')
-    		->addOrderBy('res.num', 'DESC')
-    		->setMaxResults(1);
-
-    	return $qb->getQuery()->getSingleResult();
+    public function findLastMatch($communityId) {
+		$qb = $this->createQueryBuilder('res');
+		$qb->where('res.community = :cmnId')
+			->setParameter('cmnId', $communityId)
+			->addOrderBy('res.year', 'DESC')
+			->addOrderBy('res.trimester', 'DESC')
+			->addOrderBy('res.num', 'DESC')
+			->setMaxResults(1);
+		try {
+			$lastMatch = $qb->getQuery()->getSingleResult();
+		} catch (NoResultException $e) {
+			return null;
+		}
+		return $lastMatch;
     }
 
     public function findByTrimester($year, $trimester) {

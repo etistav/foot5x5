@@ -49,13 +49,19 @@ class StandingRepository extends EntityRepository
         // return array_merge($standings, $annuals);
     }
 
-	public function findLastStanding() {
-    	$qb = $this->createQueryBuilder('std')
-            ->addOrderBy('std.year', 'DESC')
-    		->addOrderBy('std.trimester', 'DESC')
-    		->setMaxResults(1);
-
-    	return $qb->getQuery()->getSingleResult();
+    public function findLastStanding($communityId) {
+		$qb = $this->createQueryBuilder('std')
+			->where('std.community = :cmnId')
+			->setParameter('cmnId', $communityId)
+			->addOrderBy('std.year', 'DESC')
+			->addOrderBy('std.trimester', 'DESC')
+			->setMaxResults(1);
+		try {
+			$lastStanding = $qb->getQuery()->getSingleResult();
+		} catch (NoResultException $e) {
+			return null;
+		}
+		return $lastStanding;
     }
 
     public function findByTrimester($year, $trimester) {

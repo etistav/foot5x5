@@ -13,6 +13,7 @@ body {
 }
 #content {
 	width: 100%;
+	min-height: 800px;
 }
 .well {
     background: linear-gradient(to bottom, rgb(250,250,250) 0%, rgb(234,234,250) 100%);

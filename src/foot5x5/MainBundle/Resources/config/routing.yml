@@ -47,49 +47,49 @@ edit_pwd:
         _controller: foot5x5MainBundle:Main:editPwd
 
 results:
-    path:     /results
+    path:     /community/results
     defaults:
-        _controller: foot5x5MainBundle:Main:results
+        _controller: foot5x5MainBundle:Community:results
 
 standing:
-    path:     /standing/{id}
+    path:     /community/standing/{id}
     defaults:
         _controller: foot5x5MainBundle:Main:standing
 
 standings:
-    path:     /standings
+    path:     /community/standings
     defaults:
-        _controller: foot5x5MainBundle:Main:standings
+        _controller: foot5x5MainBundle:Community:standings
 
 players:
-    path:     /players
+    path:     /community/players
     defaults:
-        _controller: foot5x5MainBundle:Main:players
+        _controller: foot5x5MainBundle:Community:players
 
 notes:
-    path:     /notes
+    path:     /community/notes
     defaults:
-        _controller: foot5x5MainBundle:Main:notes
+        _controller: foot5x5MainBundle:Community:notes
 
 edit_note:
-    path:     /note/{id}/edit
+    path:     /community/note/{id}/edit
     defaults:
-        _controller: foot5x5MainBundle:Main:editNote
+        _controller: foot5x5MainBundle:Community:editNote
 
 delete_note:
-    path:     /note/{id}/delete
+    path:     /community/note/{id}/delete
     defaults:
-        _controller: foot5x5MainBundle:Main:deleteNote
+        _controller: foot5x5MainBundle:Community:deleteNote
 
 random_draw:
-    path:     /random
+    path:     /community/random
     defaults:
-        _controller: foot5x5MainBundle:Main:randomDraw
+        _controller: foot5x5MainBundle:Community:randomDraw
 
 finances:
-    path:     /finances
+    path:     /community/finances
     defaults:
-        _controller: foot5x5MainBundle:Main:finances
+        _controller: foot5x5MainBundle:Community:finances
 
 admin_home:
     path:     /admin

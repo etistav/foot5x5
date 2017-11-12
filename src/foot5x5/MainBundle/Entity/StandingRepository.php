@@ -24,29 +24,19 @@ class StandingRepository extends EntityRepository
     	return $qb->getQuery()->getSingleResult();
     }
 
-	public function findAll() {
-    	$qb = $this->createQueryBuilder('std')
-    		->leftJoin('std.rankings', 'rnk')
-            // ->innerJoin('foot5x5\MainBundle\Entity\Result', 'res', 'WITH', 'std.year = res.year AND std.trimester = res.trimester')
-    		->addSelect('rnk');
-    	$qb->addOrderBy('std.year', 'DESC')
-    		->addOrderBy('std.trimester', 'DESC')
-    		->addOrderBy('rnk.rank', 'ASC');
-
-    	$standings = $qb->getQuery()->getResult();
+    public function findByCommunity($communityId)
+    {
+		$qb = $this->createQueryBuilder('std')
+			->leftJoin('std.rankings', 'rnk')
+			->addSelect('rnk')
+			->where('std.community = :cmnId')
+			->setParameter('cmnId', $communityId)
+			->addOrderBy('std.year', 'DESC')
+			->addOrderBy('std.trimester', 'DESC')
+			->addOrderBy('rnk.rank', 'ASC');
+		
+		$standings = $qb->getQuery()->getResult();
         return $standings;
-
-        // $qb = $this->createQueryBuilder('std')
-        //     ->leftJoin('std.rankings', 'rnk')
-        //     ->addSelect('rnk');
-        // $qb->where('std.trimester = :trim')
-        //     ->setParameter('trim', 0)
-        //     ->addOrderBy('std.year', 'DESC')
-        //     ->addOrderBy('rnk.rank', 'ASC');
-
-        // $annuals = $qb->getQuery()->getResult();
-
-        // return array_merge($standings, $annuals);
     }
 
     public function findLastStanding($communityId) {

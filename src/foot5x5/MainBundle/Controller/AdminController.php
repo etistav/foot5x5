@@ -25,7 +25,13 @@ class AdminController extends Controller
      * 
      * @param Request $request
      */
-    public function indexAction(Request $request) {
+	public function indexAction(Request $request)
+	{
+		// Retrieve community ID from session
+		$communityId = $this->get('session')->get('community');
+		if (!isset($communityId)) {
+			return $this->redirect($this->generateUrl('welcome'));
+		}
 
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
@@ -43,10 +49,10 @@ class AdminController extends Controller
         $session->set('activeTab', '');
 
         // Récupération de tous les joueurs, classements et utilisateurs
-        $players = $plrRepo->findAll();
-        $standings = $stdRepo->findAll();
-        $users = $usrRepo->findAll();
-        $trimesters = $resRepo->listAllTrimesters();
+        $players = $plrRepo->findByCommunity($communityId);
+        $standings = $stdRepo->findAll($communityId);
+        $users = $usrRepo->findAll($communityId);
+        $trimesters = $resRepo->listAllTrimesters($communityId);
 
         // Populate trimester dropdown
         $trimNames = array();
@@ -106,19 +112,33 @@ class AdminController extends Controller
      *         ADMIN - MATCHES         *
      ***********************************/
 
-    /**
+	/**
      * Management of the 'add match' view
      * 
      * @param Request $request
      */
-    public function addMatchAction(Request $request) {
+
+	/**
+	 * Management of the 'add match' view
+	 * 
+	 * @param Request $request
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
+	public function addMatchAction(Request $request)
+	{
+		// Retrieve community ID from session
+		$communityId = $this->get('session')->get('community');
+		if (!isset($communityId)) {
+			return $this->redirect($this->generateUrl('welcome'));
+		}
+		
         $match = new Result();
 
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
         // $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
 
-        $players = $plrRepo->findAll();
+        $players = $plrRepo->findByCommunity($communityId);
         $matchPlayerA = array();
         $matchPlayerB = array();
         
@@ -180,10 +200,16 @@ class AdminController extends Controller
      */
     public function editMatchAction(Request $request, $id) {
 
+	    	// Retrieve community ID from session
+	    	$communityId = $this->get('session')->get('community');
+	    	if (!isset($communityId)) {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
+
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
 
-        $players = $plrRepo->findAll();
+        $players = $plrRepo->findByCommunity($communityId);
         $match = $resRepo->find($id);
         $dateEditedMatch = $match->getDate()->format('d/m/Y');
         $matchForm = $this->createForm(ResultType::class, $match);
@@ -222,6 +248,12 @@ class AdminController extends Controller
      */
     public function deleteMatchAction($id) {
 
+	    	// Retrieve community ID from session
+	    	$communityId = $this->get('session')->get('community');
+	    	if (!isset($communityId)) {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
+    	
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
         $match = $resRepo->find($id);
         $dateDeletedMatch = $match->getDate()->format('d/m/Y');
@@ -251,6 +283,12 @@ class AdminController extends Controller
      */
     public function calcStandingAction($id) {
 
+	    	// Retrieve community ID from session
+	    	$communityId = $this->get('session')->get('community');
+	    	if (!isset($communityId)) {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
+	    	
         $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
         $mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
@@ -348,7 +386,14 @@ class AdminController extends Controller
      * @param Request $request
      */
     public function addPlayerAction(Request $request) {
-        $player = new Player();
+        
+	    	// Retrieve community ID from session
+	    	$communityId = $this->get('session')->get('community');
+	    	if (!isset($communityId)) {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
+    	
+    		$player = new Player();
 
         // Création du formulaire associé
         $playerForm = $this->createForm(PlayerType::class, $player);
@@ -383,7 +428,14 @@ class AdminController extends Controller
      * @param integer $id Player id
      */
     public function editPlayerAction(Request $request, $id) {
-        $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
+        
+	    	// Retrieve community ID from session
+	    	$communityId = $this->get('session')->get('community');
+	    	if (!isset($communityId)) {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
+    	
+    		$plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $player = $plrRepo->find($id);
 
         // Création du formulaire associé
@@ -419,6 +471,12 @@ class AdminController extends Controller
      */
     public function deletePlayerAction($id) {
 
+	    	// Retrieve community ID from session
+	    	$communityId = $this->get('session')->get('community');
+	    	if (!isset($communityId)) {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
+    	
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $player = $plrRepo->find($id);
         $playerName = $player->getName();
@@ -445,6 +503,12 @@ class AdminController extends Controller
      */
     public function updatePlayerBalanceAction($id, $operation) {
 
+	    	// Retrieve community ID from session
+	    	$communityId = $this->get('session')->get('community');
+	    	if (!isset($communityId)) {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
+    	
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $prmRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Param');
         $player = $plrRepo->find($id);
@@ -483,7 +547,13 @@ class AdminController extends Controller
      * @param Request $request
      */
     public function addUserAction(Request $request) {
-        $user = new User();
+        
+	    	// Retrieve community ID from session
+	    	$communityId = $this->get('session')->get('community');
+	    	if (!isset($communityId)) {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
+		$user = new User();
 
         // Création du formulaire associé
         $formOptions = array(
@@ -533,7 +603,13 @@ class AdminController extends Controller
      * @param integer $id User id
      */
     public function editUserAction(Request $request, $id) {
-        $usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
+        
+	    	// Retrieve community ID from session
+	    	$communityId = $this->get('session')->get('community');
+	    	if (!isset($communityId)) {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
+    		$usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
         $user = $usrRepo->find($id);
         $formOptions = array(
         		"action" => "edit"
@@ -571,6 +647,11 @@ class AdminController extends Controller
      */
     public function deleteUserAction($id) {
 
+	    	// Retrieve community ID from session
+	    	$communityId = $this->get('session')->get('community');
+	    	if (!isset($communityId)) {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
         $usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
         $user = $usrRepo->find($id);
         $username = $user->getUsername();
@@ -596,7 +677,13 @@ class AdminController extends Controller
      * @param Request $request
      */
     public function addTransactionAction(Request $request) {
-		$transaction = new Transaction();
+		
+	    	// Retrieve community ID from session
+	    	$communityId = $this->get('session')->get('community');
+	    	if (!isset($communityId)) {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
+    		$transaction = new Transaction();
 		$trnForm = $this->createForm(TransactionType::class, $transaction);
 		
 		$trnForm->handleRequest($request);
@@ -641,7 +728,13 @@ class AdminController extends Controller
      * @param integer $id Transaction id
      */
     public function editTransactionAction(Request $request, $id) {
-		$trnRepo = $this->getDoctrine()->getRepository(Transaction::class);
+		
+	    	// Retrieve community ID from session
+	    	$communityId = $this->get('session')->get('community');
+	    	if (!isset($communityId)) {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
+    		$trnRepo = $this->getDoctrine()->getRepository(Transaction::class);
 		
 		$transaction = $trnRepo->find($id);
 		$previousAmount = $transaction->getAmount();
@@ -721,7 +814,14 @@ class AdminController extends Controller
      * @param integer $id Transaction id
      */
     public function deleteTransactionAction($id) {
-        $trnRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Transaction');
+        
+	    	// Retrieve community ID from session
+	    	$communityId = $this->get('session')->get('community');
+	    	if (!isset($communityId)) {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
+    	
+    		$trnRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Transaction');
         $transaction = $trnRepo->find($id);
 
         $em = $this->getDoctrine()->getManager();

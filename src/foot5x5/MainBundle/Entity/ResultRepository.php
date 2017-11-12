@@ -64,12 +64,15 @@ class ResultRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function listAllTrimesters() {
-        $qb = $this->createQueryBuilder('res')
-            ->select('res.year, res.trimester')
-            ->distinct()
-            ->addOrderBy('res.year', 'DESC')
-            ->addOrderBy('res.trimester', 'DESC');
+    public function listAllTrimesters($communityId)
+    {
+		$qb = $this->createQueryBuilder('res')
+			->select('res.year, res.trimester')
+			->distinct()
+			->where('res.community = :cmnId')
+			->setParameter('cmnId', $communityId)
+			->addOrderBy('res.year', 'DESC')
+			->addOrderBy('res.trimester', 'DESC');
 
         return $qb->getQuery()->getResult();
     }

@@ -21,6 +21,16 @@ welcome:
     defaults:
         _controller: foot5x5UserBundle:Registration:welcome
 
+create_community:
+    path:     /community/create
+    defaults:
+        _controller: foot5x5MainBundle:Community:create
+
+community_home:
+    path:     /community/{id}/home
+    defaults:
+        _controller: foot5x5MainBundle:Community:home
+
 myprofile:
     path:     /profile
     defaults:

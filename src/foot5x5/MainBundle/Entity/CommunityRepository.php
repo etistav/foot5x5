@@ -12,4 +12,19 @@ use Doctrine\ORM\EntityRepository;
  */
 class CommunityRepository extends EntityRepository
 {
+	/**
+	 * Return a randomly generated password
+	 * 
+	 * @param number $length
+	 * @return string randomly generated password
+	 */
+	function generatePassword($length = 10) {
+		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$charactersLength = strlen($characters);
+		$randomString = '';
+		for ($i = 0; $i < $length; $i++) {
+			$randomString .= $characters[rand(0, $charactersLength - 1)];
+		}
+		return $randomString;
+	}
 }

@@ -3,6 +3,7 @@
 namespace foot5x5\MainBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use foot5x5\UserBundle\Entity\User;
 
 /**
  * RolesRepository
@@ -12,4 +13,10 @@ use Doctrine\ORM\EntityRepository;
  */
 class RolesRepository extends EntityRepository
 {
+	public function assignRole(User $user, Community $community, string $role) {
+		$userRole = new Roles();
+		
+		
+		
+	}
 }

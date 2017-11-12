@@ -13,6 +13,8 @@ use foot5x5\UserBundle\Form\UserPwdType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use foot5x5\MainBundle\Entity\Community;
+use foot5x5\MainBundle\Form\CommunityType;
 
 class MainController extends Controller
 {
@@ -536,5 +538,41 @@ class MainController extends Controller
                 'userPwdForm' => $userPwdForm->createView()
             )
         );
+    }
+    
+    /**
+     * Management of the 'create community' view
+     *
+     * @param Request $request
+     */
+    public function createCommunityAction(Request $request) {
+    		$community = new Community();
+		$communityForm = $this->createForm(CommunityType::class, $community);
+		var_dump($community->getPassword());
+		
+		$communityForm->handleRequest($request);
+		if ($communityForm->isSubmitted() && $communityForm->isValid()) {
+			// Get connected user and save him as the creator of the community
+			$user = $this->getUser();
+			$community->setCreatorUserId($user);
+			
+			// Save the community in db
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($community);
+			$em->flush();
+			
+			// Redirect to home page
+			$this->get('session')->getFlashBag()->add('success', 'Tu viens de créer la communauté '.$community->getName().' !');
+			return $this->redirect($this->generateUrl('foot5x5_main_homepage'));
+		}
+		return $this->render(
+			'foot5x5MainBundle::community_form.html.twig',
+			array(
+    				'title' => 'Crée ta communauté foot5x5 !',
+    				'buttonLabel' => 'C\'est parti !',
+    				'community' => $community,
+    				'communityForm' => $communityForm->createView()
+			)
+		);
     }
 }

@@ -38,9 +38,9 @@ class Roles
     private $userId;
 
     /**
-     * @var array
+     * @var string
      *
-     * @ORM\Column(name="rol_roles", type="array")
+     * @ORM\Column(name="rol_roles", type="string")
      */
     private $roles;
 
@@ -101,10 +101,11 @@ class Roles
         return $this->userId;
     }
 
+
     /**
      * Set roles
      *
-     * @param array $roles
+     * @param string $roles
      * @return Roles
      */
     public function setRoles($roles)
@@ -117,7 +118,7 @@ class Roles
     /**
      * Get roles
      *
-     * @return array 
+     * @return string 
      */
     public function getRoles()
     {

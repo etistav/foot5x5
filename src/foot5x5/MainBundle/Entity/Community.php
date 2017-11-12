@@ -4,15 +4,29 @@ namespace foot5x5\MainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Community
  *
  * @ORM\Table(name="t_communities")
  * @ORM\Entity(repositoryClass="foot5x5\MainBundle\Entity\CommunityRepository")
+ * @UniqueEntity(
+ *     fields="password",
+ *     message="Pas de chance! Le mot de passe généré pour la communauté existe déjà pour une autre communauté."
+ * )
  */
 class Community
 {
+	/**
+	 * Constructor
+	 */
+	public function __construct()
+	{
+		$this->dateOfCreation = new \DateTime();
+		// $this->password=bin2hex(random_bytes(10));
+	}
+	
     /**
      * @var integer
      *
@@ -45,6 +59,12 @@ class Community
      */
     private $dateOfCreation;
 
+    /**
+     * @var string
+     * 
+     * @ORM\Column(name="cmn_pwd", type="string", length=10)
+     */
+    private $password;
 
     /**
      * Get id
@@ -123,5 +143,28 @@ class Community
     public function getDateOfCreation()
     {
         return $this->dateOfCreation;
+    }
+
+    /**
+     * Set password
+     *
+     * @param string $password
+     * @return Community
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Get password
+     *
+     * @return string 
+     */
+    public function getPassword()
+    {
+        return $this->password;
     }
 }

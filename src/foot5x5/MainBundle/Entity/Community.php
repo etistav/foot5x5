@@ -6,12 +6,20 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping\Entity;
 
 /**
  * Community
  *
- * @ORM\Table(name="t_communities")
- * @ORM\Entity(repositoryClass="foot5x5\MainBundle\Entity\CommunityRepository")
+ * @Table(name="t_communities")
+ * @Entity(repositoryClass="foot5x5\MainBundle\Entity\CommunityRepository")
  * @UniqueEntity(
  *     fields="password",
  *     message="Pas de chance! Le mot de passe généré pour la communauté existe déjà pour une autre communauté."
@@ -34,31 +42,31 @@ class Community
     /**
      * @var integer
      *
-     * @ORM\Column(name="cmn_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @Column(name="cmn_id", type="integer")
+     * @Id()
+     * @GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="cmn_name", type="string", length=255)
+     * @Column(name="cmn_name", type="string", length=255)
      */
     private $name;
 
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="foot5x5\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="cmn_creatorUserId", referencedColumnName="usr_id", nullable=false)
+     * @ManyToOne(targetEntity="foot5x5\UserBundle\Entity\User")
+     * @JoinColumn(name="cmn_creatorUserId", referencedColumnName="usr_id", nullable=false)
      */
     private $creatorUserId;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="cmn_dateOfCreation", type="date")
+     * @Column(name="cmn_dateOfCreation", type="date")
      * @Assert\Date()
      */
     private $dateOfCreation;
@@ -66,22 +74,22 @@ class Community
     /**
      * @var string
      * 
-     * @ORM\Column(name="cmn_pwd", type="string", length=10)
+     * @Column(name="cmn_pwd", type="string", length=10)
      */
     private $password;
     
     /**
-     * @ORM\OneToMany(targetEntity="foot5x5\MainBundle\Entity\Result", mappedBy="community")
+     * @OneToMany(targetEntity="foot5x5\MainBundle\Entity\Result", mappedBy="community")
      */
     private $results;
     
     /**
-     * @ORM\OneToMany(targetEntity="foot5x5\MainBundle\Entity\Standing", mappedBy="community")
+     * @OneToMany(targetEntity="foot5x5\MainBundle\Entity\Standing", mappedBy="community")
      */
     private $standings;
     
     /**
-     * @ORM\OneToMany(targetEntity="foot5x5\MainBundle\Entity\Player", mappedBy="community")
+     * @OneToMany(targetEntity="foot5x5\MainBundle\Entity\Player", mappedBy="community")
      */
     private $players;
 

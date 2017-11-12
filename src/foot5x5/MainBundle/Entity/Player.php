@@ -40,7 +40,7 @@ class Player
     /**
      * @var Community
      *
-     * @ManyToOne(targetEntity="foot5x5\MainBundle\Entity\Community", inversedBy="standings")
+     * @ManyToOne(targetEntity="foot5x5\MainBundle\Entity\Community", inversedBy="players")
      * @JoinColumn(name="plr_communityId", referencedColumnName="cmn_id")
      */
     private $community;

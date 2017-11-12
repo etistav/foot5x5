@@ -33,7 +33,7 @@ class Roles
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="foot5x5\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="foot5x5\UserBundle\Entity\User", inversedBy="userRoles")
      * @ORM\JoinColumn(name="rol_userId", referencedColumnName="usr_id", nullable=false)
      */
     private $user;

@@ -17,6 +17,7 @@ use foot5x5\UserBundle\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\HttpFoundation\Request;
+use foot5x5\MainBundle\Entity\Community;
 
 class AdminController extends Controller
 {
@@ -50,7 +51,7 @@ class AdminController extends Controller
 
         // Récupération de tous les joueurs, classements et utilisateurs
         $players = $plrRepo->findByCommunity($communityId);
-        $standings = $stdRepo->findAll($communityId);
+        $standings = $stdRepo->findByCommunity($communityId);
         $users = $usrRepo->findAll($communityId);
         $trimesters = $resRepo->listAllTrimesters($communityId);
 
@@ -113,12 +114,6 @@ class AdminController extends Controller
      ***********************************/
 
 	/**
-     * Management of the 'add match' view
-     * 
-     * @param Request $request
-     */
-
-	/**
 	 * Management of the 'add match' view
 	 * 
 	 * @param Request $request
@@ -132,11 +127,14 @@ class AdminController extends Controller
 			return $this->redirect($this->generateUrl('welcome'));
 		}
 		
-        $match = new Result();
-
-        $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
+		$match = new Result();
+		
+		$cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+		$plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
-        // $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
+        $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
+        
+        $community = $cmnRepo->find($communityId);
 
         $players = $plrRepo->findByCommunity($communityId);
         $matchPlayerA = array();
@@ -162,13 +160,16 @@ class AdminController extends Controller
         $matchForm = $this->createForm(ResultType::class, $match);
 
 		$matchForm->handleRequest($request);
-		if ($matchForm->isSubmitted() && $matchForm->isValid()) {
+		if ($matchForm->isSubmitted() && $matchForm->isValid())
+		{
+			$match->setCommunity($community);
+			
 			// Détermination du n° de match
 			$matchNum = $resRepo->determineMatchNumber($match);
 			$match->setNum($matchNum);
 			
 			// Création d'un classement pour le trimestre si besoin
-			// $isStandingCreated = $stdRepo->initializeStanding($match->getYear(), $match->getTrimester());
+			$stdRepo->initializeStanding($community, $match->getYear(), $match->getTrimester());
 			
 			// Ecriture du match en BDD
 			$em = $this->getDoctrine()->getManager();
@@ -265,6 +266,9 @@ class AdminController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->remove($match);
         $em->flush();
+        
+        // TODO Remove standing if no match left
+        // ...
 
         // Redirection sur la page d'admin avec gestion du message d'info
         $this->get('session')->getFlashBag()->add('success', 'Le match du '.$dateDeletedMatch.' a bien été supprimé.');

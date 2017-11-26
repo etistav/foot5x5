@@ -94,7 +94,7 @@ class MainController extends Controller
         $rnkRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Ranking');
         $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
 
-        $lastStanding = $stdRepo->findLastStanding();
+        $lastStanding = $stdRepo->findLastStanding($communityId);
         $rank = $rnkRepo->findRankInStanding($lastStanding, $player);
         $currentForm = $mplRepo->getCurrentForm($player);
         $lastMatch = $mplRepo->getLastMatch($player);

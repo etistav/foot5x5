@@ -53,7 +53,7 @@ class ResultRepository extends EntityRepository
 			->andWhere('res.trimester = :trim')
 			->setParameter('trim', $trimester)
 			->andWhere('res.community = :cmnId')
-			->setParameter('cmdId', $communityId)
+			->setParameter('cmnId', $communityId)
 			->orderBy('res.num', 'DESC');
 		
 		return $qb->getQuery()->getResult();
@@ -72,7 +72,7 @@ class ResultRepository extends EntityRepository
 		$qb->where('res.year = :year')
 			->setParameter('year', $year)
 			->andWhere('res.community = :cmnId')
-			->setParameter('cmdId', $communityId)
+			->setParameter('cmnId', $communityId)
 			->addOrderBy('res.trimester', 'DESC')
 			->addOrderBy('res.num', 'DESC');
 		

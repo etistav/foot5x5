@@ -201,7 +201,7 @@ class CommunityController extends Controller
 			$currentTrimester = $lastResult->getTrimester();
 		}
 		
-		$results = $resRepo->listAllByTrimester($currentYear, $currentTrimester);
+		$results = $resRepo->listAllByTrimester($communityId, $currentYear, $currentTrimester);
 		
 		$players = $plrRepo->findAllActives($communityId);
 		$lastStandingId = $stdRepo->findLastStanding($communityId)->getId();

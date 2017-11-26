@@ -14,7 +14,14 @@ use Symfony\Component\Validator\Constraints\Null;
  */
 class ResultRepository extends EntityRepository
 {
-    public function findLastMatch($communityId) {
+	/**
+	 * Retrieve the last match of a community
+	 * 
+	 * @param int $communityId
+	 * @return Result lastMatch
+	 */
+	public function findLastMatch($communityId)
+	{
 		$qb = $this->createQueryBuilder('res');
 		$qb->where('res.community = :cmnId')
 			->setParameter('cmnId', $communityId)
@@ -30,40 +37,78 @@ class ResultRepository extends EntityRepository
 		return $lastMatch;
     }
 
-    public function findByTrimester($year, $trimester) {
-    	$qb = $this->createQueryBuilder('res');
-    	$qb->where('res.year = :year')
-    		->setParameter('year', $year)
-    		->andWhere('res.trimester = :trim')
-    		->setParameter('trim', $trimester)
-    		->orderBy('res.num', 'DESC');
-
-        return $qb->getQuery()->getResult();
+    /**
+     * Retrieve all results of a community for one given quarter
+     * 
+     * @param int $communityId
+     * @param int $year
+     * @param int $trimester
+     * @return array
+     */
+	public function findByTrimester($communityId, $year, $trimester)
+	{
+		$qb = $this->createQueryBuilder('res');
+		$qb->where('res.year = :year')
+			->setParameter('year', $year)
+			->andWhere('res.trimester = :trim')
+			->setParameter('trim', $trimester)
+			->andWhere('res.community = :cmnId')
+			->setParameter('cmdId', $communityId)
+			->orderBy('res.num', 'DESC');
+		
+		return $qb->getQuery()->getResult();
     }
 
-    public function findByYear($year) {
-        $qb = $this->createQueryBuilder('res');
-        $qb->where('res.year = :year')
-            ->setParameter('year', $year)
-            ->addOrderBy('res.trimester', 'DESC')
-            ->addOrderBy('res.num', 'DESC');
-
-        return $qb->getQuery()->getResult();
+    /**
+     * Retrieve all results of a community for one given year
+     * 
+     * @param int $communityId
+     * @param int $year
+     * @return array
+     */
+	public function findByYear($communityId, $year)
+	{
+		$qb = $this->createQueryBuilder('res');
+		$qb->where('res.year = :year')
+			->setParameter('year', $year)
+			->andWhere('res.community = :cmnId')
+			->setParameter('cmdId', $communityId)
+			->addOrderBy('res.trimester', 'DESC')
+			->addOrderBy('res.num', 'DESC');
+		
+		return $qb->getQuery()->getResult();
     }
 
-    public function listAllByTrimester($year, $trimester) {
-    	$qb = $this->createQueryBuilder('res')
-    		->Join('res.matchPlayers', 'mpl')
-    		->addSelect('mpl');
-    	$qb->where('res.year = :year')
-    		->setParameter('year', $year)
-    		->andWhere('res.trimester = :trim')
-    		->setParameter('trim', $trimester)
-    		->orderBy('res.num', 'DESC');
-
-        return $qb->getQuery()->getResult();
+    /**
+     * Retrieve all results and match players of a community for one given quarter
+     *  
+     * @param int $communityId
+     * @param int $year
+     * @param int $trimester
+     * @return array
+     */
+	public function listAllByTrimester($communityId, $year, $trimester)
+	{
+		$qb = $this->createQueryBuilder('res')
+			->Join('res.matchPlayers', 'mpl')
+			->addSelect('mpl');
+		$qb->where('res.year = :year')
+			->setParameter('year', $year)
+			->andWhere('res.trimester = :trim')
+			->setParameter('trim', $trimester)
+			->andWhere('res.community = :cmnId')
+			->setParameter('cmnId', $communityId)
+			->orderBy('res.num', 'DESC');
+		
+		return $qb->getQuery()->getResult();
     }
 
+    /**
+     * Retrieve all quarters with match played for a given community
+     * 
+     * @param int $communityId
+     * @return array
+     */
     public function listAllTrimesters($communityId)
     {
 		$qb = $this->createQueryBuilder('res')
@@ -77,29 +122,40 @@ class ResultRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findFollowingGames(Result $match) {
+	public function findFollowingGames(Result $match)
+	{
+		$year = $match->getYear();
+		$trimester = $match->getTrimester();
+		$date = $match->getDate();
+		$communityId = $match->getCommunity()->getId();
+		
+		$qb = $this->createQueryBuilder('res');
+		$qb->where('res.year = :year')
+			->andWhere('res.trimester = :trim')
+			->andWhere('res.date > :date')
+			->andWhere('res.community = :cmnId')
+			->setParameter('year', $year)
+			->setParameter('trim', $trimester)
+			->setParameter('date', $date)
+			->setParameter('cmnId', $communityId)
+			->orderBy('res.num', 'DESC');
+		
+		return $qb->getQuery()->getResult();
+	}
+
+	/**
+	 * Determine the match number of a new created match
+	 * 
+	 * @param Result $match
+	 * @return number
+	 */
+    public function determineMatchNumber(Result $match) {
+
         $year = $match->getYear();
         $trimester = $match->getTrimester();
-        $date = $match->getDate();
+        $communityId = $match->getCommunity()->getId();
 
-        $qb = $this->createQueryBuilder('res');
-        $qb->where('res.year = :year')
-            ->andWhere('res.trimester = :trim')
-            ->andWhere('res.date > :date')
-            ->setParameter('year', $year)
-            ->setParameter('trim', $trimester)
-            ->setParameter('date', $date)
-            ->orderBy('res.num', 'DESC');
-
-        return $qb->getQuery()->getResult();
-    }
-
-    public function findMatchNumber(Result $match) {
-
-        $year = $match->getYear();
-        $trimester = $match->getTrimester();
-
-        $allResults = $this->findByTrimester($year, $trimester);
+        $allResults = $this->findByTrimester($communityId, $year, $trimester);
         $followingGames = $this->findFollowingGames($match);
         $nbAllResults = count($allResults);
         $nbFollowingGames = count($followingGames);
@@ -119,45 +175,42 @@ class ResultRepository extends EntityRepository
         return $num;
     }
 
-    public function updateMatchNumbers(Result $match) {
+    /**
+     * Update match number of all following matches
+     * after the removal of one match
+     * 
+     * @param Result $match
+     */
+	public function updateMatchNumbersAfterRemoval(Result $match)
+	{
+		$followingGames = $this->findFollowingGames($match);
+		$nbFollowingGames = count($followingGames);
+		
+		if ($nbFollowingGames > 0)
+		{
+			foreach ($followingGames as $game)
+			{
+				$num = $game->getNum();
+				$this->updateMatchNumber($game->getId(), $num - 1);
+			}
+		}
+	}
 
-        $year = $match->getYear();
-        $trimester = $match->getTrimester();
-
-        $followingGames = $this->findFollowingGames($match);
-        $nbFollowingGames = count($followingGames);
-
-        if ($nbFollowingGames > 0) {
-            foreach ($followingGames as $game) {
-                $num = $game->getNum();
-                $this->updateMatchNumber($game->getId(), $num - 1);
-            }
-        }
-
-        // $results = $this->findByTrimester($year, $trimester);
-        // $nbResults = count($results);
-        // $i = 0;
-        // $num = $match->getNum();
-        // $numTmp = $results[$i]->getNum();
-        // $isFirstMatch = false;
-
-        // while (($i <= $nbResults - 1) && ($num < $numTmp)) {
-        //     // mettre à jour le numéro du match
-        //     $this->updateMatchNumber($results[$i]->getId(), $numTmp - 1);
-        //     // passage à l'occurence suivante
-        //     $i++;
-        //     $numTmp = $results[$i]->getNum();
-        // }
-    }
-
-    public function updateMatchNumber($id, $num) {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-            ->update('foot5x5MainBundle:Result', 'res')
-            ->set('res.num', '?1')
-            ->where('res.id = ?2')
-            ->setParameter(1, $num)
-            ->setParameter(2, $id)
-            ->getQuery();
-        $qb->execute();
-    }
+	/**
+	 * Update the number of a match
+	 * 
+	 * @param int $id
+	 * @param int $num
+	 */
+	public function updateMatchNumber($id, $num)
+	{
+		$qb = $this->getEntityManager()->createQueryBuilder()
+			->update('foot5x5MainBundle:Result', 'res')
+			->set('res.num', '?1')
+			->where('res.id = ?2')
+			->setParameter(1, $num)
+			->setParameter(2, $id)
+			->getQuery();
+		$qb->execute();
+	}
 }

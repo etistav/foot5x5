@@ -84,12 +84,12 @@ class AdminController extends Controller
                 $currentTrimester = substr($idTrimester, 4, 1);
             }
         } else {
-            $lastResult = $resRepo->findLastMatch();
+        		$lastResult = $resRepo->findLastMatch($communityId);
             $currentYear = $lastResult->getYear();
             $currentTrimester = $lastResult->getTrimester();
         }
 
-        $results = $resRepo->listAllByTrimester($currentYear, $currentTrimester);
+        $results = $resRepo->listAllByTrimester($communityId, $currentYear, $currentTrimester);
         $transactions = $trnRepo->listAllByTrimester($currentYear, $currentTrimester);
 
         return $this->render(
@@ -164,7 +164,7 @@ class AdminController extends Controller
 		$matchForm->handleRequest($request);
 		if ($matchForm->isSubmitted() && $matchForm->isValid()) {
 			// Détermination du n° de match
-			$matchNum = $resRepo->findMatchNumber($match);
+			$matchNum = $resRepo->determineMatchNumber($match);
 			$match->setNum($matchNum);
 			
 			// Création d'un classement pour le trimestre si besoin
@@ -259,7 +259,7 @@ class AdminController extends Controller
         $dateDeletedMatch = $match->getDate()->format('d/m/Y');
 
         // Mise à jour des numéros de match du trimestre correspondant
-        $resRepo->updateMatchNumbers($match);
+        $resRepo->updateMatchNumbersAfterRemoval($match);
 
         // Suppression du match en BDD
         $em = $this->getDoctrine()->getManager();
@@ -307,10 +307,10 @@ class AdminController extends Controller
         
         if ($trimester == 0) {
             // Récupération du nombre total de matchs effectués sur l'année
-            $results = $resRepo->findByYear($year);
+        		$results = $resRepo->findByYear($communityId, $year);
         } else {
             // Récupération du nombre total de matchs effectués sur ce trimestre
-            $results = $resRepo->findByTrimester($year, $trimester);
+            $results = $resRepo->findByTrimester($communityId, $year, $trimester);
         }
         $nbTotalResults = count($results);
         $minParticipation = 0.33;

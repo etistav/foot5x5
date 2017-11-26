@@ -52,7 +52,7 @@ class AdminController extends Controller
         // Récupération de tous les joueurs, classements et utilisateurs
         $players = $plrRepo->findByCommunity($communityId);
         $standings = $stdRepo->findByCommunity($communityId);
-        $users = $usrRepo->findAll($communityId);
+        $users = $usrRepo->findByCommunity($communityId);
         $trimesters = $resRepo->listAllTrimesters($communityId);
 
         // Populate trimester dropdown

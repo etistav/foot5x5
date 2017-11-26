@@ -384,46 +384,52 @@ class AdminController extends Controller
      *         ADMIN - PLAYERS         *
      ***********************************/
 
-    /**
-     * Management of the 'add player' view
-     * 
-     * @param Request $request
-     */
-    public function addPlayerAction(Request $request) {
-        
-	    	// Retrieve community ID from session
-	    	$communityId = $this->get('session')->get('community');
-	    	if (!isset($communityId)) {
-	    		return $this->redirect($this->generateUrl('welcome'));
-	    	}
-    	
-    		$player = new Player();
-
-        // Création du formulaire associé
-        $playerForm = $this->createForm(PlayerType::class, $player);
-
-        $playerForm->handleRequest($request);
-        if ($playerForm->isSubmitted() && $playerForm->isValid()) {
-			// Ecriture du player en BDD
+	/**
+	 * Management of the 'add player' view
+	 * 
+	 * @param Request $request
+	 */
+	public function addPlayerAction(Request $request) {
+		
+		// Retrieve community ID from session
+		$communityId = $this->get('session')->get('community');
+		if (!isset($communityId)) {
+			return $this->redirect($this->generateUrl('welcome'));
+		}
+	
+		$player = new Player();
+		
+		$cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+		$community = $cmnRepo->find($communityId);
+	
+		// Création du formulaire associé
+		$playerForm = $this->createForm(PlayerType::class, $player);
+	
+		$playerForm->handleRequest($request);
+		if ($playerForm->isSubmitted() && $playerForm->isValid())
+		{
+			$player->setCommunity($community);
+			
+			// Persist the new player into the DB
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($player);
 			$em->flush();
 			
-			// Redirection sur la page d'admin avec gestion du message d'info
+			// Redirect to admin homepage with info message
 			$this->get('session')->getFlashBag()->add('success', 'Le joueur '.$player->getName().' a bien été créé.');
 			$this->get('session')->set('activeTab', 'players');
 			return $this->redirect($this->generateUrl('admin_home'));
-        }
-        return $this->render(
-            'foot5x5MainBundle::player_form.html.twig',
-            array(
-                'title' => 'Nouveau Joueur',
-                'buttonLabel' => 'Créer',
-                'player' => $player,
-                'playerForm' => $playerForm->createView()
-            )
-        );
-    }
+		}
+		return $this->render(
+			'foot5x5MainBundle::player_form.html.twig',
+			array(
+				'title' => 'Nouveau Joueur',
+				'buttonLabel' => 'Créer',
+				'player' => $player,
+				'playerForm' => $playerForm->createView()
+			)
+		);
+	}
 
     /**
      * Management of the 'edit match' view

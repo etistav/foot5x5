@@ -4,7 +4,6 @@ namespace foot5x5\MainBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
-use Symfony\Component\Validator\Constraints\Null;
 
 /**
  * ResultRepository

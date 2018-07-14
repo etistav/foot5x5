@@ -113,7 +113,7 @@ class CommunityController extends Controller
 		// Retrieve the last standing for the community
 		$lastStanding = $stdRepo->findLastStanding($communityId);
 		if (isset($lastStanding)) {
-			$lastStanding = $stdRepo->find($lastStanding->getId());
+			$lastStanding = $stdRepo->findStanding($lastStanding->getId());
 		}
 		
 		$players = $plrRepo->findAllActives($communityId);

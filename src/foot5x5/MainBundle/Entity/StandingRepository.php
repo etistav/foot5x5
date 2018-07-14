@@ -18,7 +18,7 @@ class StandingRepository extends EntityRepository
 	 * 
 	 * @param int $id Standing Id
 	 */
-	public function find($id)
+	public function findStanding($id)
 	{
 		$qb = $this->createQueryBuilder('std')
 			->leftJoin('std.rankings', 'rnk')

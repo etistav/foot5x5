@@ -13,7 +13,7 @@ use Doctrine\ORM\NoResultException;
  */
 class StandingRepository extends EntityRepository
 {
-	public function find($id) {
+	public function findStanding($id) {
     	$qb = $this->createQueryBuilder('std')
     		->leftJoin('std.rankings', 'rnk')
     		->addSelect('rnk');

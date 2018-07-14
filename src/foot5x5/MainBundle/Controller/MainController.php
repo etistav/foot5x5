@@ -31,7 +31,7 @@ class MainController extends Controller
         $matchPlayers = $mplRepo->findBy(array('match' => $lastResult), array('team' => 'ASC'));
 
         $lastStandingId = $stdRepo->findLastStanding()->getId();
-        $lastStanding = $stdRepo->find($lastStandingId);
+        $lastStanding = $stdRepo->findStanding($lastStandingId);
         
         $players = $plrRepo->findAllActives();
         $ranks = array();

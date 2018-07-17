@@ -19,4 +19,23 @@ class RolesRepository extends EntityRepository
 		
 		
 	}
+	
+	public function getRoleForCommunity(User $user, Community $community)
+	{
+	    $qb = $this->createQueryBuilder('rol')
+	    ->where('rol.community = :community')
+	    ->andWhere('rol.user = :user')
+	    ->setParameter('community', $community)
+	    ->setParameter('user', $user);
+	    
+	    try {
+	        $result = $qb->getQuery()->getSingleResult();
+	        $role = $result->getRole();
+	    } catch (NoResultException $e) {
+	        return "";
+	    }
+	    
+	    return $role;
+	}
+	
 }

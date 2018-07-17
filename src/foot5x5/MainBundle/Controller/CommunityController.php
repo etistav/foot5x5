@@ -102,6 +102,27 @@ class CommunityController extends Controller
 		
 		$community = $cmnRepo->find($communityId);
 		
+		// Get user role for the community
+		$user = $this->getUser();
+		$rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
+		$userRole = $rolRepo->getRoleForCommunity($user, $community);
+		$userRoles = [];
+		$userRoles[] = $userRole;
+		$user->setRoles($userRoles);
+		// Ecriture du role du user en BDD
+		$em = $this->getDoctrine()->getManager();
+		$em->persist($user);
+		$em->flush();
+		
+		$token = new \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken(
+		    $user,
+		    null,
+		    'main',
+		    $user->getRoles()
+		    );
+		$this->get('security.token_storage')->setToken($token);
+		
+		
 		// Retrieve the last result for the community
 		$lastResult = $resRepo->findLastMatch($communityId);
 		if (isset($lastResult)) {
@@ -134,6 +155,7 @@ class CommunityController extends Controller
 		return $this->render(
 			'foot5x5MainBundle::index.html.twig',
 			array(
+			    'userRole' => $userRole,
 				'lastResult' => $lastResult,
 				'matchPlayers' => $matchPlayers,
 				'lastStanding' => $lastStanding,

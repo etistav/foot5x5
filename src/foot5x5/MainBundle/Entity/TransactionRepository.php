@@ -4,6 +4,7 @@ namespace foot5x5\MainBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
+use foot5x5\MainBundle\Entity\Community;
 
 /**
  * TransactionRepository
@@ -13,13 +14,14 @@ use Doctrine\ORM\NoResultException;
  */
 class TransactionRepository extends EntityRepository
 {
-	public function listAllByTrimester($year, $trimester) {
-    	$qb = $this->createQueryBuilder('trn');
-    	// $qb->where('res.year = :year')
-    	// 	->setParameter('year', $year)
-    	// 	->andWhere('res.trimester = :trim')
-    	// 	->setParameter('trim', $trimester)
-    	$qb->orderBy('trn.date', 'DESC');
+	public function listAllByCommunity(Community $community) {
+	    $qb = $this->createQueryBuilder('trn')
+	       ->Join('trn.giver', 'giv')
+	       ->Join('trn.receiver', 'rec')
+	       ->where('giv.community = :community')
+	       ->andWhere('rec.community = :community')
+	       ->setParameter('community', $community)
+    	   ->orderBy('trn.date', 'DESC');
 
         return $qb->getQuery()->getResult();
     }

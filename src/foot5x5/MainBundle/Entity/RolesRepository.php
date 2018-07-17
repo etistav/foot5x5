@@ -38,4 +38,17 @@ class RolesRepository extends EntityRepository
 	    return $role;
 	}
 	
+	public function listAllUsersByCommunity($communityId)
+	{
+
+	    $qb = $this->createQueryBuilder('rol')
+	    ->leftJoin('rol.user', 'usr')
+	    ->addSelect('usr')
+	    ->where('rol.community = :cmnId')
+	    ->setParameter('cmnId', $communityId)
+	    ->addOrderBy('usr.username', 'ASC');
+	    
+	    return $qb->getQuery()->getResult();
+	}
+	
 }

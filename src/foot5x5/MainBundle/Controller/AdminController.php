@@ -39,6 +39,10 @@ class AdminController extends Controller
         $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
         $trnRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Transaction');
         $usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
+        $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
+        $cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+        
+        $community = $cmnRepo->find($communityId);
 
         // Gestion de l'onglet actif en session et réinitialisation
         $session = $request->getSession();
@@ -52,7 +56,8 @@ class AdminController extends Controller
         // Récupération de tous les joueurs, classements et utilisateurs
         $players = $plrRepo->findByCommunity($communityId);
         $standings = $stdRepo->findByCommunity($communityId);
-        $users = $usrRepo->findByCommunity($communityId);
+        //$users = $usrRepo->findByCommunity($communityId);
+        $users = $rolRepo->listAllUsersByCommunity($community);
         $trimesters = $resRepo->listAllTrimesters($communityId);
 
         // Populate trimester dropdown
@@ -85,13 +90,19 @@ class AdminController extends Controller
                 $currentTrimester = substr($idTrimester, 4, 1);
             }
         } else {
-        		$lastResult = $resRepo->findLastMatch($communityId);
-            $currentYear = $lastResult->getYear();
-            $currentTrimester = $lastResult->getTrimester();
+        	$lastResult = $resRepo->findLastMatch($communityId);
+        	if (!is_null($lastResult)) {
+        	    $currentYear = $lastResult->getYear();
+        	    $currentTrimester = $lastResult->getTrimester();
+        	} else {
+        	    $currentYear = date("Y");
+        	    $curMonth = date("m", time());
+        	    $currentTrimester = ceil($curMonth/3);
+        	}
         }
 
         $results = $resRepo->listAllByTrimester($communityId, $currentYear, $currentTrimester);
-        $transactions = $trnRepo->listAllByTrimester($currentYear, $currentTrimester);
+        $transactions = $trnRepo->listAllByCommunity($community);
 
         return $this->render(
 			'foot5x5MainBundle::admin.html.twig',

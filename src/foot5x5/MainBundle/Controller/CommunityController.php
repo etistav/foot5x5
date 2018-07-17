@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use foot5x5\MainBundle\Entity\Community;
 use foot5x5\MainBundle\Entity\Note;
 use foot5x5\MainBundle\Form\CommunityType;
+use foot5x5\MainBundle\Form\JoinCommunityType;
 use foot5x5\MainBundle\Form\NoteType;
 use foot5x5\MainBundle\Form\RandomDrawType;
 use foot5x5\MainBundle\Entity\Roles;
@@ -62,6 +63,60 @@ class CommunityController extends Controller
 				'communityForm' => $communityForm->createView()
 			)
 		);
+	}
+
+	/**
+	 * Management of the 'join community' view
+	 *
+	 * @param Request $request
+	 */
+	public function joinAction(Request $request) {
+	    
+	    $cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+	    $rolRepo = $this->getDoctrine()->getRepository(Roles::class);
+	    
+	    $joinCommunityForm = $this->createForm(JoinCommunityType::class);
+	    $joinCommunityForm->handleRequest($request);
+	    
+	    if ($joinCommunityForm->isSubmitted() && $joinCommunityForm->isValid()) {
+
+	        $user = $this->getUser();
+	        $password = $joinCommunityForm["password"]->getData();
+	        $community = $cmnRepo->findOneBy(['password' => $password]);
+	        
+	        if (is_null($community)) {
+	            // Manage the case where no communities correspond to the entered password
+	            $this->get('session')->getFlashBag()->add('warning', 'Le mot de passe "'.$password.'" ne correspond à aucune communauté!');
+	            return $this->redirect($this->generateUrl('join_community'));
+	        } else {
+	            if (!empty($rolRepo->getRoleForCommunity($user,$community))) {
+	                // Manage the case where the user already belongs to the community which corresponds to the entered password
+	                $this->get('session')->getFlashBag()->add('warning', 'Vous avez déjà rejoint la communauté "'.$community->getName().'" !');
+	                return $this->redirect($this->generateUrl('join_community'));
+	            } else {
+	                // Create a role for the user in the community which corresponds to the entered password
+	                $role = new Roles();
+	                $role->setCommunity($community);
+	                $role->setUser($user);
+	                $role->setRole('ROLE_USER');
+	                $em = $this->getDoctrine()->getManager();
+	                $em->persist($role);
+	                $em->flush();
+	            }	             
+	        }
+	        
+	        // Redirect to home page
+	        $this->get('session')->getFlashBag()->add('success', 'Tu viens de rejoindre la communauté "'.$community->getName().'" !');
+	        return $this->redirect($this->generateUrl('foot5x5_main_homepage'));
+	    }
+	    return $this->render(
+	        'foot5x5MainBundle::joinCommunity_form.html.twig',
+	        array(
+	            'title' => 'Rejoins ta communauté foot5x5 !',
+	            'buttonLabel' => 'C\'est parti !',
+	            'joinCommunityForm' => $joinCommunityForm->createView()
+	        )
+        );
 	}
 	
 	/**

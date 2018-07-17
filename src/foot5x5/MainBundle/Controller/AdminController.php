@@ -12,6 +12,7 @@ use foot5x5\UserBundle\Entity\User;
 use foot5x5\MainBundle\Form\PlayerType;
 use foot5x5\MainBundle\Form\ResultType;
 use foot5x5\MainBundle\Form\TransactionType;
+use foot5x5\MainBundle\Form\RolesType;
 use foot5x5\UserBundle\Form\UserType;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -623,14 +624,15 @@ class AdminController extends Controller
      * @param Request $request
      * @param integer $id User id
      */
+    /*
     public function editUserAction(Request $request, $id) {
         
-	    	// Retrieve community ID from session
-	    	$communityId = $this->get('session')->get('community');
-	    	if (!isset($communityId)) {
-	    		return $this->redirect($this->generateUrl('welcome'));
-	    	}
-    		$usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
+    	// Retrieve community ID from session
+    	$communityId = $this->get('session')->get('community');
+    	if (!isset($communityId)) {
+    		return $this->redirect($this->generateUrl('welcome'));
+    	}
+		$usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
         $user = $usrRepo->find($id);
         $formOptions = array(
         		"action" => "edit"
@@ -660,6 +662,7 @@ class AdminController extends Controller
             )
         );
     }
+    */
 
     /**
      * Handle the removal of a user
@@ -688,6 +691,79 @@ class AdminController extends Controller
         return $this->redirect($this->generateUrl('admin_home'));
     }
 
+    /**
+     * Management of the 'edit user role' view
+     *
+     * @param Request $request
+     * @param integer $id User id
+     */
+    public function editUserRoleAction(Request $request, $id) {
+        
+        // Retrieve community ID from session
+        $communityId = $this->get('session')->get('community');
+        if (!isset($communityId)) {
+            return $this->redirect($this->generateUrl('welcome'));
+        }
+        
+        $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
+        $role = $rolRepo->find($id);
+        $formOptions = array(
+            "action" => "edit_role"
+        );
+        $roleForm = $this->createForm(RolesType::class, $role, $formOptions);
+        
+        $roleForm->handleRequest($request);
+        if ($roleForm->isSubmitted() && $roleForm->isValid()) {
+            // Ecriture du user en BDD
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($role);
+            $em->flush();
+            
+            // Redirection sur la page d'admin avec gestion du message d'info
+            $this->get('session')->getFlashBag()->add('success', 'Le rôle du user '.$role->getUser()->getUsername().' a bien été modifié.');
+            $this->get('session')->set('activeTab', 'users');
+            return $this->redirect($this->generateUrl('admin_home'));
+        }
+        return $this->render(
+            'foot5x5MainBundle::user_role_form.html.twig',
+            array(
+                'action' => 'editUserRole',
+                'title' => 'Modification du rôle utilisateur',
+                'buttonLabel' => 'Enregistrer',
+                'role' => $role,
+                'roleForm' => $roleForm->createView()
+            )
+        );
+    }
+    
+    /**
+     * Handle the removal of a user role
+     *
+     * @param integer $id User id
+     */
+    public function deleteUserRoleAction($id) {
+        
+        // Retrieve community ID from session
+        $communityId = $this->get('session')->get('community');
+        if (!isset($communityId)) {
+            return $this->redirect($this->generateUrl('welcome'));
+        }
+        
+        $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
+        $role = $rolRepo->find($id);
+        $username = $role->getUser()->getUsername();
+        
+        // Suppression du user role en BDD
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($role);
+        $em->flush();
+        
+        // Redirection sur la page d'admin avec gestion du message d'info
+        $this->get('session')->getFlashBag()->add('success', 'L\'utilisateur '.$username.' a bien été supprimé de cette communauté.');
+        $this->get('session')->set('activeTab', 'users');
+        return $this->redirect($this->generateUrl('admin_home'));
+    }
+    
     /***********************************
      *         ADMIN - FINANCES        *
      ***********************************/

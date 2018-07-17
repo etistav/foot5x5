@@ -69,6 +69,7 @@ class UserType extends AbstractType
     			))
     			->add('username', TextType::class)
     			->add('email', EmailType::class)
+    			/*
     			->add('roles', ChoiceType::class, array(
     					'choices' => array(
     							'Admin' => 'ROLE_ADMIN',
@@ -78,6 +79,12 @@ class UserType extends AbstractType
     					'choices_as_values' => true,
     					'required' => true,
     					'multiple' => true
+    			))
+    			*/
+    			->add('userRoles', EntityType::class, array(
+    			    'class' => 'foot5x5MainBundle:Roles',
+    			    'choice_label' => 'role',
+    			    'multiple' => false
     			))
     			->add('player', EntityType::class, array(
     					'class' => 'foot5x5MainBundle:Player',

@@ -3,6 +3,7 @@
 namespace foot5x5\MainBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
 use foot5x5\UserBundle\Entity\User;
 
 /**

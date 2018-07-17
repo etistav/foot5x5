@@ -26,6 +26,11 @@ create_community:
     defaults:
         _controller: foot5x5MainBundle:Community:create
 
+join_community:
+    path:     /community/join
+    defaults:
+        _controller: foot5x5MainBundle:Community:join
+
 select_community:
     path:     /community/select/{id}
     defaults:
@@ -141,20 +146,30 @@ update_player_balance:
     defaults:
         _controller: foot5x5MainBundle:Admin:updatePlayerBalance
 
-add_user:
-    path:     /admin/user/add
-    defaults:
-        _controller: foot5x5MainBundle:Admin:addUser
+# add_user:
+#    path:     /admin/user/add
+#    defaults:
+#        _controller: foot5x5MainBundle:Admin:addUser
 
-edit_user:
-    path:     /admin/user/{id}/edit
-    defaults:
-        _controller: foot5x5MainBundle:Admin:editUser
+# edit_user:
+#    path:     /admin/user/{id}/edit
+#    defaults:
+#        _controller: foot5x5MainBundle:Admin:editUser
 
-delete_user:
-    path:     /admin/user/{id}/delete
+edit_user_role:
+    path:     /admin/user/{id}/edit_role
     defaults:
-        _controller: foot5x5MainBundle:Admin:deleteUser
+        _controller: foot5x5MainBundle:Admin:editUserRole
+
+# delete_user:
+#    path:     /admin/user/{id}/delete
+#    defaults:
+#        _controller: foot5x5MainBundle:Admin:deleteUser
+        
+delete_user_role:
+    path:     /admin/user/{id}/delete_user_role
+    defaults:
+        _controller: foot5x5MainBundle:Admin:deleteUserRole
 
 add_transaction:
     path:     /admin/transaction/add

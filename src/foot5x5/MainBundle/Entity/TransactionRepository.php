@@ -26,13 +26,16 @@ class TransactionRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-	public function listLast($communityId, $nbTransactions)
+	public function listLast(Community $community, $nbTransactions)
 	{
 		$qb = $this->createQueryBuilder('trn')
 			->Join('trn.giver', 'giv')
 			->addSelect('giv')
 			->Join('trn.receiver', 'rec')
 			->addSelect('rec')
+			->where('giv.community = :community')
+			->andWhere('rec.community = :community')
+			->setParameter('community', $community)
 			->orderBy('trn.date', 'DESC')
 			->addOrderBy('giv.name', 'ASC')
 			->addOrderBy('rec.name', 'ASC')

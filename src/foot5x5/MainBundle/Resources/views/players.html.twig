@@ -4,8 +4,8 @@
 
 {% block content %}
 <h2><span class="label dark-blue-grad">Joueurs</span></h2>
-{% for flashMessage in app.session.flashbag.get('success') %}
-<div class="alert alert-success">
+{% for flashMessage in app.session.flashbag.get('warning') %}
+<div class="alert alert-warning">
     {{ flashMessage }}
 </div>
 {% endfor %}

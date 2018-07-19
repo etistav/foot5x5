@@ -3,7 +3,14 @@
 {% block title %}Finances{% endblock %}
 
 {% block content %}
-<h2 class="text-center">{{ block('title') }}</h2>
+{#<h2 class="text-center">{{ block('title') }}</h2>#}
+<h2><span class="label dark-blue-grad">{{ block('title') }}</span></h2>
+{% for flashMessage in app.session.flashbag.get('warning') %}
+<div class="alert alert-warning">
+    {{ flashMessage }}
+</div>
+{% endfor %}
+{% if transactions %}
 <div id="finances-container" class="col-md-12 well">
     {% if debts is defined %}
     <div class="col-md-7">
@@ -74,4 +81,5 @@
     </div>
     {% endif %}
 </div>
+{% endif %}
 {% endblock %}

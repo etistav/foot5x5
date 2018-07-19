@@ -15,6 +15,7 @@
     {{ flashMessage }}
 </div>
 {% endfor %}
+{% if players %}
 <div class="col-md-12" id="random-container">
 {{ form_start(randomDrawForm) }}
     <div class="col-xs-4" id="random-select-section">
@@ -94,6 +95,7 @@
     </div>
 </div>
 {{ form_end(randomDrawForm) }}
+{% endif %}
 <script>
     var _selectRange = false, _deselectQueue = [];
     $(function() {

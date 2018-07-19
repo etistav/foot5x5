@@ -383,6 +383,10 @@ class CommunityController extends Controller
 		$stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
 		
 		$players = $plrRepo->findAllActives($communityId);
+		if (empty($players)) {
+			$this->get('session')->getFlashBag()->add('warning', 'Aucun joueur n\'a été créé pour cette communauté.');
+		}
+
 		$lastStanding = $stdRepo->findLastStanding($communityId);
 		
 		$ranks = array();
@@ -455,6 +459,9 @@ class CommunityController extends Controller
 		$plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
 		$mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
 		$players = $plrRepo->findAllActives($communityId);
+		if (empty($players)) {
+			$this->get('session')->getFlashBag()->add('warning', 'Aucun joueur n\'a été créé pour cette communauté.');
+		}
 		$matchPlayers = array();
 		$selectedPlayersList = array();
 		
@@ -530,12 +537,18 @@ class CommunityController extends Controller
 		
 		$plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
 		$trnRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Transaction');
+        $cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+        
+        $community = $cmnRepo->find($communityId);
 		
 		$debts = $plrRepo->findAllWithDebts($communityId);
 		$credits = $plrRepo->findAllWithCredits($communityId);
 		$totalDebts = $plrRepo->calcTotalDebts($communityId);
 		$totalCredits = $plrRepo->calcTotalCredits($communityId);
-		$transactions = $trnRepo->listLast($communityId, 10);
+		$transactions = $trnRepo->listLast($community, 10);
+		if (empty($transactions)) {
+			$this->get('session')->getFlashBag()->add('warning', 'Aucune transaction n\'a été enregistrée pour cette communauté.');
+		}
 		return $this->render(
 			'foot5x5MainBundle::finance.html.twig',
 			array(
@@ -564,6 +577,9 @@ class CommunityController extends Controller
 		$user = $this->getUser();
 		$plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
 		$players = $plrRepo->findNotesFromUser($communityId, $user);
+		if (empty($players)) {
+			$this->get('session')->getFlashBag()->add('warning', 'Aucun joueur n\'a été créé pour cette communauté.');
+		}
 		
 		return $this->render(
 			'foot5x5MainBundle::notes.html.twig',

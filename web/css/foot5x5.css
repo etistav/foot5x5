@@ -119,10 +119,12 @@ div#home-buttons img {
 /* ------------------------- */
 /*   RESULTATS               */
 /* ------------------------- */
-#results-container {
+
+div#results-container {
 	padding: 0;
 }
-#results-container div {
+
+#results-container div:not(.alert) {
 	padding: 0;
 }
 table thead.bg-primary {
@@ -302,10 +304,10 @@ li.player-droppable:hover {
 /* ------------------------- */
 /*   CLASSEMENT              */
 /* ------------------------- */
-#standing-container {
+div#standing-container {
 	padding: 0;
 }
-#standing-container div {
+#standing-container div:not(.alert) {
 	padding: 0;
 }
 table#standing-table {

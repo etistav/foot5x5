@@ -440,11 +440,13 @@ class AdminController extends Controller
             
             // Manage the link User-Player for the community in the entity Roles
             $user = $player->getUser();
-            $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
-            $role = $rolRepo->findByUserAndCommunity($user, $community);
-            $role->setPlayer($player);
-			$em->persist($role);
-            $em->flush();
+            if (!is_null($user)) {
+                $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
+                $role = $rolRepo->findByUserAndCommunity($user, $community);
+                $role->setPlayer($player);
+                $em->persist($role);
+                $em->flush();
+            }            
 			
 			// Redirect to admin homepage with info message
 			$this->get('session')->getFlashBag()->add('success', 'Le joueur '.$player->getName().' a bien été créé.');
@@ -494,13 +496,15 @@ class AdminController extends Controller
             
             // Manage the link User-Player for the community in the entity Roles
             $user = $player->getUser();
-            $cmnRepo = $this->getDoctrine()->getRepository(Community::class);
-            $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
-            $community = $cmnRepo->find($communityId);
-            $role = $rolRepo->findByUserAndCommunity($user, $community);
-            $role->setPlayer($player);
-			$em->persist($role);
-            $em->flush();
+            if (!is_null($user)) {
+                $cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+                $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
+                $community = $cmnRepo->find($communityId);
+                $role = $rolRepo->findByUserAndCommunity($user, $community);
+                $role->setPlayer($player);
+                $em->persist($role);
+                $em->flush();
+            }
 			
 			// Redirection sur la page d'admin avec gestion du message d'info
 			$this->get('session')->getFlashBag()->add('success', 'Le joueur '.$player->getName().' a bien été modifié.');
@@ -535,16 +539,19 @@ class AdminController extends Controller
         $player = $plrRepo->find($id);
         $playerName = $player->getName();
 
+        $em = $this->getDoctrine()->getManager();
+
         // Unlink User-Player for the community in the entity Roles
         $user = $player->getUser();
-        $cmnRepo = $this->getDoctrine()->getRepository(Community::class);
-        $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
-        $community = $cmnRepo->find($communityId);
-        $role = $rolRepo->findByUserAndCommunity($user, $community);
-        $role->setPlayer(NULL);
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($role);
-        $em->flush();
+        if (!is_null($user)) {
+            $cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+            $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
+            $community = $cmnRepo->find($communityId);
+            $role = $rolRepo->findByUserAndCommunity($user, $community);
+            $role->setPlayer(NULL);
+            $em->persist($role);
+            $em->flush();
+        }
 
         // Attention! Le joueur ne peut être supprimé s'il a joué au moins un match
         // TODO... Ajout notion "inactivité" joueur

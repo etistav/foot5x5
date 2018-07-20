@@ -87,12 +87,16 @@ class MainController extends Controller
 		if (!isset($communityId)) {
 			return $this->redirect($this->generateUrl('welcome'));
 		}
-        $user = $this->getUser();
-        $player = $user->getPlayer();
+        $user = $this->getUser();        
 
         $mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
         $rnkRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Ranking');
-        $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
+		$stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
+		$rolRepo = $this->getDoctrine()->getRepository(Roles::class);
+		$cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+		
+		$community = $cmnRepo->find($communityId);
+		$player = $rolRepo->getPlayerForCommunity($user, $community);
 
 		$lastStanding = $stdRepo->findLastStanding($communityId);
 		
@@ -109,7 +113,7 @@ class MainController extends Controller
 		$nbTimesLast = "-";
 
 		if (is_null($player)) {
-			$this->get('session')->getFlashBag()->add('warning', 'Attention! Le profil n\'est rattaché à aucun joueur pour le moment.');	
+			$this->get('session')->getFlashBag()->add('warning', 'Attention! Le profil n\'est rattaché à aucun joueur de cette communauté.');	
 		} else {
 			if (!is_null($lastStanding)) {
 				$rank = $rnkRepo->findRankInStanding($lastStanding, $player);
@@ -131,7 +135,8 @@ class MainController extends Controller
         return $this->render(
             'foot5x5MainBundle::profile.html.twig',
             array(
-                'user' => $user,
+				'user' => $user,
+				'player' => $player,
                 'rank' => $rank,
                 'currentForm' => $currentForm,
                 'lastMatch' => $lastMatch,

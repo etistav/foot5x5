@@ -20,6 +20,18 @@ class RolesRepository extends EntityRepository
 		
 		
 	}
+
+	public function findByUserAndCommunity(User $user, Community $community)
+	{
+	    $qb = $this->createQueryBuilder('rol')
+	    ->where('rol.community = :community')
+	    ->andWhere('rol.user = :user')
+	    ->setParameter('community', $community)
+	    ->setParameter('user', $user);
+	    
+	    $result = $qb->getQuery()->getSingleResult();	    
+	    return $result;
+	}
 	
 	public function getRoleForCommunity(User $user, Community $community)
 	{
@@ -37,6 +49,24 @@ class RolesRepository extends EntityRepository
 	    }
 	    
 	    return $role;
+	}
+
+	public function getPlayerForCommunity(User $user, Community $community)
+	{
+	    $qb = $this->createQueryBuilder('rol')
+	    ->where('rol.community = :community')
+	    ->andWhere('rol.user = :user')
+	    ->setParameter('community', $community)
+	    ->setParameter('user', $user);
+	    
+	    try {
+	        $result = $qb->getQuery()->getSingleResult();
+	        $player = $result->getPlayer();
+	    } catch (NoResultException $e) {
+	        return "";
+	    }
+	    
+	    return $player;
 	}
 	
 	public function listAllUsersByCommunity($communityId)

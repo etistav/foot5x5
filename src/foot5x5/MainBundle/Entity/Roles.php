@@ -45,6 +45,14 @@ class Roles
      */
     private $role;
 
+    /**
+     * @var Player
+     *
+     * @ORM\OneToOne(targetEntity="foot5x5\MainBundle\Entity\Player")
+     * @ORM\JoinColumn(name="rol_playerId", referencedColumnName="plr_id", nullable=true)
+     */
+    private $player;
+
 
     /**
      * Get id
@@ -124,5 +132,28 @@ class Roles
     public function getRole()
     {
         return $this->role;
+    }
+
+    /**
+     * Set player
+     *
+     * @param \foot5x5\MainBundle\Entity\Player $player
+     * @return Roles
+     */
+    public function setPlayer(\foot5x5\MainBundle\Entity\Player $player = null)
+    {
+        $this->player = $player;
+
+        return $this;
+    }
+
+    /**
+     * Get player
+     *
+     * @return \foot5x5\MainBundle\Entity\Player 
+     */
+    public function getPlayer()
+    {
+        return $this->player;
     }
 }

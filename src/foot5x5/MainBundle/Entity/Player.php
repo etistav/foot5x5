@@ -101,9 +101,8 @@ class Player
     private $isActive;
 
     /**
-     * @ORM\OneToOne(targetEntity="foot5x5\UserBundle\Entity\User",
-     *     mappedBy="player")
-     * @Assert\Valid()
+     * @ORM\ManyToOne(targetEntity="foot5x5\UserBundle\Entity\User", inversedBy="players")
+     * @ORM\JoinColumn(name="plr_userId", referencedColumnName="usr_id", nullable=true)
      */
     private $user;
 

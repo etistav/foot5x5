@@ -100,10 +100,9 @@ class User implements UserInterface, \Serializable
     private $roles;
 
     /**
-     * @ORM\OneToOne(targetEntity="foot5x5\MainBundle\Entity\Player", inversedBy="user")
-     * @ORM\JoinColumn(name="usr_playerId", referencedColumnName="plr_id", nullable=true)
+     * @ORM\OneToMany(targetEntity="foot5x5\MainBundle\Entity\Player", mappedBy="user")
      */
-    private $player;
+    private $players;
 
     /**
      * @var \DateTime
@@ -610,5 +609,38 @@ class User implements UserInterface, \Serializable
     public function getUserRoles()
     {
         return $this->userRoles;
+    }
+
+    /**
+     * Add players
+     *
+     * @param \foot5x5\MainBundle\Entity\Player $players
+     * @return User
+     */
+    public function addPlayer(\foot5x5\MainBundle\Entity\Player $players)
+    {
+        $this->players[] = $players;
+
+        return $this;
+    }
+
+    /**
+     * Remove players
+     *
+     * @param \foot5x5\MainBundle\Entity\Player $players
+     */
+    public function removePlayer(\foot5x5\MainBundle\Entity\Player $players)
+    {
+        $this->players->removeElement($players);
+    }
+
+    /**
+     * Get players
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPlayers()
+    {
+        return $this->players;
     }
 }

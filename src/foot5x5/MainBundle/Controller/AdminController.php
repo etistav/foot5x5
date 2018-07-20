@@ -422,8 +422,11 @@ class AdminController extends Controller
 		$cmnRepo = $this->getDoctrine()->getRepository(Community::class);
 		$community = $cmnRepo->find($communityId);
 	
-		// Création du formulaire associé
-		$playerForm = $this->createForm(PlayerType::class, $player);
+		// Create the form passing the community ID to only list users of the community
+        $formOptions = array(
+            "communityId" => $communityId
+        );
+		$playerForm = $this->createForm(PlayerType::class, $player, $formOptions);
 	
 		$playerForm->handleRequest($request);
 		if ($playerForm->isSubmitted() && $playerForm->isValid())
@@ -433,7 +436,15 @@ class AdminController extends Controller
 			// Persist the new player into the DB
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($player);
-			$em->flush();
+            $em->flush();
+            
+            // Manage the link User-Player for the community in the entity Roles
+            $user = $player->getUser();
+            $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
+            $role = $rolRepo->findByUserAndCommunity($user, $community);
+            $role->setPlayer($player);
+			$em->persist($role);
+            $em->flush();
 			
 			// Redirect to admin homepage with info message
 			$this->get('session')->getFlashBag()->add('success', 'Le joueur '.$player->getName().' a bien été créé.');
@@ -459,24 +470,37 @@ class AdminController extends Controller
      */
     public function editPlayerAction(Request $request, $id) {
         
-	    	// Retrieve community ID from session
-	    	$communityId = $this->get('session')->get('community');
-	    	if (!isset($communityId)) {
-	    		return $this->redirect($this->generateUrl('welcome'));
-	    	}
-    	
-    		$plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
+        // Retrieve community ID from session
+        $communityId = $this->get('session')->get('community');
+        if (!isset($communityId)) {
+            return $this->redirect($this->generateUrl('welcome'));
+        }
+    
+        $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $player = $plrRepo->find($id);
 
-        // Création du formulaire associé
-        $playerForm = $this->createForm(PlayerType::class, $player);
+        // Create the form passing the community ID to only list users of the community
+        $formOptions = array(
+            "communityId" => $communityId
+        );
+        $playerForm = $this->createForm(PlayerType::class, $player, $formOptions);
 
         $playerForm->handleRequest($request);
         if ($playerForm->isSubmitted() && $playerForm->isValid()) {
 			// Ecriture du player en BDD
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($player);
-			$em->flush();
+            $em->flush();
+            
+            // Manage the link User-Player for the community in the entity Roles
+            $user = $player->getUser();
+            $cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+            $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
+            $community = $cmnRepo->find($communityId);
+            $role = $rolRepo->findByUserAndCommunity($user, $community);
+            $role->setPlayer($player);
+			$em->persist($role);
+            $em->flush();
 			
 			// Redirection sur la page d'admin avec gestion du message d'info
 			$this->get('session')->getFlashBag()->add('success', 'Le joueur '.$player->getName().' a bien été modifié.');
@@ -501,21 +525,31 @@ class AdminController extends Controller
      */
     public function deletePlayerAction($id) {
 
-	    	// Retrieve community ID from session
-	    	$communityId = $this->get('session')->get('community');
-	    	if (!isset($communityId)) {
-	    		return $this->redirect($this->generateUrl('welcome'));
-	    	}
+        // Retrieve community ID from session
+        $communityId = $this->get('session')->get('community');
+        if (!isset($communityId)) {
+            return $this->redirect($this->generateUrl('welcome'));
+        }
     	
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $player = $plrRepo->find($id);
         $playerName = $player->getName();
 
+        // Unlink User-Player for the community in the entity Roles
+        $user = $player->getUser();
+        $cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+        $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
+        $community = $cmnRepo->find($communityId);
+        $role = $rolRepo->findByUserAndCommunity($user, $community);
+        $role->setPlayer(NULL);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($role);
+        $em->flush();
+
         // Attention! Le joueur ne peut être supprimé s'il a joué au moins un match
         // TODO... Ajout notion "inactivité" joueur
 
         // Suppression du joueur en BDD
-        $em = $this->getDoctrine()->getManager();
         $em->remove($player);
         $em->flush();
 

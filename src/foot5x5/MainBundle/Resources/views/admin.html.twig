@@ -240,7 +240,7 @@
                         {% endif %#}
                         {{ user.role }}
                     </td>
-                    <td class="col-md-2 admin-left-column">{% if user.user.player.name is defined %}{{ user.user.player.name }}{% endif %}</td>
+                    <td class="col-md-2 admin-left-column">{% if user.player.name is defined %}{{ user.player.name }}{% endif %}</td>
                     <td class="col-md-2 admin-left-column">{{ user.user.email }}</td>
                     <td class="col-md-2 admin-center-column">
                         <a href="{{ path('edit_user_role', {'id':user.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>

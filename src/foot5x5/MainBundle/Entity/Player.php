@@ -25,6 +25,7 @@ class Player
         $this->valPhy = 5.0;
         $this->updateValAvg();
         $this->cashBalance = 0;
+        $this->isActive = true;
         // $this->notes = new ArrayCollection();
     }
 

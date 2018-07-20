@@ -463,17 +463,30 @@ class CommunityController extends Controller
 		if (!isset($communityId)) {
 			return $this->redirect($this->generateUrl('welcome'));
 		}
+
+		$title = 'Tirage au sort';
 		
 		$plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
 		$mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
 		$players = $plrRepo->findAllActives($communityId);
-		if (empty($players)) {
-			$this->get('session')->getFlashBag()->add('warning', 'Aucun joueur n\'a été créé pour cette communauté.');
-		}
 		$matchPlayers = array();
 		$selectedPlayersList = array();
-		
 		$randomDrawForm= $this->createForm(RandomDrawType::class, $players);
+
+		// Check if there is enough players to allow a random draw
+		if (count($players) < 10) {
+			$this->get('session')->getFlashBag()->add('warning', 'Il faut au moins 10 joueurs dans la communauté pour autoriser un tirage.');
+			return $this->render(
+				'foot5x5MainBundle::randomDraw.html.twig',
+				array(
+					'title' => $title,
+					'randomDrawForm' => $randomDrawForm->createView(),
+					'players' => $players,
+					'matchPlayers' => $matchPlayers,
+					'selectedPlayersList' => $selectedPlayersList
+				)
+			);
+		}
 		
 		$randomDrawForm->handleRequest($request);
 		if ($randomDrawForm->isSubmitted() && $randomDrawForm->isValid()) {
@@ -523,7 +536,7 @@ class CommunityController extends Controller
 		return $this->render(
 			'foot5x5MainBundle::randomDraw.html.twig',
 			array(
-				'title' => 'Tirage au sort',
+				'title' => $title,
 				'randomDrawForm' => $randomDrawForm->createView(),
 				'players' => $players,
 				'matchPlayers' => $matchPlayers,

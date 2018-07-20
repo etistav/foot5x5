@@ -139,16 +139,24 @@ class AdminController extends Controller
 			return $this->redirect($this->generateUrl('welcome'));
 		}
 		
-		$match = new Result();
-		
-		$cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+        $cmnRepo = $this->getDoctrine()->getRepository(Community::class);
 		$plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
         $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
-        
+                
+		
         $community = $cmnRepo->find($communityId);
-
         $players = $plrRepo->findByCommunity($communityId);
+
+        // Check that at least 10 players have been defined for this community
+        if (count($players) < 10) {
+            // Redirection to admin home page with a warning message
+			$this->get('session')->getFlashBag()->add('warning', 'Impossible de créer un nouveau match. Le nb de joueurs dans la communauté est insuffisant ( <10 ).');
+			$this->get('session')->set('activeTab', 'results');
+			return $this->redirect($this->generateUrl('admin_home'));
+        }
+
+        $match = new Result();
         $matchPlayerA = array();
         $matchPlayerB = array();
         

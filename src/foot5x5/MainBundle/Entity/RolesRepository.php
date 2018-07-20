@@ -51,5 +51,20 @@ class RolesRepository extends EntityRepository
 	    
 	    return $qb->getQuery()->getResult();
 	}
+
+	public function listAllAdminUsersByCommunity($communityId)
+	{
+		$roleAdmin = "ROLE_ADMIN";
+	    $qb = $this->createQueryBuilder('rol')
+	    ->leftJoin('rol.user', 'usr')
+	    ->addSelect('usr')
+		->where('rol.community = :cmnId')
+		->andWhere('rol.role = :rolAdmin')
+		->setParameter('cmnId', $communityId)
+		->setParameter('rolAdmin', $roleAdmin)
+	    ->addOrderBy('usr.username', 'ASC');
+	    
+	    return $qb->getQuery()->getResult();
+	}
 	
 }

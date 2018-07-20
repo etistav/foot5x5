@@ -679,11 +679,11 @@ class AdminController extends Controller
      */
     public function deleteUserAction($id) {
 
-	    	// Retrieve community ID from session
-	    	$communityId = $this->get('session')->get('community');
-	    	if (!isset($communityId)) {
-	    		return $this->redirect($this->generateUrl('welcome'));
-	    	}
+        // Retrieve community ID from session
+        $communityId = $this->get('session')->get('community');
+        if (!isset($communityId)) {
+            return $this->redirect($this->generateUrl('welcome'));
+        }
         $usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
         $user = $usrRepo->find($id);
         $username = $user->getUsername();
@@ -715,6 +715,7 @@ class AdminController extends Controller
         
         $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
         $role = $rolRepo->find($id);
+        $username = $role->getUser()->getUsername();
         $formOptions = array(
             "action" => "edit_role"
         );
@@ -722,13 +723,25 @@ class AdminController extends Controller
         
         $roleForm->handleRequest($request);
         if ($roleForm->isSubmitted() && $roleForm->isValid()) {
+
+            // Forbid the removal of the last admin user for the community
+            $adminUsers = $rolRepo->listAllAdminUsersByCommunity($communityId);
+            if (count($adminUsers) == 1) {
+                $onlyAdminUser = array_shift($adminUsers);
+                if ($onlyAdminUser->getId() == $id) {
+                    $this->get('session')->getFlashBag()->add('warning', 'Impossible de modifier le rôle de l\'utilisateur '.$username.' car c\'est le seul administrateur pour cette communauté.');
+                    $this->get('session')->set('activeTab', 'users');
+                    return $this->redirect($this->generateUrl('admin_home'));
+                }
+            }
+
             // Ecriture du user en BDD
             $em = $this->getDoctrine()->getManager();
             $em->persist($role);
             $em->flush();
             
             // Redirection sur la page d'admin avec gestion du message d'info
-            $this->get('session')->getFlashBag()->add('success', 'Le rôle du user '.$role->getUser()->getUsername().' a bien été modifié.');
+            $this->get('session')->getFlashBag()->add('success', 'Le rôle du user '.$username.' a bien été modifié.');
             $this->get('session')->set('activeTab', 'users');
             return $this->redirect($this->generateUrl('admin_home'));
         }
@@ -760,6 +773,17 @@ class AdminController extends Controller
         $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
         $role = $rolRepo->find($id);
         $username = $role->getUser()->getUsername();
+
+        // Forbid the removal of the last admin user for the community
+        $adminUsers = $rolRepo->listAllAdminUsersByCommunity($communityId);
+        if (count($adminUsers) == 1) {
+            $onlyAdminUser = array_shift($adminUsers);
+            if ($onlyAdminUser->getId() == $id) {
+                $this->get('session')->getFlashBag()->add('warning', 'Impossible de supprimer l\'utilisateur '.$username.' car c\'est le seul administrateur pour cette communauté.');
+                $this->get('session')->set('activeTab', 'users');
+                return $this->redirect($this->generateUrl('admin_home'));
+            }
+        }
         
         // Suppression du user role en BDD
         $em = $this->getDoctrine()->getManager();

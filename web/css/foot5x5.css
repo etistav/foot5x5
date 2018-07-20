@@ -228,6 +228,7 @@ table#result-table #datepicker input {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
+	padding-bottom: 5px;
 	width: 100%;
 }
 #teamA-sortable, #teamB-sortable, #teamA-droppable, #teamB-droppable {

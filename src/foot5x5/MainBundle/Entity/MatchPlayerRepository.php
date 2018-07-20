@@ -179,7 +179,7 @@ class MatchPlayerRepository extends EntityRepository
         try {
             $lastMatch = $qb->getQuery()->getSingleResult();
         } catch (NoResultException $e) {
-            return "-";
+            return NULL;
         }
         return $lastMatch->getMatch();
     }

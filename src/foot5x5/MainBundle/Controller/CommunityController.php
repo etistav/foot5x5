@@ -405,21 +405,29 @@ class CommunityController extends Controller
 		
 		foreach ($players as $player) {
 			$playerId = $player->getId();
-			$ranks[$playerId] = $rnkRepo->findRankInStanding($lastStanding, $player);
+
 			$currentForms[$playerId] = $mplRepo->getCurrentForm($player);
 			$currentSeries[$playerId] = $mplRepo->getCurrentSerie($player);
 			$lastMatches[$playerId] = $mplRepo->getLastMatch($player);
-			$resultsForPlayer[$playerId] = $mplRepo->getResultForPlayer($lastMatches[$playerId], $player);
 			$globalResults[$playerId] = $mplRepo->getAllResultsForPlayer($player);
-			
 			$ranksPerPeriod[$playerId] = $rnkRepo->getAllRankings($player);
-			
 			$bestRanks[$playerId] = $rnkRepo->findBestRankEver($player);
 			$worstRanks[$playerId] = $rnkRepo->findWorstRankEver($player);
 			$nbTitles[$playerId] = $rnkRepo->howManyTitlesForPlayer($player);
 			$nbPodiums[$playerId] = $rnkRepo->howManyPodiumsForPlayer($player);
 			$nbRelegations[$playerId] = $rnkRepo->howManyRelegationsForPlayer($player);
 			$nbTimesLast[$playerId] = $rnkRepo->howManyTimesLastForPlayer($player);
+
+			if (is_null($lastStanding)) {
+				$ranks[$playerId] = 'Non classé';
+			} else {
+				$ranks[$playerId] = $rnkRepo->findRankInStanding($lastStanding, $player);
+			}
+			if (is_null($lastMatches[$playerId])) {
+				$resultsForPlayer[$playerId] = "-";
+			} else {
+				$resultsForPlayer[$playerId] = $mplRepo->getResultForPlayer($lastMatches[$playerId], $player);
+			}
 		}
 		
 		return $this->render(

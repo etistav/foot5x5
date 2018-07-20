@@ -82,11 +82,11 @@ class MainController extends Controller
      */
     public function profileAction() {
 
-	    	// Retrieve community ID from session
-	    	$communityId = $this->get('session')->get('community');
-	    	if (!isset($communityId)) {
-	    		return $this->redirect($this->generateUrl('welcome'));
-	    	}
+		// Retrieve community ID from session
+		$communityId = $this->get('session')->get('community');
+		if (!isset($communityId)) {
+			return $this->redirect($this->generateUrl('welcome'));
+		}
         $user = $this->getUser();
         $player = $user->getPlayer();
 
@@ -94,19 +94,39 @@ class MainController extends Controller
         $rnkRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Ranking');
         $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
 
-        $lastStanding = $stdRepo->findLastStanding($communityId);
-        $rank = $rnkRepo->findRankInStanding($lastStanding, $player);
-        $currentForm = $mplRepo->getCurrentForm($player);
-        $lastMatch = $mplRepo->getLastMatch($player);
-        $resultForPlayer = $mplRepo->getResultForPlayer($lastMatch, $player);
+		$lastStanding = $stdRepo->findLastStanding($communityId);
+		
+		//Initialisation des paramètres passés à la view twig
+		$rank = "Non classé";
+		$currentForm = "-";
+		$lastMatch = NULL;
+		$resultForPlayer = "-";
+		$bestRank = "-";
+		$worstRank = "-";
+		$nbTitles = "-";
+		$nbPodiums = "-";
+		$nbRelegations = "-";
+		$nbTimesLast = "-";
 
-        $bestRank = $rnkRepo->findBestRankEver($player);
-        $worstRank = $rnkRepo->findWorstRankEver($player);
-        $nbTitles = $rnkRepo->howManyTitlesForPlayer($player);
-        $nbPodiums = $rnkRepo->howManyPodiumsForPlayer($player);
-        $nbRelegations = $rnkRepo->howManyRelegationsForPlayer($player);
-        $nbTimesLast = $rnkRepo->howManyTimesLastForPlayer($player);
-
+		if (is_null($player)) {
+			$this->get('session')->getFlashBag()->add('warning', 'Attention! Le profil n\'est rattaché à aucun joueur pour le moment.');	
+		} else {
+			if (!is_null($lastStanding)) {
+				$rank = $rnkRepo->findRankInStanding($lastStanding, $player);
+			}
+			$currentForm = $mplRepo->getCurrentForm($player);
+			$lastMatch = $mplRepo->getLastMatch($player);
+			if (!is_null($lastMatch)) {
+				$resultForPlayer = $mplRepo->getResultForPlayer($lastMatch, $player);
+			}
+	
+			$bestRank = $rnkRepo->findBestRankEver($player);
+			$worstRank = $rnkRepo->findWorstRankEver($player);
+			$nbTitles = $rnkRepo->howManyTitlesForPlayer($player);
+			$nbPodiums = $rnkRepo->howManyPodiumsForPlayer($player);
+			$nbRelegations = $rnkRepo->howManyRelegationsForPlayer($player);
+			$nbTimesLast = $rnkRepo->howManyTimesLastForPlayer($player);
+		}
 
         return $this->render(
             'foot5x5MainBundle::profile.html.twig',

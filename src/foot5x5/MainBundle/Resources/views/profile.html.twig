@@ -11,6 +11,11 @@
     {{ flashMessage }}
 </div>
 {% endfor %}
+{% for flashMessage in app.session.flashbag.get('warning') %}
+<div class="alert alert-warning">
+    {{ flashMessage }}
+</div>
+{% endfor %}
 
 <div id="profile-container" class="col-md-12 well">
 	<div id="profile-pic">
@@ -27,12 +32,20 @@
 			{% elseif user.roles[0] == "ROLE_USER" %}Joueur
 			{% endif %}
 		</p>
-		<p><span class="profile-info-label">Nom joueur : </span>{{ user.player.name }}</p>
+		<p><span class="profile-info-label">Nom joueur : </span>
+			{% if user.player %}{{ user.player.name }}
+			{% else %}-
+			{% endif %}
+		</p>
 		
 		<h3><span class="label">Performances actuelles</span></h3>
 		<p><span class="profile-info-label">Classement : </span>{{ rank }}</p>
 		<p><span class="profile-info-label">Série en cours : </span>{{ currentForm }}</p>
-		<p><span class="profile-info-label">Dernier match : </span>{{ lastMatch.date|date('d/m/Y') }} {{ resultForPlayer }}</p>
+		<p><span class="profile-info-label">Dernier match : </span>
+			{% if lastMatch %}{{ lastMatch.date|date('d/m/Y') }} {{ resultForPlayer }}
+			{% else %}-
+			{% endif %}
+		</p>
 
 		<h3><span class="label">Statistiques Classement</span></h3>
 		<p><span class="profile-info-label">Meilleur classement : </span>{{ bestRank }}</p>

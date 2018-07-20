@@ -783,13 +783,29 @@ class AdminController extends Controller
      */
     public function addTransactionAction(Request $request) {
 		
-	    	// Retrieve community ID from session
-	    	$communityId = $this->get('session')->get('community');
-	    	if (!isset($communityId)) {
-	    		return $this->redirect($this->generateUrl('welcome'));
-	    	}
-    		$transaction = new Transaction();
-		$trnForm = $this->createForm(TransactionType::class, $transaction);
+        // Retrieve community ID from session
+        $communityId = $this->get('session')->get('community');
+        if (!isset($communityId)) {
+            return $this->redirect($this->generateUrl('welcome'));
+        }
+
+        $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
+        $players = $plrRepo->findByCommunity($communityId);
+        
+        // Check that at least 2 players have been defined for this community
+        if (count($players) < 2) {
+            // Redirection to admin home page with a warning message
+			$this->get('session')->getFlashBag()->add('warning', 'Impossible d\'enregistrer une transaction tant qu\'il n\'y a pas au moins 2 joueurs définis dans la communauté.');
+			$this->get('session')->set('activeTab', 'finance');
+			return $this->redirect($this->generateUrl('admin_home'));
+        }
+
+        $transaction = new Transaction();
+        // Pass the community ID to the form to only allow transactions between community players
+        $formOptions = array(
+            "communityId" => $communityId
+        );
+		$trnForm = $this->createForm(TransactionType::class, $transaction, $formOptions);
 		
 		$trnForm->handleRequest($request);
 		if ($trnForm->isSubmitted() && $trnForm->isValid()) {

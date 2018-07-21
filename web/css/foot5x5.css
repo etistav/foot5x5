@@ -859,8 +859,23 @@ dl#random-list dt span {
 /* ------------------------- */
 /*   FINANCES                */
 /* ------------------------- */
+#finances-container {
+	min-width: 360px;
+}
 #finances-container table.table-bordered {
 	border: 1px solid #191950;
+}
+#finances-debts,
+#finances-credits {
+	padding:0;
+}
+@media (min-width: 768px) {
+	#finances-debts {
+		padding-right: 5px;
+	}
+	#finances-credits {
+		padding-left: 5px;
+	}
 }
 #finances-container .table-striped > tbody > tr:nth-child(odd):not(#finances-totalCredits):not(#finances-totalDebts) > td {
    background-color: #E0F0FF;
@@ -888,9 +903,15 @@ tr#finances-totalCredits td {
 	color: #191950;
 	padding: 0;
 }
+#finances-transactions table tr td {
+	max-width: 0px;
+	min-width: 70px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
 
 #finances-form #datepicker input {
-	/* color: #006dcc; */
 	color: #006dcc;
 	text-align: center;
 }

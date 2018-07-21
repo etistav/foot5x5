@@ -920,8 +920,14 @@ tr#finances-totalCredits td {
 /* ------------------------- */
 /*   NOTES                   */
 /* ------------------------- */
+#note-container,
+#note-title {
+	min-width: 350px;
+}
 .slider-div {
 	padding-top: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 .slider-note {
 	border: 2px solid #191950;
@@ -932,6 +938,21 @@ tr#finances-totalCredits td {
 }
 .slider-note .ui-slider-range {
 	background: #E0F0FF;
+}
+.slider-value input {
+	width: 60px;
+	border: 1px solid #191950;
+	font-weight: bold;
+	color: #006dcc!important;
+	text-align: center;
+	background-color: #E0F0FF!important;
+}
+#note-submit {
+	margin: 0;
+	text-align: center;
+}
+#note-submit div {
+	padding: 0;
 }
 
 /* ------------------------- */

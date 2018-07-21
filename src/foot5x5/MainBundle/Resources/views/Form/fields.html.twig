@@ -34,10 +34,10 @@
 {% block sliderNote_widget %}
     {% spaceless %}
         {% set sliderId = id ~ "_slider" %}
-        <div class="col-sm-4 slider-div">
+        <div class="col-xs-6 col-sm-5 slider-div">
             <div id="{{ sliderId }}" class="slider-note"></div>
         </div>
-        <div class="col-sm-1">
+        <div class="col-xs-2 col-sm-2 col-md-1 slider-value">
             <input type="text" id="{{ id }}" name="{{ id|slice(0, 4) }}[{{ name }}]" readonly required="required" class="form-control" rows="2" value="{{ value }}">
         </div>
     {% endspaceless %}

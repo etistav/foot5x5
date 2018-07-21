@@ -307,16 +307,19 @@ class AdminController extends Controller
      */
     public function calcStandingAction($id) {
 
-	    	// Retrieve community ID from session
-	    	$communityId = $this->get('session')->get('community');
-	    	if (!isset($communityId)) {
-	    		return $this->redirect($this->generateUrl('welcome'));
-	    	}
+        // Retrieve community ID from session
+        $communityId = $this->get('session')->get('community');
+        if (!isset($communityId)) {
+            return $this->redirect($this->generateUrl('welcome'));
+        }
 	    	
         $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
         $mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
         $rnkRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Ranking');
+        $cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+        
+        $community = $cmnRepo->find($communityId);
         $em = $this->getDoctrine()->getManager();
 
         // Détermination du classement correspondant
@@ -331,7 +334,7 @@ class AdminController extends Controller
         
         if ($trimester == 0) {
             // Récupération du nombre total de matchs effectués sur l'année
-        		$results = $resRepo->findByYear($communityId, $year);
+        	$results = $resRepo->findByYear($communityId, $year);
         } else {
             // Récupération du nombre total de matchs effectués sur ce trimestre
             $results = $resRepo->findByTrimester($communityId, $year, $trimester);
@@ -340,7 +343,7 @@ class AdminController extends Controller
         $minParticipation = 0.33;
 
         $currentPlayerId = 0;
-        $matchPlayers = $mplRepo->listAllForStanding($year, $trimester);
+        $matchPlayers = $mplRepo->listAllForStanding($community, $year, $trimester);
         foreach ($matchPlayers as $matchPlayer) {
             $playerId = $matchPlayer->getPlayer()->getId();
             if ($currentPlayerId <> $playerId) {

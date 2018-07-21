@@ -80,11 +80,13 @@ class StandingRepository extends EntityRepository
 	 * @param int $trimester
 	 * @return boolean
 	 */
-	public function findByTrimester($year, $trimester)
+	public function findByTrimester(Community $community, $year, $trimester)
 	{
 		$hasToBeCreated = false;
 		$qb = $this->createQueryBuilder('std');
-		$qb->where('std.year = :year')
+		$qb->where('std.community = :cmnId')
+			->setParameter('cmnId', $community)
+			->andWhere('std.year = :year')
 			->setParameter('year', $year)
 			->andWhere('std.trimester = :trim')
 			->setParameter('trim', $trimester)
@@ -108,7 +110,7 @@ class StandingRepository extends EntityRepository
 	public function initializeStanding($community, $year, $trimester)
 	{
 		// Check if the annual standing has to be created
-		$hasToBeCreated = $this->findByTrimester($year, 0);
+		$hasToBeCreated = $this->findByTrimester($community, $year, 0);
 		if ($hasToBeCreated)
 		{
 			// Initialize a new annual standing
@@ -124,7 +126,7 @@ class StandingRepository extends EntityRepository
 		}
 		
 		// Check if the quarterly standing has to be created
-		$hasToBeCreated = $this->findByTrimester($year, $trimester);
+		$hasToBeCreated = $this->findByTrimester($community, $year, $trimester);
 		if ($hasToBeCreated)
 		{
 			// Initialize a new quarterly standing

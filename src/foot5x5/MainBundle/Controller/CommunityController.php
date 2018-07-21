@@ -567,9 +567,6 @@ class CommunityController extends Controller
 		$totalDebts = $plrRepo->calcTotalDebts($communityId);
 		$totalCredits = $plrRepo->calcTotalCredits($communityId);
 		$transactions = $trnRepo->listLast($community, 10);
-		if (empty($transactions)) {
-			$this->get('session')->getFlashBag()->add('warning', 'Aucune transaction n\'a été enregistrée pour cette communauté.');
-		}
 		return $this->render(
 			'foot5x5MainBundle::finance.html.twig',
 			array(

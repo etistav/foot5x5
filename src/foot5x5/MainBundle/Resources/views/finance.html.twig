@@ -10,11 +10,10 @@
     {{ flashMessage }}
 </div>
 {% endfor %}
-{% if transactions %}
 <div id="finances-container" class="col-sm-12 well">
-    {% if debts is defined %}
     <div class="col-sm-12 col-md-7">
         <h3><span class="label">Bilan</span></h3>
+        {% if debts %}
         <div id="finances-debts" class="col-sm-6">
             <table class="table table-striped table-bordered table-condensed">
                 <thead class="dark-blue-grad">
@@ -57,9 +56,13 @@
                 </tbody>
             </table>
         </div>
+        {% else %}
+        <div class="alert alert-success">Aucune dette ou avoir en cours dans cette communauté! Bravo! :)</div>
+        {% endif %}
     </div>
     <div id="finances-transactions" class="col-sm-12 col-md-5">
         <h3><span class="label">Dernières Transactions</span></h3>
+        {% if transactions %}
         <table class="table table-striped table-bordered table-condensed">
             <thead class="dark-blue-grad">
                 <tr>
@@ -78,8 +81,9 @@
             </tr>
             {% endfor %}
         </table>
+        {% else %}
+        <div class="alert alert-warning">Aucune transaction n'a été enregistrée pour cette communauté.</div>
+        {% endif %}
     </div>
-    {% endif %}
 </div>
-{% endif %}
 {% endblock %}

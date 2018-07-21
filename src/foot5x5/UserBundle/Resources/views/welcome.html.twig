@@ -17,7 +17,7 @@
     </div>
     {% if communities is not empty %}
     <div id="welcome-communities" class="col-sm-4 col-sm-offset-4">
-        <h3>Vos communautés</h3>
+        <h3 class="text-center">Vos communautés</h3>
         <ul class="list-group">
             {% for community in communities %}
                 <a href="{{ path('select_community', {'id':community.id}) }}"><li class="list-group-item">{{ community.name }}</li></a>

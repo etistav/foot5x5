@@ -10,13 +10,13 @@
 </div>
 {% endfor %}
 <div class="col-sm-12">
-    <div id="welcome-buttons" class="col-sm-4 col-sm-offset-4">
+    <div id="welcome-buttons" class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
         <img src="{{ 'logoFoot5x5_001d.png'  | imagine_filter('avatar_200') }}" alt="Foot5x5_logo" class="img-responsive"/>
         <a href="{{ path('create_community') }}"><button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Créer une communauté</button></a>
         <a href="{{ path('join_community') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-chevron-right"></span> Rejoindre une communauté</button></a>
     </div>
     {% if communities is not empty %}
-    <div id="welcome-communities" class="col-sm-4 col-sm-offset-4">
+    <div id="welcome-communities" class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
         <h3 class="text-center">Vos communautés</h3>
         <ul class="list-group">
             {% for community in communities %}

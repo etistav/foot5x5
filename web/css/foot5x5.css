@@ -52,9 +52,45 @@ h2, h3 {
 /* ------------------------- */
 /*   NAV BAR                 */
 /* ------------------------- */
+@media (min-width: 768px) and (max-width: 1200px) {
+	.navbar-fixed-top .navbar-collapse {
+		max-height: 400px;
+	}
+	.navbar-header {
+        float: none;
+    }
+	.navbar-left, .navbar-right {
+        float: none !important;
+    }
+	.navbar-toggle {
+        display: block;
+	}
+	.navbar-collapse.collapse {
+        display: none!important;
+	}
+	.navbar-nav {
+        float: none!important;
+        margin-top: 7.5px;
+	}	
+    .navbar-nav>li {
+        float: none;
+    }
+    .navbar-nav>li>a {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .collapse.in{
+		display:block !important;
+	}
+}
+
 #navbar-site-title li a {
 	font-family: montserrat;
 	font-size: 18px;
+}
+
+.navbar-left {
+    float: left!important;
 }
 
 nav.navbar-custom {
@@ -100,6 +136,7 @@ div#home-buttons a button {
     margin-right: 20px;
 	height: 70px;
 	width: 100%;
+	white-space: normal;
 }
 div#welcome-buttons img,
 div#home-buttons img {

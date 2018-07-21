@@ -144,6 +144,22 @@ div#home-buttons img {
 	margin-bottom: 2em;
 }
 
+div#welcome-communities {
+	margin-top: 10px;
+	border-top: 1px solid #191950;
+}
+div#welcome-communities li {
+	margin-top: 5px;
+}
+div#welcome-communities li:hover {
+	border: 1px solid #191950;
+	background-color: #E0F0FF;
+	font-weight: bold;
+}
+div#welcome-communities a:hover {
+    text-decoration:none;
+}
+
 /* ------------------------- */
 /*   TRIM FORM               */
 /* ------------------------- */

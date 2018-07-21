@@ -33,25 +33,24 @@ class PlayerToNameTransformer implements DataTransformerInterface
     }
 
     /**
-     * Transforms a string (name) to an object Player.
+     * Transforms a string (playerId) to an object Player.
      *
-     * @param  string $playerName
+     * @param  string $playerId
      * @return Player|null
      * @throws TransformationFailedException if object Player is not found.
      */
-    public function reverseTransform($playerName)
+    public function reverseTransform($playerId)
     {
-        if (!$playerName) {
+        if (!$playerId) {
             return null;
-            // return $this->repo->findOneBy(array('name' => 'Eti'));
         }
 
-        $player = $this->repo->findOneBy(array('name' => $playerName));
+        $player = $this->repo->findOneBy(array('id' => $playerId));
 
         if (null === $player) {
             throw new TransformationFailedException(sprintf(
-                'Il nexiste pas de joueur du nom de "%s"!',
-                $playerName
+                'Il n\'existe pas de joueur avec l\ID "%s"!',
+                $playerId
             ));
         }
 

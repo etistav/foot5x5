@@ -3,14 +3,13 @@
 {% block title %}Classement {{ standing.name }}{% endblock %}
 
 {% block content %}
-<div id="trim-form-container" class="col-md-12">
+<div id="trim-form-container" class="col-xs-10">
     <h2><span class="label dark-blue-grad">Classement {{ standing.name }}</span></h2>
     {% if standingForm is defined %}
-    <div class="well col-md-4">
+    <div class="well col-lg-6 col-md-8 col-sm-10">
         {{ form_start(standingForm, { 'attr': {'class': 'form-inline'} }) }}
         <div class="form-group">
             {{ form_label(standingForm.stdCombo, null, { 'label_attr': { 'class': 'control-label' }}) }}
-            {{ form_errors(standingForm.stdCombo) }}
             {{ form_widget(standingForm.stdCombo, { 'attr': { 'class': 'form-control' }}) }}
             <button type="submit" class="btn btn-primary dark-blue-grad">Afficher</button>
         </div>
@@ -19,8 +18,8 @@
     {% endif %}
 </div>
 
-<div id="standing-container" class="col-md-12">
-    <div class="col-lg-10 table-responsive">
+<div id="standing-container" class="col-xs-10">
+    <div class="table-responsive">
         {% if standing.rankings %}
         <table id="standing-table" class="table table-striped table-bordered table-condensed">
             <thead class="dark-blue-grad">

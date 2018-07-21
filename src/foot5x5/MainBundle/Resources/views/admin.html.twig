@@ -10,6 +10,11 @@
     {{ flashMessage }}
 </div>
 {% endfor %}
+{% for flashMessage in app.session.flashbag.get('warning') %}
+<div class="alert alert-warning">
+    {{ flashMessage }}
+</div>
+{% endfor %}
 <div class="row">
     <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
         <ul class="nav nav-tabs nav-justified">
@@ -51,8 +56,8 @@
         <div class="admin-button-new col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
             <a href="{{ path('add_match') }}"><button type="button" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouveau match</button></a>
         </div>
-        {% if results %}
         <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+        {% if results %}
             <table class="table table-hover table-condensed">
                 <thead class="bg-primary dark-blue-grad">
                     <tr>
@@ -99,10 +104,10 @@
                     {% endfor %}
                 </tbody>
             </table>
-        </div>
         {% else %}
-        <div class="alert alert-warning">Aucun résultat trouvé pour le trimestre T0{{ currentTrimester }} {{ currentYear }}</div>
+            <div class="alert alert-warning">Aucun résultat trouvé pour le trimestre T0{{ currentTrimester }} {{ currentYear }}</div>
         {% endif %}
+        </div>
     </div>
 
     {% if activeTab == 'standings' %}
@@ -110,8 +115,8 @@
     {% else %}
     <div class="tab-pane fade admin-panel" id="admin-standings-panel">
     {% endif %}
-        {% if standings %}
         <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+        {% if standings %}
             <table class="table table-hover table-condensed">
                 <thead class="bg-primary dark-blue-grad">
                     <tr>
@@ -128,10 +133,10 @@
                 </tr>
                 {% endfor %}
             </table>
-        </div>
         {% else %}
-        <div class="alert alert-warning">Aucun classement trouvé.</div>
+        	<div class="alert alert-warning">Aucun classement trouvé.</div>
         {% endif %}
+        </div>
     </div>
 
     {% if activeTab == 'players' %}
@@ -142,8 +147,8 @@
         <div class="admin-button-new col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
             <a href="{{ path('add_player') }}"><button type="button" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouveau joueur</button></a>
         </div>
-        {% if players %}
         <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+        {% if players %}
             <table class="table table-hover table-condensed">
                 <thead class="bg-primary dark-blue-grad">
                     <tr>
@@ -192,10 +197,10 @@
                 </tr>
                 {% endfor %}
             </table>
-        </div>
         {% else %}
-        <div class="alert alert-warning">Aucun joueur trouvé.</div>
+        	<div class="alert alert-warning">Aucun joueur trouvé.</div>
         {% endif %}
+        </div>
     </div>
 
     {% if activeTab == 'users' %}
@@ -203,11 +208,13 @@
     {% else %}
     <div class="tab-pane fade admin-panel" id="admin-users-panel">
     {% endif %}
+    	{#
         <div class="admin-button-new col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
             <a href="{{ path('add_user') }}"><button type="button" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouvel utilisateur</button></a>
         </div>
-        {% if users %}
+        #}
         <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+        {% if users %}
             <table class="table table-hover table-condensed">
                 <thead class="bg-primary dark-blue-grad">
                     <tr>
@@ -220,9 +227,9 @@
                 </thead>
                 {% for user in users %}
                 <tr>
-                    <td class="col-md-2 admin-left-column">{{ user.username }}</a></td>
+                    <td class="col-md-2 admin-left-column">{{ user.user.username }}</a></td>
                     <td class="col-md-2 admin-left-column">
-                        {% if 'ROLE_ADMIN' in user.roles %}
+                        {#% if 'ROLE_ADMIN' in user.roles %}
                             Admin
                         {% else %}
                             {% if 'ROLE_EVALUATOR' in user.roles %}
@@ -230,12 +237,13 @@
                             {% else %}
                                 Joueur
                             {% endif %}
-                        {% endif %}
+                        {% endif %#}
+                        {{ user.role }}
                     </td>
                     <td class="col-md-2 admin-left-column">{% if user.player.name is defined %}{{ user.player.name }}{% endif %}</td>
-                    <td class="col-md-2 admin-left-column">{{ user.email }}</td>
+                    <td class="col-md-2 admin-left-column">{{ user.user.email }}</td>
                     <td class="col-md-2 admin-center-column">
-                        <a href="{{ path('edit_user', {'id':user.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+                        <a href="{{ path('edit_user_role', {'id':user.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
                         <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#userDialog{{ user.id }}"><span class="glyphicon glyphicon-remove"></span>
                         </button>
                         <div class="modal fade" id="userDialog{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -246,11 +254,11 @@
                                         <h4 class="modal-title" id="myModalLabel">Confirmation suppression utilisateur</h4>
                                     </div>
                                     <div class="modal-body">
-                                        Veux-tu vraiment supprimer le user {{ user.username }} ?
+                                        Veux-tu vraiment supprimer le user {{ user.user.username }} de la communauté ?
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                                        <a href="{{ path('delete_user', {'id':user.id}) }}" class="btn btn-danger">Supprimer</a>
+                                        <a href="{{ path('delete_user_role', {'id':user.id}) }}" class="btn btn-danger">Supprimer</a>
                                     </div>
                                 </div><!-- /.modal-content -->
                             </div><!-- /.modal-dialog -->
@@ -259,10 +267,10 @@
                 </tr>
                 {% endfor %}
             </table>
-        </div>
         {% else %}
-        <div class="alert alert-warning">Aucun utilisateur trouvé.</div>
+        	<div class="alert alert-warning">Aucun utilisateur trouvé.</div>
         {% endif %}
+        </div>
     </div>
 
     {% if activeTab == 'finance' %}
@@ -273,8 +281,8 @@
         <div class="admin-button-new col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
             <a href="{{ path('add_transaction') }}"><button type="button" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouvelle transaction</button></a>
         </div>
-        {% if transactions %}
         <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+        {% if transactions %}
             <table class="table table-hover table-condensed">
                 <thead class="bg-primary dark-blue-grad">
                     <tr>
@@ -316,10 +324,10 @@
                 </tr>
                 {% endfor %}
             </table>
-        </div>
         {% else %}
-        <div class="alert alert-warning">Aucune transaction trouvée.</div>
+        	<div class="alert alert-warning">Aucune transaction trouvée.</div>
         {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}

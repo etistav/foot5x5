@@ -9,11 +9,6 @@
     {{ flashMessage }}
 </div>
 {% endfor %}
-{#% if form_errors(userForm.password.first) %}
-<div class="alert alert-danger">
-    {{ form_errors(userForm.password.first) }}
-</div>
-{% endif %#}
 {% if not userForm.vars.valid %}
 <div class="alert alert-danger"><ul>
 {% for child in userForm.children %}
@@ -84,7 +79,7 @@
         {{ form_label(userForm.birthday, null, { 'label_attr':  {
             'class': 'col-sm-5 control-label'
         }}) }}
-        <div class="col-sm-4 form-inline">
+        <div class="col-sm-7 form-inline">
             {{ form_widget(userForm.birthday.day, { 'attr':  {
                 'class': 'form-control mb-10'
             }}) }}

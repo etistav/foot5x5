@@ -163,11 +163,12 @@
             var slotId = $(this).attr("id");
             var playerNameBefore = $(this).text().trim();
 
-            // id de l'input hidden correspondant
-            var inputId = "#result_"+slotId+"_player";
-
             // nom du joueur droppé
             var playerName = ui.draggable.text().trim();
+            var playerId = $(ui.draggable).attr("id").substring(12);
+
+            // id de l'input hidden correspondant
+            var inputId = "#result_"+slotId+"_player";
 
             // Cacher le joueur dans la liste à gauche
             hidePlayer(playerName);
@@ -180,7 +181,7 @@
 
             // Mise à jour de la value de l'input hidden pour prise
             // en compte lors de la soumission du formulaire
-            $(inputId).val(playerName);
+            $(inputId).val(playerId);
 
             if (playerNameBefore != "") {
                 // Réafficher le joueur dans la liste à gauche

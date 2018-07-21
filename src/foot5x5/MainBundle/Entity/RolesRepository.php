@@ -3,6 +3,8 @@
 namespace foot5x5\MainBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
+use foot5x5\UserBundle\Entity\User;
 
 /**
  * RolesRepository
@@ -12,4 +14,87 @@ use Doctrine\ORM\EntityRepository;
  */
 class RolesRepository extends EntityRepository
 {
+	public function assignRole(User $user, Community $community, string $role) {
+		$userRole = new Roles();
+		
+		
+		
+	}
+
+	public function findByUserAndCommunity(User $user, Community $community)
+	{
+	    $qb = $this->createQueryBuilder('rol')
+	    ->where('rol.community = :community')
+	    ->andWhere('rol.user = :user')
+	    ->setParameter('community', $community)
+	    ->setParameter('user', $user);
+	    
+	    $result = $qb->getQuery()->getSingleResult();	    
+	    return $result;
+	}
+	
+	public function getRoleForCommunity(User $user, Community $community)
+	{
+	    $qb = $this->createQueryBuilder('rol')
+	    ->where('rol.community = :community')
+	    ->andWhere('rol.user = :user')
+	    ->setParameter('community', $community)
+	    ->setParameter('user', $user);
+	    
+	    try {
+	        $result = $qb->getQuery()->getSingleResult();
+	        $role = $result->getRole();
+	    } catch (NoResultException $e) {
+	        return "";
+	    }
+	    
+	    return $role;
+	}
+
+	public function getPlayerForCommunity(User $user, Community $community)
+	{
+	    $qb = $this->createQueryBuilder('rol')
+	    ->where('rol.community = :community')
+	    ->andWhere('rol.user = :user')
+	    ->setParameter('community', $community)
+	    ->setParameter('user', $user);
+	    
+	    try {
+	        $result = $qb->getQuery()->getSingleResult();
+	        $player = $result->getPlayer();
+	    } catch (NoResultException $e) {
+	        return "";
+	    }
+	    
+	    return $player;
+	}
+	
+	public function listAllUsersByCommunity($communityId)
+	{
+
+	    $qb = $this->createQueryBuilder('rol')
+	    ->leftJoin('rol.user', 'usr')
+	    ->addSelect('usr')
+	    ->where('rol.community = :cmnId')
+	    ->setParameter('cmnId', $communityId)
+	    ->addOrderBy('usr.username', 'ASC');
+	    
+	    return $qb->getQuery()->getResult();
+	}
+
+	public function listAllAdminUsersByCommunity($communityId)
+	{
+		$roleAdmin = "ROLE_ADMIN";
+	    $qb = $this->createQueryBuilder('rol')
+	    ->leftJoin('rol.user', 'usr')
+	    ->addSelect('usr')
+		->where('rol.community = :cmnId')
+		->andWhere('rol.role = :rolAdmin')
+		->setParameter('cmnId', $communityId)
+		->setParameter('rolAdmin', $roleAdmin)
+	    ->addOrderBy('usr.username', 'ASC');
+	    
+	    return $qb->getQuery()->getResult();
+	}
+	
 }

@@ -11,37 +11,145 @@
     {{ flashMessage }}
 </div>
 {% endfor %}
+{% for flashMessage in app.session.flashbag.get('warning') %}
+<div class="alert alert-warning">
+    {{ flashMessage }}
+</div>
+{% endfor %}
 
-<div id="profile-container" class="col-md-12 well">
+<div id="profile-container" class="col-xs-12 well">
 	<div id="profile-pic">
-		<img src="{{ user.pictureWebPath | imagine_filter('avatar_200') }}" alt="{{ user.profilePicture }}" />
+		<a data-popup-open="popup-upload" href="#">
+			<img src="{{ user.pictureWebPath | imagine_filter('avatar_200') }}" alt="{{ user.profilePicture }}" />
+		</a>
 		<a href="{{ path('edit_pwd') }}"><button type="button" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-cog"></span> Modifier mot de passe</button></a>
 	</div>
-	<div id="profile-info">
+	<div id="profile-info" class="col-sm-8 col-md-9">
 		<h3><span class="label">Informations Générales</span></h3>
-		<p><span class="profile-info-label">Nom utilisateur : </span>{{ user.username }}</p>
-		<p><span class="profile-info-label">Date d'anniversaire : </span>{{ user.birthday|date('d/m/Y') }} ({{ user.age }} ans)</p>
-		<p><span class="profile-info-label">Rôle : </span>
-			{% if user.roles[0] == "ROLE_ADMIN" %}Administrateur
-			{% elseif user.roles[0] == "ROLE_EVALUATOR" %}Evaluateur
-			{% elseif user.roles[0] == "ROLE_USER" %}Joueur
-			{% endif %}
-		</p>
-		<p><span class="profile-info-label">Nom joueur : </span>{{ user.player.name }}</p>
+		<table>
+			<tbody>
+				<tr>
+					<td class="profile-info-label">Nom utilisateur :</td>
+					<td>{{ user.username }}</td>
+				</tr>
+				<tr>
+					<td class="profile-info-label">Date de naissance :</td>
+					<td>{{ user.birthday|date('d/m/Y') }} ({{ user.age }} ans)</td>
+				</tr>
+				<tr>
+					<td class="profile-info-label">Rôle : </td>
+					<td>
+						{% if user.roles[0] == "ROLE_ADMIN" %}Administrateur
+						{% elseif user.roles[0] == "ROLE_EVALUATOR" %}Evaluateur
+						{% elseif user.roles[0] == "ROLE_USER" %}Joueur
+						{% endif %}
+					</td>
+				</tr>
+				<tr>
+					<td class="profile-info-label">Nom joueur :</td>
+					<td>
+						{% if player %}{{ player.name }}
+						{% else %}-
+						{% endif %}
+					</td>
+				</tr>
+			</tbody>
+		</table>
 		
 		<h3><span class="label">Performances actuelles</span></h3>
-		<p><span class="profile-info-label">Classement : </span>{{ rank }}</p>
-		<p><span class="profile-info-label">Série en cours : </span>{{ currentForm }}</p>
-		<p><span class="profile-info-label">Dernier match : </span>{{ lastMatch.date|date('d/m/Y') }} {{ resultForPlayer }}</p>
+		<table>
+			<tbody>
+				<tr>
+					<td class="profile-info-label">Classement : </td>
+					<td>{{ rank }}</td>
+				</tr>
+				<tr>
+					<td class="profile-info-label">Série en cours : </td>
+					<td>{{ currentForm }}</td>
+				</tr>
+				<tr>
+					<td class="profile-info-label">Dernier match : </td>
+					<td>
+						{% if lastMatch %}{{ lastMatch.date|date('d/m/Y') }} {{ resultForPlayer }}
+						{% else %}-
+						{% endif %}
+					</td>
+				</tr>
+			</tbody>
+		</table>
 
 		<h3><span class="label">Statistiques Classement</span></h3>
-		<p><span class="profile-info-label">Meilleur classement : </span>{{ bestRank }}</p>
-		<p><span class="profile-info-label">Pire classement : </span>{{ worstRank }}</p>
-		<p><span class="profile-info-label">Nb fois champion du trimestre : </span>{{ nbTitles }}</p>
-		<p><span class="profile-info-label">Nb fois sur le podium du trimestre : </span>{{ nbPodiums }}</p>
-		<p><span class="profile-info-label">Nb fois relégué du trimestre : </span>{{ nbRelegations }}</p>
-		<p><span class="profile-info-label">Nb fois lanterne rouge du trimestre : </span>{{ nbTimesLast }}</p>
+		<table>
+			<tbody>
+				<tr>
+					<td class="profile-info-label">Meilleur classement : </td>
+					<td>{{ bestRank }}</td>
+				</tr>
+				<tr>
+					<td class="profile-info-label">Pire classement : </td>
+					<td>{{ worstRank }}</td>
+				</tr>
+				<tr>
+					<td class="profile-info-label">Champions : </td>
+					<td>{{ nbTitles }}</td>
+				</tr>
+				<tr>
+					<td class="profile-info-label">Podiums : </td>
+					<td>{{ nbPodiums }}</td>
+				</tr>
+				<tr>
+					<td class="profile-info-label">Relégations : </td>
+					<td>{{ nbRelegations }}</td>
+				</tr>
+				<tr>
+					<td class="profile-info-label">Lanterne rouge : </td>
+					<td>{{ nbTimesLast }}</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </div>
+
+<div class="popup" data-popup="popup-upload">
+	<div class="popup-inner popup-upload">
+        <div class="popup-inner-scroll">
+			<h3 class="text-center">Upload photo de profil</h3>
+			{{ form_start(uploadForm, { 'attr': {'class': 'form-horizontal'} }) }}
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-6">
+					{{ form_errors(uploadForm.file) }}
+					{{ form_widget(uploadForm.file, { 'attr':  {
+						'class': 'form-control'
+					}}) }}
+				</div>
+				<div class="col-sm-2">
+					<input type="submit" class="btn btn-primary" value="{{ buttonLabel }}" />
+				</div>
+			</div>
+			{{ form_end(uploadForm) }}
+            <a class="popup-close" data-popup-close="popup-upload" href="#">x</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function() {
+        //----- OPEN
+        $('[data-popup-open]').on('click', function(e)  {
+            var targeted_popup_class = jQuery(this).attr('data-popup-open');
+            $('[data-popup="' + targeted_popup_class + '"]').fadeIn(350);
+     
+            e.preventDefault();
+        });
+     
+        //----- CLOSE
+        $('[data-popup-close]').on('click', function(e)  {
+            var targeted_popup_class = jQuery(this).attr('data-popup-close');
+            $('[data-popup="' + targeted_popup_class + '"]').fadeOut(350);
+     
+            e.preventDefault();
+        });
+    });
+</script>
 
 {% endblock %}

@@ -22,12 +22,24 @@ class TransactionType extends AbstractType
             ->add('giver', EntityType::class, array(
                 'class' => 'foot5x5MainBundle:Player',
                 'label' => 'Donneur',
+                'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use($options) {
+                    return $er->createQueryBuilder('plr')
+                    ->where('plr.community = :cmnId')
+                    ->setParameter('cmnId', $options['communityId'])
+                    ->addOrderBy('plr.name', 'ASC');
+                },
                 'choice_label' => 'name',
                 'multiple' => false
             ))
             ->add('receiver', EntityType::class, array(
                 'class' => 'foot5x5MainBundle:Player',
                 'label' => 'Receveur',
+                'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use($options) {
+                    return $er->createQueryBuilder('plr')
+                    ->where('plr.community = :cmnId')
+                    ->setParameter('cmnId', $options['communityId'])
+                    ->addOrderBy('plr.name', 'ASC');
+                },
                 'choice_label' => 'name',
                 'multiple' => false
             ))
@@ -43,7 +55,8 @@ class TransactionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'foot5x5\MainBundle\Entity\Transaction'
+            'data_class' => 'foot5x5\MainBundle\Entity\Transaction',
+            'communityId' => 0
         ));
     }
 

@@ -13,94 +13,133 @@ use Doctrine\ORM\NoResultException;
  */
 class StandingRepository extends EntityRepository
 {
-	public function findStanding($id) {
-    	$qb = $this->createQueryBuilder('std')
-    		->leftJoin('std.rankings', 'rnk')
-    		->addSelect('rnk');
-    	$qb->where('std.id = :id')
-    		->setParameter('id', $id)
-    		->addOrderBy('rnk.rank', 'ASC');
-
-    	return $qb->getQuery()->getSingleResult();
-    }
-
-	public function findAll() {
-    	$qb = $this->createQueryBuilder('std')
-    		->leftJoin('std.rankings', 'rnk')
-            // ->innerJoin('foot5x5\MainBundle\Entity\Result', 'res', 'WITH', 'std.year = res.year AND std.trimester = res.trimester')
-    		->addSelect('rnk');
-    	$qb->addOrderBy('std.year', 'DESC')
-    		->addOrderBy('std.trimester', 'DESC')
-    		->addOrderBy('rnk.rank', 'ASC');
-
-    	$standings = $qb->getQuery()->getResult();
+	/**
+	 * Retrieve a standing with corresponding rankings
+	 * 
+	 * @param int $id Standing Id
+	 */
+	public function findStanding($id)
+	{
+		$qb = $this->createQueryBuilder('std')
+			->leftJoin('std.rankings', 'rnk')
+			->addSelect('rnk');
+		$qb->where('std.id = :id')
+			->setParameter('id', $id)
+			->addOrderBy('rnk.rank', 'ASC');
+		
+		return $qb->getQuery()->getSingleResult();
+	}
+	
+	/**
+	 * Retrieve all standings for a given community
+	 * 
+	 * @param int $communityId
+	 * @return array
+	 */
+	public function findByCommunity($communityId)
+	{
+		$qb = $this->createQueryBuilder('std')
+			->leftJoin('std.rankings', 'rnk')
+			->addSelect('rnk')
+			->where('std.community = :cmnId')
+			->setParameter('cmnId', $communityId)
+			->addOrderBy('std.year', 'DESC')
+			->addOrderBy('std.trimester', 'DESC')
+			->addOrderBy('rnk.rank', 'ASC');
+		
+		$standings = $qb->getQuery()->getResult();
         return $standings;
+	}
 
-        // $qb = $this->createQueryBuilder('std')
-        //     ->leftJoin('std.rankings', 'rnk')
-        //     ->addSelect('rnk');
-        // $qb->where('std.trimester = :trim')
-        //     ->setParameter('trim', 0)
-        //     ->addOrderBy('std.year', 'DESC')
-        //     ->addOrderBy('rnk.rank', 'ASC');
+	/**
+	 * Retrieve the last standing of a given community
+	 * 
+	 * @param int $communityId
+	 * @return Standing
+	 */
+	public function findLastStanding($communityId)
+	{
+		$qb = $this->createQueryBuilder('std')
+			->where('std.community = :cmnId')
+			->setParameter('cmnId', $communityId)
+			->addOrderBy('std.year', 'DESC')
+			->addOrderBy('std.trimester', 'DESC')
+			->setMaxResults(1);
+		try {
+			$lastStanding = $qb->getQuery()->getSingleResult();
+		} catch (NoResultException $e) {
+			return null;
+		}
+		return $lastStanding;
+	}
 
-        // $annuals = $qb->getQuery()->getResult();
+	/**
+	 * Returns true if the standing has to be created
+	 * 
+	 * @param int $year
+	 * @param int $trimester
+	 * @return boolean
+	 */
+	public function findByTrimester(Community $community, $year, $trimester)
+	{
+		$hasToBeCreated = false;
+		$qb = $this->createQueryBuilder('std');
+		$qb->where('std.community = :cmnId')
+			->setParameter('cmnId', $community)
+			->andWhere('std.year = :year')
+			->setParameter('year', $year)
+			->andWhere('std.trimester = :trim')
+			->setParameter('trim', $trimester)
+			->setMaxResults(1);
+		try {
+			$standing = $qb->getQuery()->getSingleResult();
+		} catch (\Doctrine\Orm\NoResultException $e) {
+			$hasToBeCreated = true;
+		}
+		return $hasToBeCreated;
+	}
 
-        // return array_merge($standings, $annuals);
-    }
-
-	public function findLastStanding() {
-    	$qb = $this->createQueryBuilder('std')
-            ->addOrderBy('std.year', 'DESC')
-    		->addOrderBy('std.trimester', 'DESC')
-    		->setMaxResults(1);
-
-    	return $qb->getQuery()->getSingleResult();
-    }
-
-    public function findByTrimester($year, $trimester) {
-        $hasToBeCreated = false;
-        $qb = $this->createQueryBuilder('std');
-        $qb->where('std.year = :year')
-            ->setParameter('year', $year)
-            ->andWhere('std.trimester = :trim')
-            ->setParameter('trim', $trimester)
-            ->setMaxResults(1);
-        try {
-            $standing = $qb->getQuery()->getSingleResult();
-        } catch (\Doctrine\Orm\NoResultException $e) {
-            $hasToBeCreated = true;
-        }
-        return $hasToBeCreated;
-    }
-
-    public function initializeStanding($year, $trimester) {
-        // Vérification de l'existence du classement annuel
-        $hasToBeCreated = $this->findByTrimester($year, 0);
-        if ($hasToBeCreated) {
-            // Initialisation d'un nouveau classement
-            $standing = New Standing();
-            $standing->setYear($year);
-            $standing->setTrimester(0);
-
-            // Ecriture du classement en BDD
-            $em = $this->_em;
-            $em->persist($standing);
-            $em->flush();
-        }
-        // Vérification de l'existence du classement trimestriel
-        $hasToBeCreated = $this->findByTrimester($year, $trimester);
-        if ($hasToBeCreated) {
-            // Initialisation d'un nouveau classement
-            $standing = New Standing();
-            $standing->setYear($year);
-            $standing->setTrimester($trimester);
-
-            // Ecriture du classement en BDD
-            $em = $this->_em;
-            $em->persist($standing);
-            $em->flush();
-        }
-        return $hasToBeCreated;
-    }
+	/**
+	 * Initialize the standings if necessary
+	 * 
+	 * @param Community $community
+	 * @param int $year
+	 * @param int $trimester
+	 * @return boolean
+	 */
+	public function initializeStanding($community, $year, $trimester)
+	{
+		// Check if the annual standing has to be created
+		$hasToBeCreated = $this->findByTrimester($community, $year, 0);
+		if ($hasToBeCreated)
+		{
+			// Initialize a new annual standing
+			$standing = New Standing();
+			$standing->setYear($year);
+			$standing->setTrimester(0);
+			$standing->setCommunity($community);
+			
+			// Persist it into the DB
+			$em = $this->_em;
+			$em->persist($standing);
+			$em->flush();
+		}
+		
+		// Check if the quarterly standing has to be created
+		$hasToBeCreated = $this->findByTrimester($community, $year, $trimester);
+		if ($hasToBeCreated)
+		{
+			// Initialize a new quarterly standing
+			$standing = New Standing();
+			$standing->setYear($year);
+			$standing->setTrimester($trimester);
+			$standing->setCommunity($community);
+			
+			// Persist it into the DB
+			$em = $this->_em;
+			$em->persist($standing);
+			$em->flush();
+		}
+		return $hasToBeCreated;
+	}
 }

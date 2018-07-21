@@ -12,11 +12,13 @@ use foot5x5\UserBundle\Entity\User;
 use foot5x5\MainBundle\Form\PlayerType;
 use foot5x5\MainBundle\Form\ResultType;
 use foot5x5\MainBundle\Form\TransactionType;
+use foot5x5\MainBundle\Form\RolesType;
 use foot5x5\UserBundle\Form\UserType;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\HttpFoundation\Request;
+use foot5x5\MainBundle\Entity\Community;
 
 class AdminController extends Controller
 {
@@ -25,13 +27,23 @@ class AdminController extends Controller
      * 
      * @param Request $request
      */
-    public function indexAction(Request $request) {
+	public function indexAction(Request $request)
+	{
+		// Retrieve community ID from session
+		$communityId = $this->get('session')->get('community');
+		if (!isset($communityId)) {
+			return $this->redirect($this->generateUrl('welcome'));
+		}
 
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
         $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
         $trnRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Transaction');
         $usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
+        $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
+        $cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+        
+        $community = $cmnRepo->find($communityId);
 
         // Gestion de l'onglet actif en session et réinitialisation
         $session = $request->getSession();
@@ -43,10 +55,11 @@ class AdminController extends Controller
         $session->set('activeTab', '');
 
         // Récupération de tous les joueurs, classements et utilisateurs
-        $players = $plrRepo->findAll();
-        $standings = $stdRepo->findAll();
-        $users = $usrRepo->findAll();
-        $trimesters = $resRepo->listAllTrimesters();
+        $players = $plrRepo->findByCommunity($communityId);
+        $standings = $stdRepo->findByCommunity($communityId);
+        //$users = $usrRepo->findByCommunity($communityId);
+        $users = $rolRepo->listAllUsersByCommunity($community);
+        $trimesters = $resRepo->listAllTrimesters($communityId);
 
         // Populate trimester dropdown
         $trimNames = array();
@@ -78,13 +91,19 @@ class AdminController extends Controller
                 $currentTrimester = substr($idTrimester, 4, 1);
             }
         } else {
-            $lastResult = $resRepo->findLastMatch();
-            $currentYear = $lastResult->getYear();
-            $currentTrimester = $lastResult->getTrimester();
+        	$lastResult = $resRepo->findLastMatch($communityId);
+        	if (!is_null($lastResult)) {
+        	    $currentYear = $lastResult->getYear();
+        	    $currentTrimester = $lastResult->getTrimester();
+        	} else {
+        	    $currentYear = date("Y");
+        	    $curMonth = date("m", time());
+        	    $currentTrimester = ceil($curMonth/3);
+        	}
         }
 
-        $results = $resRepo->listAllByTrimester($currentYear, $currentTrimester);
-        $transactions = $trnRepo->listAllByTrimester($currentYear, $currentTrimester);
+        $results = $resRepo->listAllByTrimester($communityId, $currentYear, $currentTrimester);
+        $transactions = $trnRepo->listAllByCommunity($community);
 
         return $this->render(
 			'foot5x5MainBundle::admin.html.twig',
@@ -106,19 +125,38 @@ class AdminController extends Controller
      *         ADMIN - MATCHES         *
      ***********************************/
 
-    /**
-     * Management of the 'add match' view
-     * 
-     * @param Request $request
-     */
-    public function addMatchAction(Request $request) {
-        $match = new Result();
-
-        $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
+	/**
+	 * Management of the 'add match' view
+	 * 
+	 * @param Request $request
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
+	public function addMatchAction(Request $request)
+	{
+		// Retrieve community ID from session
+		$communityId = $this->get('session')->get('community');
+		if (!isset($communityId)) {
+			return $this->redirect($this->generateUrl('welcome'));
+		}
+		
+        $cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+		$plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
-        // $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
+        $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
+                
+		
+        $community = $cmnRepo->find($communityId);
+        $players = $plrRepo->findByCommunity($communityId);
 
-        $players = $plrRepo->findAll();
+        // Check that at least 10 players have been defined for this community
+        if (count($players) < 10) {
+            // Redirection to admin home page with a warning message
+			$this->get('session')->getFlashBag()->add('warning', 'Impossible de créer un nouveau match. Le nb de joueurs dans la communauté est insuffisant ( <10 ).');
+			$this->get('session')->set('activeTab', 'results');
+			return $this->redirect($this->generateUrl('admin_home'));
+        }
+
+        $match = new Result();
         $matchPlayerA = array();
         $matchPlayerB = array();
         
@@ -142,13 +180,16 @@ class AdminController extends Controller
         $matchForm = $this->createForm(ResultType::class, $match);
 
 		$matchForm->handleRequest($request);
-		if ($matchForm->isSubmitted() && $matchForm->isValid()) {
+		if ($matchForm->isSubmitted() && $matchForm->isValid())
+		{
+			$match->setCommunity($community);
+			
 			// Détermination du n° de match
-			$matchNum = $resRepo->findMatchNumber($match);
+			$matchNum = $resRepo->determineMatchNumber($match);
 			$match->setNum($matchNum);
 			
 			// Création d'un classement pour le trimestre si besoin
-			// $isStandingCreated = $stdRepo->initializeStanding($match->getYear(), $match->getTrimester());
+			$stdRepo->initializeStanding($community, $match->getYear(), $match->getTrimester());
 			
 			// Ecriture du match en BDD
 			$em = $this->getDoctrine()->getManager();
@@ -180,10 +221,16 @@ class AdminController extends Controller
      */
     public function editMatchAction(Request $request, $id) {
 
+	    	// Retrieve community ID from session
+	    	$communityId = $this->get('session')->get('community');
+	    	if (!isset($communityId)) {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
+
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
 
-        $players = $plrRepo->findAll();
+        $players = $plrRepo->findByCommunity($communityId);
         $match = $resRepo->find($id);
         $dateEditedMatch = $match->getDate()->format('d/m/Y');
         $matchForm = $this->createForm(ResultType::class, $match);
@@ -222,17 +269,26 @@ class AdminController extends Controller
      */
     public function deleteMatchAction($id) {
 
+	    	// Retrieve community ID from session
+	    	$communityId = $this->get('session')->get('community');
+	    	if (!isset($communityId)) {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
+    	
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
         $match = $resRepo->find($id);
         $dateDeletedMatch = $match->getDate()->format('d/m/Y');
 
         // Mise à jour des numéros de match du trimestre correspondant
-        $resRepo->updateMatchNumbers($match);
+        $resRepo->updateMatchNumbersAfterRemoval($match);
 
         // Suppression du match en BDD
         $em = $this->getDoctrine()->getManager();
         $em->remove($match);
         $em->flush();
+        
+        // TODO Remove standing if no match left
+        // ...
 
         // Redirection sur la page d'admin avec gestion du message d'info
         $this->get('session')->getFlashBag()->add('success', 'Le match du '.$dateDeletedMatch.' a bien été supprimé.');
@@ -251,10 +307,19 @@ class AdminController extends Controller
      */
     public function calcStandingAction($id) {
 
+        // Retrieve community ID from session
+        $communityId = $this->get('session')->get('community');
+        if (!isset($communityId)) {
+            return $this->redirect($this->generateUrl('welcome'));
+        }
+	    	
         $stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
         $mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
         $resRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Result');
         $rnkRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Ranking');
+        $cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+        
+        $community = $cmnRepo->find($communityId);
         $em = $this->getDoctrine()->getManager();
 
         // Détermination du classement correspondant
@@ -269,16 +334,16 @@ class AdminController extends Controller
         
         if ($trimester == 0) {
             // Récupération du nombre total de matchs effectués sur l'année
-            $results = $resRepo->findByYear($year);
+        	$results = $resRepo->findByYear($communityId, $year);
         } else {
             // Récupération du nombre total de matchs effectués sur ce trimestre
-            $results = $resRepo->findByTrimester($year, $trimester);
+            $results = $resRepo->findByTrimester($communityId, $year, $trimester);
         }
         $nbTotalResults = count($results);
         $minParticipation = 0.33;
 
         $currentPlayerId = 0;
-        $matchPlayers = $mplRepo->listAllForStanding($year, $trimester);
+        $matchPlayers = $mplRepo->listAllForStanding($community, $year, $trimester);
         foreach ($matchPlayers as $matchPlayer) {
             $playerId = $matchPlayer->getPlayer()->getId();
             if ($currentPlayerId <> $playerId) {
@@ -342,39 +407,65 @@ class AdminController extends Controller
      *         ADMIN - PLAYERS         *
      ***********************************/
 
-    /**
-     * Management of the 'add player' view
-     * 
-     * @param Request $request
-     */
-    public function addPlayerAction(Request $request) {
-        $player = new Player();
-
-        // Création du formulaire associé
-        $playerForm = $this->createForm(PlayerType::class, $player);
-
-        $playerForm->handleRequest($request);
-        if ($playerForm->isSubmitted() && $playerForm->isValid()) {
-			// Ecriture du player en BDD
+	/**
+	 * Management of the 'add player' view
+	 * 
+	 * @param Request $request
+	 */
+	public function addPlayerAction(Request $request) {
+		
+		// Retrieve community ID from session
+		$communityId = $this->get('session')->get('community');
+		if (!isset($communityId)) {
+			return $this->redirect($this->generateUrl('welcome'));
+		}
+	
+		$player = new Player();
+		
+		$cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+		$community = $cmnRepo->find($communityId);
+	
+		// Create the form passing the community ID to only list users of the community
+        $formOptions = array(
+            "communityId" => $communityId
+        );
+		$playerForm = $this->createForm(PlayerType::class, $player, $formOptions);
+	
+		$playerForm->handleRequest($request);
+		if ($playerForm->isSubmitted() && $playerForm->isValid())
+		{
+			$player->setCommunity($community);
+			
+			// Persist the new player into the DB
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($player);
-			$em->flush();
+            $em->flush();
+            
+            // Manage the link User-Player for the community in the entity Roles
+            $user = $player->getUser();
+            if (!is_null($user)) {
+                $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
+                $role = $rolRepo->findByUserAndCommunity($user, $community);
+                $role->setPlayer($player);
+                $em->persist($role);
+                $em->flush();
+            }            
 			
-			// Redirection sur la page d'admin avec gestion du message d'info
+			// Redirect to admin homepage with info message
 			$this->get('session')->getFlashBag()->add('success', 'Le joueur '.$player->getName().' a bien été créé.');
 			$this->get('session')->set('activeTab', 'players');
 			return $this->redirect($this->generateUrl('admin_home'));
-        }
-        return $this->render(
-            'foot5x5MainBundle::player_form.html.twig',
-            array(
-                'title' => 'Nouveau Joueur',
-                'buttonLabel' => 'Créer',
-                'player' => $player,
-                'playerForm' => $playerForm->createView()
-            )
-        );
-    }
+		}
+		return $this->render(
+			'foot5x5MainBundle::player_form.html.twig',
+			array(
+				'title' => 'Nouveau Joueur',
+				'buttonLabel' => 'Créer',
+				'player' => $player,
+				'playerForm' => $playerForm->createView()
+			)
+		);
+	}
 
     /**
      * Management of the 'edit match' view
@@ -383,18 +474,40 @@ class AdminController extends Controller
      * @param integer $id Player id
      */
     public function editPlayerAction(Request $request, $id) {
+        
+        // Retrieve community ID from session
+        $communityId = $this->get('session')->get('community');
+        if (!isset($communityId)) {
+            return $this->redirect($this->generateUrl('welcome'));
+        }
+    
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $player = $plrRepo->find($id);
 
-        // Création du formulaire associé
-        $playerForm = $this->createForm(PlayerType::class, $player);
+        // Create the form passing the community ID to only list users of the community
+        $formOptions = array(
+            "communityId" => $communityId
+        );
+        $playerForm = $this->createForm(PlayerType::class, $player, $formOptions);
 
         $playerForm->handleRequest($request);
         if ($playerForm->isSubmitted() && $playerForm->isValid()) {
 			// Ecriture du player en BDD
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($player);
-			$em->flush();
+            $em->flush();
+            
+            // Manage the link User-Player for the community in the entity Roles
+            $user = $player->getUser();
+            if (!is_null($user)) {
+                $cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+                $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
+                $community = $cmnRepo->find($communityId);
+                $role = $rolRepo->findByUserAndCommunity($user, $community);
+                $role->setPlayer($player);
+                $em->persist($role);
+                $em->flush();
+            }
 			
 			// Redirection sur la page d'admin avec gestion du message d'info
 			$this->get('session')->getFlashBag()->add('success', 'Le joueur '.$player->getName().' a bien été modifié.');
@@ -419,15 +532,34 @@ class AdminController extends Controller
      */
     public function deletePlayerAction($id) {
 
+        // Retrieve community ID from session
+        $communityId = $this->get('session')->get('community');
+        if (!isset($communityId)) {
+            return $this->redirect($this->generateUrl('welcome'));
+        }
+    	
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $player = $plrRepo->find($id);
         $playerName = $player->getName();
+
+        $em = $this->getDoctrine()->getManager();
+
+        // Unlink User-Player for the community in the entity Roles
+        $user = $player->getUser();
+        if (!is_null($user)) {
+            $cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+            $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
+            $community = $cmnRepo->find($communityId);
+            $role = $rolRepo->findByUserAndCommunity($user, $community);
+            $role->setPlayer(NULL);
+            $em->persist($role);
+            $em->flush();
+        }
 
         // Attention! Le joueur ne peut être supprimé s'il a joué au moins un match
         // TODO... Ajout notion "inactivité" joueur
 
         // Suppression du joueur en BDD
-        $em = $this->getDoctrine()->getManager();
         $em->remove($player);
         $em->flush();
 
@@ -445,6 +577,12 @@ class AdminController extends Controller
      */
     public function updatePlayerBalanceAction($id, $operation) {
 
+	    	// Retrieve community ID from session
+	    	$communityId = $this->get('session')->get('community');
+	    	if (!isset($communityId)) {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
+    	
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
         $prmRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Param');
         $player = $plrRepo->find($id);
@@ -483,7 +621,13 @@ class AdminController extends Controller
      * @param Request $request
      */
     public function addUserAction(Request $request) {
-        $user = new User();
+        
+	    	// Retrieve community ID from session
+	    	$communityId = $this->get('session')->get('community');
+	    	if (!isset($communityId)) {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
+		$user = new User();
 
         // Création du formulaire associé
         $formOptions = array(
@@ -532,8 +676,15 @@ class AdminController extends Controller
      * @param Request $request
      * @param integer $id User id
      */
+    /*
     public function editUserAction(Request $request, $id) {
-        $usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
+        
+    	// Retrieve community ID from session
+    	$communityId = $this->get('session')->get('community');
+    	if (!isset($communityId)) {
+    		return $this->redirect($this->generateUrl('welcome'));
+    	}
+		$usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
         $user = $usrRepo->find($id);
         $formOptions = array(
         		"action" => "edit"
@@ -563,6 +714,7 @@ class AdminController extends Controller
             )
         );
     }
+    */
 
     /**
      * Handle the removal of a user
@@ -571,6 +723,11 @@ class AdminController extends Controller
      */
     public function deleteUserAction($id) {
 
+        // Retrieve community ID from session
+        $communityId = $this->get('session')->get('community');
+        if (!isset($communityId)) {
+            return $this->redirect($this->generateUrl('welcome'));
+        }
         $usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
         $user = $usrRepo->find($id);
         $username = $user->getUsername();
@@ -586,6 +743,103 @@ class AdminController extends Controller
         return $this->redirect($this->generateUrl('admin_home'));
     }
 
+    /**
+     * Management of the 'edit user role' view
+     *
+     * @param Request $request
+     * @param integer $id User id
+     */
+    public function editUserRoleAction(Request $request, $id) {
+        
+        // Retrieve community ID from session
+        $communityId = $this->get('session')->get('community');
+        if (!isset($communityId)) {
+            return $this->redirect($this->generateUrl('welcome'));
+        }
+        
+        $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
+        $role = $rolRepo->find($id);
+        $username = $role->getUser()->getUsername();
+        $formOptions = array(
+            "action" => "edit_role"
+        );
+        $roleForm = $this->createForm(RolesType::class, $role, $formOptions);
+        
+        $roleForm->handleRequest($request);
+        if ($roleForm->isSubmitted() && $roleForm->isValid()) {
+
+            // Forbid the removal of the last admin user for the community
+            $adminUsers = $rolRepo->listAllAdminUsersByCommunity($communityId);
+            if (count($adminUsers) == 1) {
+                $onlyAdminUser = array_shift($adminUsers);
+                if ($onlyAdminUser->getId() == $id) {
+                    $this->get('session')->getFlashBag()->add('warning', 'Impossible de modifier le rôle de l\'utilisateur '.$username.' car c\'est le seul administrateur pour cette communauté.');
+                    $this->get('session')->set('activeTab', 'users');
+                    return $this->redirect($this->generateUrl('admin_home'));
+                }
+            }
+
+            // Ecriture du user en BDD
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($role);
+            $em->flush();
+            
+            // Redirection sur la page d'admin avec gestion du message d'info
+            $this->get('session')->getFlashBag()->add('success', 'Le rôle du user '.$username.' a bien été modifié.');
+            $this->get('session')->set('activeTab', 'users');
+            return $this->redirect($this->generateUrl('admin_home'));
+        }
+        return $this->render(
+            'foot5x5MainBundle::user_role_form.html.twig',
+            array(
+                'action' => 'editUserRole',
+                'title' => 'Modification du rôle utilisateur',
+                'buttonLabel' => 'Enregistrer',
+                'role' => $role,
+                'roleForm' => $roleForm->createView()
+            )
+        );
+    }
+    
+    /**
+     * Handle the removal of a user role
+     *
+     * @param integer $id User id
+     */
+    public function deleteUserRoleAction($id) {
+        
+        // Retrieve community ID from session
+        $communityId = $this->get('session')->get('community');
+        if (!isset($communityId)) {
+            return $this->redirect($this->generateUrl('welcome'));
+        }
+        
+        $rolRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Roles');
+        $role = $rolRepo->find($id);
+        $username = $role->getUser()->getUsername();
+
+        // Forbid the removal of the last admin user for the community
+        $adminUsers = $rolRepo->listAllAdminUsersByCommunity($communityId);
+        if (count($adminUsers) == 1) {
+            $onlyAdminUser = array_shift($adminUsers);
+            if ($onlyAdminUser->getId() == $id) {
+                $this->get('session')->getFlashBag()->add('warning', 'Impossible de supprimer l\'utilisateur '.$username.' car c\'est le seul administrateur pour cette communauté.');
+                $this->get('session')->set('activeTab', 'users');
+                return $this->redirect($this->generateUrl('admin_home'));
+            }
+        }
+        
+        // Suppression du user role en BDD
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($role);
+        $em->flush();
+        
+        // Redirection sur la page d'admin avec gestion du message d'info
+        $this->get('session')->getFlashBag()->add('success', 'L\'utilisateur '.$username.' a bien été supprimé de cette communauté.');
+        $this->get('session')->set('activeTab', 'users');
+        return $this->redirect($this->generateUrl('admin_home'));
+    }
+    
     /***********************************
      *         ADMIN - FINANCES        *
      ***********************************/
@@ -596,8 +850,30 @@ class AdminController extends Controller
      * @param Request $request
      */
     public function addTransactionAction(Request $request) {
-		$transaction = new Transaction();
-		$trnForm = $this->createForm(TransactionType::class, $transaction);
+		
+        // Retrieve community ID from session
+        $communityId = $this->get('session')->get('community');
+        if (!isset($communityId)) {
+            return $this->redirect($this->generateUrl('welcome'));
+        }
+
+        $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
+        $players = $plrRepo->findByCommunity($communityId);
+        
+        // Check that at least 2 players have been defined for this community
+        if (count($players) < 2) {
+            // Redirection to admin home page with a warning message
+			$this->get('session')->getFlashBag()->add('warning', 'Impossible d\'enregistrer une transaction tant qu\'il n\'y a pas au moins 2 joueurs définis dans la communauté.');
+			$this->get('session')->set('activeTab', 'finance');
+			return $this->redirect($this->generateUrl('admin_home'));
+        }
+
+        $transaction = new Transaction();
+        // Pass the community ID to the form to only allow transactions between community players
+        $formOptions = array(
+            "communityId" => $communityId
+        );
+		$trnForm = $this->createForm(TransactionType::class, $transaction, $formOptions);
 		
 		$trnForm->handleRequest($request);
 		if ($trnForm->isSubmitted() && $trnForm->isValid()) {
@@ -641,7 +917,13 @@ class AdminController extends Controller
      * @param integer $id Transaction id
      */
     public function editTransactionAction(Request $request, $id) {
-		$trnRepo = $this->getDoctrine()->getRepository(Transaction::class);
+		
+	    	// Retrieve community ID from session
+	    	$communityId = $this->get('session')->get('community');
+	    	if (!isset($communityId)) {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
+    		$trnRepo = $this->getDoctrine()->getRepository(Transaction::class);
 		
 		$transaction = $trnRepo->find($id);
 		$previousAmount = $transaction->getAmount();
@@ -721,7 +1003,14 @@ class AdminController extends Controller
      * @param integer $id Transaction id
      */
     public function deleteTransactionAction($id) {
-        $trnRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Transaction');
+        
+	    	// Retrieve community ID from session
+	    	$communityId = $this->get('session')->get('community');
+	    	if (!isset($communityId)) {
+	    		return $this->redirect($this->generateUrl('welcome'));
+	    	}
+    	
+    		$trnRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Transaction');
         $transaction = $trnRepo->find($id);
 
         $em = $this->getDoctrine()->getManager();

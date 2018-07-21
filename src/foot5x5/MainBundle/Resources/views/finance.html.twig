@@ -3,12 +3,18 @@
 {% block title %}Finances{% endblock %}
 
 {% block content %}
-
-<div id="finances-container" class="col-md-12 well">
-    {% if debts is defined %}
-    <div class="col-md-7">
+{#<h2 class="text-center">{{ block('title') }}</h2>#}
+<h2><span class="label dark-blue-grad">{{ block('title') }}</span></h2>
+{% for flashMessage in app.session.flashbag.get('warning') %}
+<div class="alert alert-warning">
+    {{ flashMessage }}
+</div>
+{% endfor %}
+<div id="finances-container" class="col-sm-12 well">
+    <div class="col-sm-12 col-md-7">
         <h3><span class="label">Bilan</span></h3>
-        <div class="col-md-6">
+        {% if debts %}
+        <div id="finances-debts" class="col-sm-6">
             <table class="table table-striped table-bordered table-condensed">
                 <thead class="dark-blue-grad">
                     <tr>
@@ -18,18 +24,18 @@
                 <tbody>
                 {% for player in debts %}
                     <tr>
-                        <td>{{ player.name }}</td>
-                        <td class="col-md-4 text-center">{{ player.cashBalance }} €</td>
+                        <td class="col-xs-8">{{ player.name }}</td>
+                        <td class="col-xs-4 text-center">{{ player.cashBalance }} €</td>
                     </tr>
                 {% endfor %}
                     <tr id="finances-totalDebts">
-                        <td>TOTAL :</td>
-                        <td class="col-md-4 text-center">{{ totalDebts.total }} €</td>
+                        <td class="col-xs-8">TOTAL :</td>
+                        <td class="col-xs-4 text-center">{{ totalDebts.total }} €</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="col-md-6">
+        <div id="finances-credits" class="col-sm-6">
             <table class="table table-striped table-bordered table-condensed">
                 <thead class="dark-blue-grad">
                     <tr>
@@ -39,38 +45,45 @@
                 <tbody>
                 {% for player in credits %}
                     <tr>
-                        <td>{{ player.name }}</td>
-                        <td class="col-md-4 text-center">{{ player.cashBalance }} €</td>
+                        <td class="col-xs-8">{{ player.name }}</td>
+                        <td class="col-xs-4 text-center">{{ player.cashBalance }} €</td>
                     </tr>
                 {% endfor %}
                     <tr id="finances-totalCredits">
                         <td>TOTAL :</td>
-                        <td class="col-md-4 text-center">{{ totalCredits.total }} €</td>
+                        <td class="col-xs-4 text-center">{{ totalCredits.total }} €</td>
                     </tr>
                 </tbody>
             </table>
         </div>
+        {% else %}
+        <div class="alert alert-success">Aucune dette ou avoir en cours dans cette communauté! Bravo! :)</div>
+        {% endif %}
     </div>
-    <div class="col-md-5">
+    <div id="finances-transactions" class="col-sm-12 col-md-5">
         <h3><span class="label">Dernières Transactions</span></h3>
+        {% if transactions %}
         <table class="table table-striped table-bordered table-condensed">
-                <thead class="dark-blue-grad">
-                    <tr>
-                        <th class="col-md-3">Date</th>
-                        <th class="col-md-3">Donneur</th>
-                        <th class="col-md-3">Receveur</th>
-                        <th class="col-md-3 text-center">Montant</th>
-                    </tr>
-                </thead>
-                {% for tran in transactions %}
+            <thead class="dark-blue-grad">
                 <tr>
-                    <td class="col-md-3">{{ tran.date|date('d/m/Y') }}</a></td>
-                    <td class="col-md-3">{{ tran.giver.name }}</a></td>
-                    <td class="col-md-3">{{ tran.receiver.name }}</a></td>
-                    <td class="col-md-3 text-center">{{ tran.amount }} €</a></td>
+                    <th class="col-xs-3">Date</th>
+                    <th class="col-xs-3">Donneur</th>
+                    <th class="col-xs-3">Receveur</th>
+                    <th class="col-xs-2 text-center">Montant</th>
                 </tr>
-                {% endfor %}
-            </table>
-    {% endif %}
+            </thead>
+            {% for tran in transactions %}
+            <tr>
+                <td class="col-xs-3">{{ tran.date|date('d/m/Y') }}</td>
+                <td class="col-xs-3">{{ tran.giver.name }}</td>
+                <td class="col-xs-3">{{ tran.receiver.name }}</td>
+                <td class="col-xs-2 text-center">{{ tran.amount }} €</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div class="alert alert-warning">Aucune transaction n'a été enregistrée pour cette communauté.</div>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

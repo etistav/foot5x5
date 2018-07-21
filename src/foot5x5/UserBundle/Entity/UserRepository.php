@@ -12,4 +12,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
+	public function findByCommunity($communityId)
+	{
+
+		$qb = $this->createQueryBuilder('usr')
+			->leftJoin('usr.userRoles', 'roles')
+			->where('roles.community = :cmnId')
+			->setParameter('cmnId', $communityId)
+			->addOrderBy('usr.username', 'ASC');
+		
+		return $qb->getQuery()->getResult();
+	}
 }

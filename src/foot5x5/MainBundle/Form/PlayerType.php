@@ -3,6 +3,7 @@
 
 namespace foot5x5\MainBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\DataTransformer\IntegerToLocalizedStringTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -48,6 +49,20 @@ class PlayerType extends AbstractType
                 'label' => 'En activité',
                 'required' => false
             ))
+            ->add('user', EntityType::Class, array(
+                'class' => 'foot5x5UserBundle:User',
+                'label' => 'User',
+                'query_builder' => function(\Doctrine\ORM\EntityRepository $er) use($options) {
+                    return $er->createQueryBuilder('usr')
+                    ->join('usr.userRoles', 'rol')
+                    ->where('rol.community = :cmnId')
+                    ->setParameter('cmnId', $options['communityId'])
+                    ->addOrderBy('usr.username', 'ASC');
+                },
+                'choice_label' => 'username',
+                'multiple' => false,
+                'required' => false
+            ))
         ;
     }
     
@@ -57,7 +72,8 @@ class PlayerType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'foot5x5\MainBundle\Entity\Player'
+            'data_class' => 'foot5x5\MainBundle\Entity\Player',
+            'communityId' => 0
         ));
     }
 

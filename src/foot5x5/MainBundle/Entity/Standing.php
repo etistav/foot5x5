@@ -3,6 +3,9 @@
 namespace foot5x5\MainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
  * Standing
@@ -30,6 +33,14 @@ class Standing
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
+    /**
+     * @var Community
+     * 
+     * @ManyToOne(targetEntity="foot5x5\MainBundle\Entity\Community", inversedBy="standings")
+     * @JoinColumn(name="std_communityId", referencedColumnName="cmn_id")
+     */
+    private $community;
 
     /**
      * @var integer
@@ -219,5 +230,28 @@ class Standing
     public function getNbPlayers()
     {
         return $this->nbPlayers;
+    }
+
+    /**
+     * Set community
+     *
+     * @param integer $community
+     * @return Standing
+     */
+    public function setCommunity($community)
+    {
+        $this->community = $community;
+
+        return $this;
+    }
+
+    /**
+     * Get community
+     *
+     * @return integer 
+     */
+    public function getCommunity()
+    {
+        return $this->community;
     }
 }

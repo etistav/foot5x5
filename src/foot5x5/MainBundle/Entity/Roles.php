@@ -3,6 +3,7 @@
 namespace foot5x5\MainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use foot5x5\UserBundle\Entity\User;
 
 /**
  * Roles
@@ -22,27 +23,35 @@ class Roles
     private $id;
 
     /**
-     * @var integer
+     * @var Community
      *
      * @ORM\ManyToOne(targetEntity="foot5x5\MainBundle\Entity\Community")
      * @ORM\JoinColumn(name="rol_communityId", referencedColumnName="cmn_id", nullable=false)
      */
-    private $communityId;
+    private $community;
 
     /**
-     * @var integer
+     * @var User
      *
-     * @ORM\ManyToOne(targetEntity="foot5x5\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="foot5x5\UserBundle\Entity\User", inversedBy="userRoles")
      * @ORM\JoinColumn(name="rol_userId", referencedColumnName="usr_id", nullable=false)
      */
-    private $userId;
+    private $user;
 
     /**
-     * @var array
+     * @var string
      *
-     * @ORM\Column(name="rol_roles", type="array")
+     * @ORM\Column(name="rol_role", type="string")
      */
-    private $roles;
+    private $role;
+
+    /**
+     * @var Player
+     *
+     * @ORM\OneToOne(targetEntity="foot5x5\MainBundle\Entity\Player")
+     * @ORM\JoinColumn(name="rol_playerId", referencedColumnName="plr_id", nullable=true)
+     */
+    private $player;
 
 
     /**
@@ -56,71 +65,95 @@ class Roles
     }
 
     /**
-     * Set communityId
+     * Set community
      *
-     * @param integer $communityId
+     * @param Community $community
      * @return Roles
      */
-    public function setCommunityId($communityId)
+    public function setCommunity($community)
     {
-        $this->communityId = $communityId;
+        $this->community = $community;
 
         return $this;
     }
 
     /**
-     * Get communityId
+     * Get community
      *
-     * @return integer 
+     * @return Community 
      */
-    public function getCommunityId()
+    public function getCommunity()
     {
-        return $this->communityId;
+        return $this->community;
     }
 
     /**
-     * Set userId
+     * Set user
      *
-     * @param integer $userId
+     * @param User $user
      * @return Roles
      */
-    public function setUserId($userId)
+    public function setUser($user)
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get userId
+     * Get user
      *
-     * @return integer 
+     * @return User 
      */
-    public function getUserId()
+    public function getUser()
     {
-        return $this->userId;
+        return $this->user;
     }
 
+
     /**
-     * Set roles
+     * Set role
      *
-     * @param array $roles
+     * @param string $role
      * @return Roles
      */
-    public function setRoles($roles)
+    public function setRole($role)
     {
-        $this->roles = $roles;
+        $this->role = $role;
 
         return $this;
     }
 
     /**
-     * Get roles
+     * Get role
      *
-     * @return array 
+     * @return string 
      */
-    public function getRoles()
+    public function getRole()
     {
-        return $this->roles;
+        return $this->role;
+    }
+
+    /**
+     * Set player
+     *
+     * @param \foot5x5\MainBundle\Entity\Player $player
+     * @return Roles
+     */
+    public function setPlayer(\foot5x5\MainBundle\Entity\Player $player = null)
+    {
+        $this->player = $player;
+
+        return $this;
+    }
+
+    /**
+     * Get player
+     *
+     * @return \foot5x5\MainBundle\Entity\Player 
+     */
+    public function getPlayer()
+    {
+        return $this->player;
     }
 }

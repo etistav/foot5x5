@@ -13,13 +13,15 @@ use Doctrine\ORM\NoResultException;
  */
 class MatchPlayerRepository extends EntityRepository
 {
-	public function listAllForStanding($year, $trimester) {
+	public function listAllForStanding(Community $community, $year, $trimester) {
         if ($trimester > 0) {
             // Trimestre
             $qb = $this->createQueryBuilder('mpl')
                 ->Join('mpl.match', 'res')
                 ->addSelect('res');
-            $qb->where('res.year = :year')
+            $qb->where('res.community = :community')
+                ->setParameter('community', $community)
+                ->andWhere('res.year = :year')
                 ->setParameter('year', $year)
                 ->andWhere('res.trimester = :trim')
                 ->setParameter('trim', $trimester)
@@ -30,7 +32,9 @@ class MatchPlayerRepository extends EntityRepository
             $qb = $this->createQueryBuilder('mpl')
                 ->Join('mpl.match', 'res')
                 ->addSelect('res');
-            $qb->where('res.year = :year')
+            $qb->where('res.community = :community')
+                ->setParameter('community', $community)
+                ->andWhere('res.year = :year')
                 ->setParameter('year', $year)
                 ->addOrderBy('mpl.player', 'ASC')
                 ->addOrderBy('res.trimester', 'ASC')
@@ -179,7 +183,7 @@ class MatchPlayerRepository extends EntityRepository
         try {
             $lastMatch = $qb->getQuery()->getSingleResult();
         } catch (NoResultException $e) {
-            return "-";
+            return NULL;
         }
         return $lastMatch->getMatch();
     }

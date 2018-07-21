@@ -1,13 +1,13 @@
 {% extends "foot5x5MainBundle::layout.html.twig" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}{{app.session.get('community_name')}}{% endblock %}
 
 {% block content %}
 
-<div id="results-container" class="col-md-12">
-    <div class="col-md-6">
+<div id="results-container" class="col-xs-12">
+    <div class="col-lg-6 col-md-8 col-sm-10">
         <h2><span class="label dark-blue-grad">Dernier match</span></h2>
-        {% if lastResult is defined %}
+        {% if lastResult is not null %}
         <table id="result-table" class="table table-bordered table-condensed">
             <thead class="dark-blue-grad">
                 <tr>
@@ -24,12 +24,12 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="col-md-2 result-teamA">
+                    <td class="col-md-3 col-sm-4 col-xs-3 result-teamA">
                         <dl>
                         {% for matchPlayer in lastResult.matchPlayers %}
                             {% if matchPlayer.match.id == lastResult.id and matchPlayer.team == "A" %}
                             <a data-popup-open="popup-{{ matchPlayer.player.id }}" href="#">
-                                <dt class="well result-matchPlayers" playerid="{{ matchPlayer.player.id }}">
+                                <dt>
                                 {#
                                 <img src="{{ asset("bundles/foot5x5main/images/icon-user-default.png") }}" alt="{{ matchPlayer.player.name }}" />
                                 #}
@@ -45,23 +45,23 @@
                         {% endfor %}
                         </dl>
                     </td>
-                    <td {% if lastResult.scoreTeamA > lastResult.scoreTeamB %} class="col-md-1 result-score result-victory" {% endif %}
-                        {% if lastResult.scoreTeamA == lastResult.scoreTeamB %} class="col-md-1 result-score result-draw" {% endif %}
-                        {% if lastResult.scoreTeamA < lastResult.scoreTeamB %} class="col-md-1 result-score result-defeat" {% endif %}>
+                    <td {% if lastResult.scoreTeamA > lastResult.scoreTeamB %} class="col-xs-1 result-score result-victory" {% endif %}
+                        {% if lastResult.scoreTeamA == lastResult.scoreTeamB %} class="col-xs-1 result-score result-draw" {% endif %}
+                        {% if lastResult.scoreTeamA < lastResult.scoreTeamB %} class="col-xs-1 result-score result-defeat" {% endif %}>
                         {{ lastResult.scoreTeamA }}
                     </td>
-                    <td class="col-md-1 result-score">-</td>
-                    <td {% if lastResult.scoreTeamA > lastResult.scoreTeamB %} class="col-md-1 result-score result-defeat" {% endif %}
-                        {% if lastResult.scoreTeamA == lastResult.scoreTeamB %} class="col-md-1 result-score result-draw" {% endif %}
-                        {% if lastResult.scoreTeamA < lastResult.scoreTeamB %} class="col-md-1 result-score result-victory" {% endif %}>
+                    <td class="col-xs-1 result-score">-</td>
+                    <td {% if lastResult.scoreTeamA > lastResult.scoreTeamB %} class="col-xs-1 result-score result-defeat" {% endif %}
+                        {% if lastResult.scoreTeamA == lastResult.scoreTeamB %} class="col-xs-1 result-score result-draw" {% endif %}
+                        {% if lastResult.scoreTeamA < lastResult.scoreTeamB %} class="col-xs-1 result-score result-victory" {% endif %}>
                         {{ lastResult.scoreTeamB }}
                     </td>
-                    <td class="col-md-2 result-teamB">
+                    <td class="col-md-3 col-sm-4 col-xs-3 result-teamB">
                         <dl>
                         {% for matchPlayer in lastResult.matchPlayers %}
                             {% if matchPlayer.match.id == lastResult.id and matchPlayer.team == "B" %}
                             <a data-popup-open="popup-{{ matchPlayer.player.id }}" href="#">
-                                <dt class="well">
+                                <dt>
                                     <span>{{ matchPlayer.player.name }}</span>
                                     {% if matchPlayer.player.user is null %}
                                         <img src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_40') }}" alt="profilePic_default.png" />
@@ -82,9 +82,10 @@
         {% endif %}
     </div>
 </div>
-<div id="standing-container" class="col-md-12">
-    <div class="col-lg-10 table-responsive">
-        <h2><span class="label dark-blue-grad">Classement en cours</span></h2>
+<div id="standing-container" class="col-xs-12">
+    <h2><span class="label dark-blue-grad">Classement en cours</span></h2>
+    <div class="table-responsive">    
+    {% if lastResult is not null %}
         {% if lastStanding.rankings %}
         <table id="standing-table" class="table table-striped table-bordered table-condensed">
             <thead class="dark-blue-grad">
@@ -136,59 +137,64 @@
         {% else %}
             <div class="alert alert-warning">Aucun classement trouvé pour le trimestre T0{{ lastStanding.trimester }} {{ lastStanding.year }}</div>
         {% endif %}
+    {% else %}
+        <div class="alert alert-warning">Aucun classement trouvé pour le trimestre en cours.</div>
+    {% endif %}
     </div>
 </div>
 
-{% for matchPlayer in lastResult.matchPlayers %}
-<div class="popup" data-popup="popup-{{ matchPlayer.player.id }}">
-    <div class="popup-inner popup-mini-inner">
-        <div class="popup-inner-scroll">
-            <div class="popup-player-header">
-                {% if matchPlayer.player.user is null %}
-                    <img class="popup-player-pic" src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_200') }}" alt="{{ matchPlayer.player.name }}" />
-                {% else %}
-                    <img class="popup-player-pic" src="{{ matchPlayer.player.user.pictureWebPath | imagine_filter('avatar_200') }}" alt="{{ matchPlayer.player.name }}" />
-                {% endif %}
-                <div class="popup-player-info">
-                    <h2><span>{{ matchPlayer.player.name }}</span></h2>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td class="popup-player-label">Age :</td>
-                                {% if matchPlayer.player.user is not null %}<td>{{ matchPlayer.player.user.age }} ans</td>
-                                {% else %}<td>N.C.</td>
-                                {% endif %}
-                            </tr>
-                            <tr>
-                                <td class="popup-player-label">Date de naissance :</td>
-                                {% if matchPlayer.player.user is not null %}<td>{{ matchPlayer.player.user.birthday|date('d/m/Y') }}</td>
-                                {% else %}<td>N.C.</td>
-                                {% endif %}
-                            </tr>
-                            <tr>
-                                <td class="popup-player-label">Classement actuel :</td>
-                                <td>{{ ranks[matchPlayer.player.id] }}</td>
-                            </tr>
-                            <tr>
-                                <td class="popup-player-label">Série en cours :</td>
-                                <td>{{ currentForms[matchPlayer.player.id] }}
-                                {% if currentSeries[matchPlayer.player.id] != "" %} ({{ currentSeries[matchPlayer.player.id] }})
-                                {% else %}
-                                {% endif %}</td>
-                            </tr>
-                            <tr>
-                                <td class="popup-player-label">Bilan complet :</td>
-                                <td>{{ globalResults[matchPlayer.player.id] }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+{% if lastResult is not null %}
+    {% for matchPlayer in lastResult.matchPlayers %}
+    <div class="popup" data-popup="popup-{{ matchPlayer.player.id }}">
+        <div class="popup-inner popup-mini-inner">
+            <div class="popup-inner-scroll">
+                <div class="popup-player-header">
+                    {% if matchPlayer.player.user is null %}
+                        <img class="popup-player-pic" src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_200') }}" alt="{{ matchPlayer.player.name }}" />
+                    {% else %}
+                        <img class="popup-player-pic" src="{{ matchPlayer.player.user.pictureWebPath | imagine_filter('avatar_200') }}" alt="{{ matchPlayer.player.name }}" />
+                    {% endif %}
+                    <div class="popup-player-info">
+                        <h2><span>{{ matchPlayer.player.name }}</span></h2>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="popup-player-label">Age :</td>
+                                    {% if matchPlayer.player.user is not null %}<td>{{ matchPlayer.player.user.age }} ans</td>
+                                    {% else %}<td>N.C.</td>
+                                    {% endif %}
+                                </tr>
+                                <tr>
+                                    <td class="popup-player-label">Date de naissance :</td>
+                                    {% if matchPlayer.player.user is not null %}<td>{{ matchPlayer.player.user.birthday|date('d/m/Y') }}</td>
+                                    {% else %}<td>N.C.</td>
+                                    {% endif %}
+                                </tr>
+                                <tr>
+                                    <td class="popup-player-label">Classement actuel :</td>
+                                    <td>{{ ranks[matchPlayer.player.id] }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="popup-player-label">Série en cours :</td>
+                                    <td>{{ currentForms[matchPlayer.player.id] }}
+                                    {% if currentSeries[matchPlayer.player.id] != "" %} ({{ currentSeries[matchPlayer.player.id] }})
+                                    {% else %}
+                                    {% endif %}</td>
+                                </tr>
+                                <tr>
+                                    <td class="popup-player-label">Bilan complet :</td>
+                                    <td>{{ globalResults[matchPlayer.player.id] }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+                <a class="popup-close" data-popup-close="popup-{{ matchPlayer.player.id }}" href="#">x</a>
             </div>
-            <a class="popup-close" data-popup-close="popup-{{ matchPlayer.player.id }}" href="#">x</a>
         </div>
     </div>
-</div>
-{% endfor %}
+    {% endfor %}
+{% endif %}
 
 <script>
     $(function() {

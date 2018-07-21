@@ -3,10 +3,10 @@ foot5x5_main_homepage:
     defaults:
         _controller: foot5x5MainBundle:Main:index
 
-login:
-    path:     /login
+home:
+    path:     /home
     defaults:
-        _controller: foot5x5MainBundle:Main:login
+        _controller: foot5x5MainBundle:Main:home
 
 register:
     path:     /register
@@ -19,7 +19,27 @@ register_check:
 welcome:
     path:     /welcome
     defaults:
-        _controller: foot5x5UserBundle:Registration:welcome
+        _controller: foot5x5MainBundle:Main:welcome
+
+create_community:
+    path:     /community/create
+    defaults:
+        _controller: foot5x5MainBundle:Community:create
+
+join_community:
+    path:     /community/join
+    defaults:
+        _controller: foot5x5MainBundle:Community:join
+
+select_community:
+    path:     /community/select/{id}
+    defaults:
+        _controller: foot5x5MainBundle:Community:select
+
+community_home:
+    path:     /community/home
+    defaults:
+        _controller: foot5x5MainBundle:Community:home
 
 myprofile:
     path:     /profile
@@ -32,49 +52,49 @@ edit_pwd:
         _controller: foot5x5MainBundle:Main:editPwd
 
 results:
-    path:     /results
+    path:     /community/results
     defaults:
-        _controller: foot5x5MainBundle:Main:results
+        _controller: foot5x5MainBundle:Community:results
 
 standing:
-    path:     /standing/{id}
+    path:     /community/standing/{id}
     defaults:
         _controller: foot5x5MainBundle:Main:standing
 
 standings:
-    path:     /standings
+    path:     /community/standings
     defaults:
-        _controller: foot5x5MainBundle:Main:standings
+        _controller: foot5x5MainBundle:Community:standings
 
 players:
-    path:     /players
+    path:     /community/players
     defaults:
-        _controller: foot5x5MainBundle:Main:players
+        _controller: foot5x5MainBundle:Community:players
 
 notes:
-    path:     /notes
+    path:     /community/notes
     defaults:
-        _controller: foot5x5MainBundle:Main:notes
+        _controller: foot5x5MainBundle:Community:notes
 
 edit_note:
-    path:     /note/{id}/edit
+    path:     /community/note/{id}/edit
     defaults:
-        _controller: foot5x5MainBundle:Main:editNote
+        _controller: foot5x5MainBundle:Community:editNote
 
 delete_note:
-    path:     /note/{id}/delete
+    path:     /community/note/{id}/delete
     defaults:
-        _controller: foot5x5MainBundle:Main:deleteNote
+        _controller: foot5x5MainBundle:Community:deleteNote
 
 random_draw:
-    path:     /random
+    path:     /community/random
     defaults:
-        _controller: foot5x5MainBundle:Main:randomDraw
+        _controller: foot5x5MainBundle:Community:randomDraw
 
 finances:
-    path:     /finances
+    path:     /community/finances
     defaults:
-        _controller: foot5x5MainBundle:Main:finances
+        _controller: foot5x5MainBundle:Community:finances
 
 admin_home:
     path:     /admin
@@ -126,20 +146,30 @@ update_player_balance:
     defaults:
         _controller: foot5x5MainBundle:Admin:updatePlayerBalance
 
-add_user:
-    path:     /admin/user/add
-    defaults:
-        _controller: foot5x5MainBundle:Admin:addUser
+# add_user:
+#    path:     /admin/user/add
+#    defaults:
+#        _controller: foot5x5MainBundle:Admin:addUser
 
-edit_user:
-    path:     /admin/user/{id}/edit
-    defaults:
-        _controller: foot5x5MainBundle:Admin:editUser
+# edit_user:
+#    path:     /admin/user/{id}/edit
+#    defaults:
+#        _controller: foot5x5MainBundle:Admin:editUser
 
-delete_user:
-    path:     /admin/user/{id}/delete
+edit_user_role:
+    path:     /admin/user/{id}/edit_role
     defaults:
-        _controller: foot5x5MainBundle:Admin:deleteUser
+        _controller: foot5x5MainBundle:Admin:editUserRole
+
+# delete_user:
+#    path:     /admin/user/{id}/delete
+#    defaults:
+#        _controller: foot5x5MainBundle:Admin:deleteUser
+        
+delete_user_role:
+    path:     /admin/user/{id}/delete_user_role
+    defaults:
+        _controller: foot5x5MainBundle:Admin:deleteUserRole
 
 add_transaction:
     path:     /admin/transaction/add

@@ -3,6 +3,7 @@
 namespace foot5x5\MainBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
 use foot5x5\UserBundle\Entity\User;
 
 /**
@@ -13,63 +14,95 @@ use foot5x5\UserBundle\Entity\User;
  */
 class PlayerRepository extends EntityRepository
 {
-	public function findAll() {
-    	$qb = $this->createQueryBuilder('plr')
-    		->addOrderBy('plr.name', 'ASC');
+	public function findByCommunity($communityId)
+	{
+		$qb = $this->createQueryBuilder('plr')
+			->where('plr.community = :cmnId')
+			->setParameter('cmnId', $communityId)
+			->addOrderBy('plr.name', 'ASC');
+		
+		return $qb->getQuery()->getResult();
+	}
 
-    	return $qb->getQuery()->getResult();
-    }
-
-    public function findAllActives() {
+	public function findAllActives($communityId) {
         $isActive = 1;
         $qb = $this->createQueryBuilder('plr')
             ->where('plr.isActive = :isActive')
             ->setParameter('isActive', $isActive)
+            ->andWhere('plr.community = :cmnId')
+            ->setParameter('cmnId', $communityId)
             ->addOrderBy('plr.name', 'ASC');
 
         return $qb->getQuery()->getResult();
     }
 
-    public function findNotesFromUser(User $user) {
-        $qb = $this->createQueryBuilder('plr')
-            ->leftJoin('plr.notes', 'notes', 'WITH', 'notes.evaluator = :user')
-            ->addSelect('notes')
-            ->setParameter('user', $user)
-            ->addOrderBy('plr.name', 'ASC');
-        return $qb->getQuery()->getResult();
+	public function findNotesFromUser($communityId, User $user)
+	{
+		$qb = $this->createQueryBuilder('plr')
+			->where('plr.community = :cmnId')
+			->setParameter('cmnId', $communityId)
+			->leftJoin('plr.notes', 'notes', 'WITH', 'notes.evaluator = :user')
+			->addSelect('notes')
+			->setParameter('user', $user)
+			->addOrderBy('plr.name', 'ASC');
+		return $qb->getQuery()->getResult();
+	}
+
+	public function findAllWithDebts($communityId)
+	{
+		$qb = $this->createQueryBuilder('plr')
+			->where('plr.cashBalance < 0')
+			->andWhere('plr.community = :cmnId')
+			->setParameter('cmnId', $communityId)
+			->addOrderBy('plr.cashBalance', 'ASC')
+			->addOrderBy('plr.name', 'ASC');
+		
+		return $qb->getQuery()->getResult();
     }
 
-    public function findAllWithDebts() {
-        $qb = $this->createQueryBuilder('plr')
-            ->where('plr.cashBalance < 0')
-            ->addOrderBy('plr.cashBalance', 'ASC')
-            ->addOrderBy('plr.name', 'ASC');
-
-        return $qb->getQuery()->getResult();
+	public function calcTotalDebts($communityId)
+	{
+		$qb = $this->createQueryBuilder('plr')
+			->addSelect("sum(plr.cashBalance) AS total")
+			->where('plr.cashBalance < 0')
+			->andWhere('plr.community = :cmnId')
+			->setParameter('cmnId', $communityId);
+		
+		try {
+			$totalDebts = $qb->getQuery()->getSingleResult();
+		} catch (NoResultException $e) {
+			return 0;
+		}
+		
+		return $totalDebts;
     }
 
-    public function calcTotalDebts() {
-        $qb = $this->createQueryBuilder('plr')
-            ->addSelect("sum(plr.cashBalance) AS total")
-            ->where('plr.cashBalance < 0');
-
-        return $qb->getQuery()->getSingleResult();
+	public function findAllWithCredits($communityId)
+	{
+		$qb = $this->createQueryBuilder('plr')
+			->where('plr.cashBalance > 0')
+			->andWhere('plr.community = :cmnId')
+			->setParameter('cmnId', $communityId)
+			->addOrderBy('plr.cashBalance', 'DESC')
+			->addOrderBy('plr.name', 'ASC');
+		
+		return $qb->getQuery()->getResult();
     }
 
-    public function findAllWithCredits() {
-        $qb = $this->createQueryBuilder('plr')
-            ->where('plr.cashBalance > 0')
-            ->addOrderBy('plr.cashBalance', 'DESC')
-            ->addOrderBy('plr.name', 'ASC');
-
-        return $qb->getQuery()->getResult();
-    }
-
-    public function calcTotalCredits() {
-        $qb = $this->createQueryBuilder('plr')
-            ->addSelect("sum(plr.cashBalance) AS total")
-            ->where('plr.cashBalance > 0');
-
-        return $qb->getQuery()->getSingleResult();
+	public function calcTotalCredits($communityId)
+	{
+		$qb = $this->createQueryBuilder('plr')
+			->addSelect("sum(plr.cashBalance) AS total")
+			->where('plr.cashBalance > 0')
+			->andWhere('plr.community = :cmnId')
+			->setParameter('cmnId', $communityId);
+		
+		try {
+			$totalCredits = $qb->getQuery()->getSingleResult();
+		} catch (NoResultException $e) {
+			return 0;
+		}
+		
+		return $totalCredits;
     }
 }

@@ -4,6 +4,8 @@ namespace foot5x5\MainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
  * Player
@@ -23,6 +25,7 @@ class Player
         $this->valPhy = 5.0;
         $this->updateValAvg();
         $this->cashBalance = 0;
+        $this->isActive = true;
         // $this->notes = new ArrayCollection();
     }
 
@@ -34,6 +37,14 @@ class Player
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
+    /**
+     * @var Community
+     *
+     * @ManyToOne(targetEntity="foot5x5\MainBundle\Entity\Community", inversedBy="players")
+     * @JoinColumn(name="plr_communityId", referencedColumnName="cmn_id")
+     */
+    private $community;
 
     /**
      * @var string
@@ -90,9 +101,8 @@ class Player
     private $isActive;
 
     /**
-     * @ORM\OneToOne(targetEntity="foot5x5\UserBundle\Entity\User",
-     *     mappedBy="player")
-     * @Assert\Valid()
+     * @ORM\ManyToOne(targetEntity="foot5x5\UserBundle\Entity\User", inversedBy="players")
+     * @ORM\JoinColumn(name="plr_userId", referencedColumnName="usr_id", nullable=true)
      */
     private $user;
 
@@ -356,5 +366,28 @@ class Player
             $this->cashBalance -= $previousAmount;
             $this->cashBalance += $amount;
         }
+    }
+
+    /**
+     * Set community
+     *
+     * @param integer $community
+     * @return Player
+     */
+    public function setCommunity($community)
+    {
+        $this->community = $community;
+
+        return $this;
+    }
+
+    /**
+     * Get community
+     *
+     * @return integer 
+     */
+    public function getCommunity()
+    {
+        return $this->community;
     }
 }

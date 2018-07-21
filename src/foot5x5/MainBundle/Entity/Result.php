@@ -5,6 +5,9 @@ namespace foot5x5\MainBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
  * Result
@@ -34,6 +37,14 @@ class Result
      */
     private $id;
 
+    /**
+     * @var Community
+     * 
+     * @ManyToOne(targetEntity="foot5x5\MainBundle\Entity\Community", inversedBy="results")
+     * @JoinColumn(name="mat_communityId", referencedColumnName="cmn_id")
+     */
+    private $community;
+    
     /**
      * @var integer
      *
@@ -278,5 +289,28 @@ class Result
     public function getMatchPlayers()
     {
         return $this->matchPlayers;
+    }
+
+    /**
+     * Set community
+     *
+     * @param \foot5x5\MainBundle\Entity\Community $community
+     * @return Result
+     */
+    public function setCommunity(\foot5x5\MainBundle\Entity\Community $community)
+    {
+        $this->community = $community;
+
+        return $this;
+    }
+
+    /**
+     * Get community
+     *
+     * @return \foot5x5\MainBundle\Entity\Community 
+     */
+    public function getCommunity()
+    {
+        return $this->community;
     }
 }

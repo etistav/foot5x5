@@ -15,9 +15,11 @@
     {{ flashMessage }}
 </div>
 {% endfor %}
+{% if players %}
 <div class="col-md-12" id="random-container">
 {{ form_start(randomDrawForm) }}
-    <div class="col-xs-4" id="random-select-section">
+    <div class="col-md-4 col-sm-12" id="random-select-section">
+        <h3>Liste des joueurs actifs</h3>
         <ol id="players-selectable">
             {% for player in players %}
             <li {% if selectedPlayersList %}
@@ -36,7 +38,7 @@
             <input type="submit" class="btn btn-primary dark-blue-grad" id="random-draw-submit" value="Tirage" />
         </div>
     </div>
-    <div class=" col-xs-8" id="random-teams-section">
+    <div class="col-md-7 col-xs-12" id="random-teams-section">
         <div class="col-xs-6" id="random-teamA" >
             <h2><span class="label dark-blue-grad">Équipe A</span></h2>
             <dl id="random-list">
@@ -64,7 +66,7 @@
                 {% endif %}
             </dl>
         </div>
-        <div class="col-md-6" id="random-teamB" >
+        <div class="col-xs-6" id="random-teamB" >
             <h2><span class="label dark-blue-grad">Équipe B</span></h2>
             <dl id="random-list">
                 {% if matchPlayers %}
@@ -94,6 +96,7 @@
     </div>
 </div>
 {{ form_end(randomDrawForm) }}
+{% endif %}
 <script>
     var _selectRange = false, _deselectQueue = [];
     $(function() {

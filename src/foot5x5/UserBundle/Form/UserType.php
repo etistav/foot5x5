@@ -30,14 +30,16 @@ class UserType extends AbstractType
     			->add('lastname', TextType::class, array(
     					'label' => 'Nom'
     			))
-    			->add('username', TextType::class)
+    			->add('username', TextType::class, array(
+    					'label' => 'Pseudo'
+    			))
     			->add('email', EmailType::class)
     			->add('password', RepeatedType::class, array(
     					'type'            => PasswordType::class,
     					'invalid_message' => 'The password fields must match.',
     					'options'         => array('required' => true),
-    					'first_options'   => array('label' => 'Password'),
-    					'second_options'  => array('label' => 'Repeat password'),
+    					'first_options'   => array('label' => 'Mot de passe'),
+    					'second_options'  => array('label' => 'Confirmer mot de passe'),
     			))
     			->add('birthday', BirthdayType::class, array(
     					'label' => 'Date de naissance',
@@ -67,6 +69,7 @@ class UserType extends AbstractType
     			))
     			->add('username', TextType::class)
     			->add('email', EmailType::class)
+    			/*
     			->add('roles', ChoiceType::class, array(
     					'choices' => array(
     							'Admin' => 'ROLE_ADMIN',
@@ -76,6 +79,12 @@ class UserType extends AbstractType
     					'choices_as_values' => true,
     					'required' => true,
     					'multiple' => true
+    			))
+    			*/
+    			->add('userRoles', EntityType::class, array(
+    			    'class' => 'foot5x5MainBundle:Roles',
+    			    'choice_label' => 'role',
+    			    'multiple' => false
     			))
     			->add('player', EntityType::class, array(
     					'class' => 'foot5x5MainBundle:Player',

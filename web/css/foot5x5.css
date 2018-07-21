@@ -960,23 +960,26 @@ tr#finances-totalCredits td {
 /* ------------------------- */
 #profile-container {
 	padding: 10px;
+	overflow: auto;
 }
 #profile-pic {
-	border: 2px solid #191950;
 	float: left;
-	height: 200px;
-	width: 200px;
+	width: 220px;
+	overflow: auto;
+	padding: 0;
 }
 #profile-pic img {
-	width: 100%;
+	border: 2px solid #191950;
+	height: 200px;
+	width: 200px;
 	margin-bottom: 20px;
 }
 #profile-info {
 	/* border: 1px solid #191950; */
 	float: left;
-	margin-left: 20px;
-	/* padding: 10px; */
-	width: 80%;
+	/* margin-left: 20px; */
+	padding: 0;
+	/* width: 80%; */
 }
 #profile-info h3 {
 	border-bottom: 1px solid #191950;
@@ -987,6 +990,39 @@ tr#finances-totalCredits td {
 #profile-info h3 span {
 	color: #191950;
 	padding: 0;
+}
+
+#profile-info table {
+	border-left: 5px solid #191950;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	width: 100%;
+}
+#profile-info tr {
+	line-height: 30px;
+}
+#profile-info td:not(.profile-info-label) {
+	font-weight: bold;
+}
+.profile-info-label {
+	color: #2447B2;
+	padding-right: 20px;
+	padding-left: 20px;
+	width: 200px;
+}
+
+@media (max-width: 768px) {
+	#profile-info {
+		margin-top: 10px!important;
+		margin-left: 0!important;
+		width: 100%;
+	}
+	#profile-info table {
+		border-left: 0!important;
+	}
+	.profile-info-label {
+		padding-left: 0!important;
+	}
 }
 
 /* ------------------------- */

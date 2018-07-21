@@ -491,6 +491,12 @@ table#standing-table tbody tr td div.standing-player strong {
 	height: 300px;
 	top: 120px;
 }
+.popup-upload {
+	padding: 10px;
+	height: 160px;
+	top: 120px;
+	width: 60%;
+}
 .popup-inner-scroll {
     width:100%;
     height:100%;

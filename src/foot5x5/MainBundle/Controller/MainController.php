@@ -8,6 +8,7 @@ use foot5x5\MainBundle\Entity\Roles;
 use foot5x5\UserBundle\Entity\User;
 use foot5x5\MainBundle\Form\NoteType;
 use foot5x5\MainBundle\Form\RandomDrawType;
+use foot5x5\MainBundle\Form\UploadProfilePicType;
 use foot5x5\UserBundle\Form\UserType;
 use foot5x5\UserBundle\Form\UserPwdType;
 
@@ -79,8 +80,10 @@ class MainController extends Controller
 
     /**
      * Management of the 'user profile' view
+	 *
+	 * @param Request $request
      */
-    public function profileAction() {
+    public function profileAction(Request $request) {
 
 		// Retrieve community ID from session
 		$communityId = $this->get('session')->get('community');
@@ -132,6 +135,18 @@ class MainController extends Controller
 			$nbTimesLast = $rnkRepo->howManyTimesLastForPlayer($player);
 		}
 
+		$uploadForm = $this->createForm(UploadProfilePicType::class, $user);
+	    $uploadForm->handleRequest($request);
+	    
+	    if ($uploadForm->isSubmitted() && $uploadForm->isValid()) {
+
+			// Save the user
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($user);
+			$em->flush();
+
+		}
+
         return $this->render(
             'foot5x5MainBundle::profile.html.twig',
             array(
@@ -146,7 +161,9 @@ class MainController extends Controller
                 'nbTitles' => $nbTitles,
                 'nbPodiums' => $nbPodiums,
                 'nbRelegations' => $nbRelegations,
-                'nbTimesLast' => $nbTimesLast
+                'nbTimesLast' => $nbTimesLast,
+	            'uploadForm' => $uploadForm->createView(),
+	            'buttonLabel' => 'Upload'
             )
         );
     }

@@ -19,7 +19,9 @@
 
 <div id="profile-container" class="col-md-12 well">
 	<div id="profile-pic">
-		<img src="{{ user.pictureWebPath | imagine_filter('avatar_200') }}" alt="{{ user.profilePicture }}" />
+		<a data-popup-open="popup-upload" href="#">
+			<img src="{{ user.pictureWebPath | imagine_filter('avatar_200') }}" alt="{{ user.profilePicture }}" />
+		</a>
 		<a href="{{ path('edit_pwd') }}"><button type="button" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-cog"></span> Modifier mot de passe</button></a>
 	</div>
 	<div id="profile-info">
@@ -56,5 +58,47 @@
 		<p><span class="profile-info-label">Nb fois lanterne rouge du trimestre : </span>{{ nbTimesLast }}</p>
 	</div>
 </div>
+
+<div class="popup" data-popup="popup-upload">
+	<div class="popup-inner popup-upload">
+        <div class="popup-inner-scroll">
+			<h3 class="text-center">Upload photo de profil</h3>
+			{{ form_start(uploadForm, { 'attr': {'class': 'form-horizontal'} }) }}
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-6">
+					{{ form_errors(uploadForm.file) }}
+					{{ form_widget(uploadForm.file, { 'attr':  {
+						'class': 'form-control'
+					}}) }}
+				</div>
+				<div class="col-sm-2">
+					<input type="submit" class="btn btn-primary" value="{{ buttonLabel }}" />
+				</div>
+			</div>
+			{{ form_end(uploadForm) }}
+            <a class="popup-close" data-popup-close="popup-upload" href="#">x</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function() {
+        //----- OPEN
+        $('[data-popup-open]').on('click', function(e)  {
+            var targeted_popup_class = jQuery(this).attr('data-popup-open');
+            $('[data-popup="' + targeted_popup_class + '"]').fadeIn(350);
+     
+            e.preventDefault();
+        });
+     
+        //----- CLOSE
+        $('[data-popup-close]').on('click', function(e)  {
+            var targeted_popup_class = jQuery(this).attr('data-popup-close');
+            $('[data-popup="' + targeted_popup_class + '"]').fadeOut(350);
+     
+            e.preventDefault();
+        });
+    });
+</script>
 
 {% endblock %}

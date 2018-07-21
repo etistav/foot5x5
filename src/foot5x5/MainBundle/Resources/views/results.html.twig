@@ -3,14 +3,13 @@
 {% block title %}Résultats T0{{ currentTrimester }} {{ currentYear }}{% endblock %}
 
 {% block content %}
-<div id="trim-form-container" class="col-md-12">
+<div id="trim-form-container" class="col-sm-10">
     <h2><span class="label dark-blue-grad">T0{{ currentTrimester }} {{ currentYear }} Résultats</span></h2>
     {% if trimesterForm is defined %}
-    <div class="well col-md-4">
+    <div class="well col-lg-6 col-md-8 col-sm-10">
         {{ form_start(trimesterForm, { 'attr': {'class': 'form-inline'} }) }}
         <div class="form-group">
             {{ form_label(trimesterForm.stdCombo, null, { 'label_attr': { 'class': 'control-label' }}) }}
-            {{ form_errors(trimesterForm.stdCombo) }}
             {{ form_widget(trimesterForm.stdCombo, { 'attr': { 'class': 'form-control' }}) }}
             <button type="submit" class="btn btn-primary dark-blue-grad">Afficher</button>
         </div>
@@ -20,8 +19,8 @@
 </div>
 
 {% if results %}
-<div id="results-container" class="col-md-12">
-    <div class="col-md-6">
+<div id="results-container" class="col-xs-12">
+    <div class="col-lg-6 col-md-8 col-sm-10">
         {% for result in results %}
         <table id="result-table" class="table table-bordered table-condensed">
             <thead class="dark-blue-grad">
@@ -38,12 +37,12 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="col-md-2 result-teamA">
+                    <td class="col-md-3 col-sm-4 col-xs-3 result-teamA">
                         <dl>
                         {% for matchPlayer in result.matchPlayers %}
                             {% if matchPlayer.match.id == result.id and matchPlayer.team == "A" %}
                             <a data-popup-open="popup-{{ matchPlayer.player.id }}" href="#">
-                                <dt class="well">
+                                <dt>
                                     {% if matchPlayer.player.user is null %}
                                         <img src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_40') }}" alt="profilePic_default.png" />
                                     {% else %}
@@ -56,23 +55,23 @@
                         {% endfor %}
                         </dl>
                     </td>
-                    <td {% if result.scoreTeamA > result.scoreTeamB %} class="col-md-1 result-score result-victory" {% endif %}
-                        {% if result.scoreTeamA == result.scoreTeamB %} class="col-md-1 result-score result-draw" {% endif %}
-                        {% if result.scoreTeamA < result.scoreTeamB %} class="col-md-1 result-score result-defeat" {% endif %}>
+                    <td {% if result.scoreTeamA > result.scoreTeamB %} class="col-xs-1 result-score result-victory" {% endif %}
+                        {% if result.scoreTeamA == result.scoreTeamB %} class="col-xs-1 result-score result-draw" {% endif %}
+                        {% if result.scoreTeamA < result.scoreTeamB %} class="col-xs-1 result-score result-defeat" {% endif %}>
                         {{ result.scoreTeamA }}
                     </td>
-                    <td class="col-md-1 result-score">-</td>
-                    <td {% if result.scoreTeamA > result.scoreTeamB %} class="col-md-1 result-score result-defeat" {% endif %}
-                        {% if result.scoreTeamA == result.scoreTeamB %} class="col-md-1 result-score result-draw" {% endif %}
-                        {% if result.scoreTeamA < result.scoreTeamB %} class="col-md-1 result-score result-victory" {% endif %}>
+                    <td class="col-xs-1 result-score">-</td>
+                    <td {% if result.scoreTeamA > result.scoreTeamB %} class="col-xs-1 result-score result-defeat" {% endif %}
+                        {% if result.scoreTeamA == result.scoreTeamB %} class="col-xs-1 result-score result-draw" {% endif %}
+                        {% if result.scoreTeamA < result.scoreTeamB %} class="col-xs-1 result-score result-victory" {% endif %}>
                         {{ result.scoreTeamB }}
                     </td>
-                    <td class="col-md-2 result-teamB">
+                    <td class="col-md-3 col-sm-4 col-xs-3 result-teamB">
                         <dl>
                         {% for matchPlayer in result.matchPlayers %}
                             {% if matchPlayer.match.id == result.id and matchPlayer.team == "B" %}
                             <a data-popup-open="popup-{{ matchPlayer.player.id }}" href="#">
-                                <dt class="well">
+                                <dt>
                                     <span>{{ matchPlayer.player.name }}</span>
                                     {% if matchPlayer.player.user is null %}
                                         <img src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_40') }}" alt="profilePic_default.png" />

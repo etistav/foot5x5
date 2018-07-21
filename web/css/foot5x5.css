@@ -168,10 +168,11 @@ div#welcome-communities a:hover {
 	border-bottom: 1px solid #4F5261;
 	padding: 0;
 	margin-bottom: 15px;
+	min-width: 360px;
 }
-
 #trim-form-container .well {
 	color: #191950;
+	padding: 12px;
 }
 #trim-form-container .well select {
 	border-color: #191950;
@@ -185,15 +186,30 @@ div#welcome-communities a:hover {
 	background-color: #99CCFF;
 }
 
+@media (max-width: 768px) {
+	#trim-form-container .form-group {
+		margin-bottom: 0;
+		margin-right: 0;
+	}
+	#trim-form-container .well {
+		max-width: 50%;
+		min-width: 250px;
+	}
+	#trim-form-container select {
+		margin-bottom: 5px;
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+		max-width: 150px;
+	}	
+}
+
 
 /* ------------------------- */
 /*   RESULTATS               */
 /* ------------------------- */
-
 div#results-container {
 	padding: 0;
 }
-
 #results-container div:not(.alert) {
 	padding: 0;
 }
@@ -204,12 +220,15 @@ table thead.bg-primary {
 table#result-table {
 	margin-top: 10px;
 	margin-bottom: 20px;
+	border: none;
+	border-bottom: 1px solid #191950;
 }
 table#result-table tbody tr td.result-score {
 	text-align: center;
 	font-weight: bold;
 	font-size: 2em;
 	vertical-align: middle;
+	background-color: #FFFFFF;
 }
 table#result-table tbody tr td.result-victory {
 	color: #005C1F;
@@ -234,31 +253,29 @@ table#result-table tbody tr td.result-score input {
 }
 table#result-table tbody tr td {
 	padding: 0;
+	background-color: #FFFFFF;
+	border: none;
+}
+table#result-table tbody tr td {
+	border-top: 1px solid #191950;
 }
 table#result-table tbody tr td.result-teamA dl {
 	text-align: left;
 	padding: 0;
 	margin: 0;
+	background-color: #FFFFFF;
 }
 table#result-table tbody tr td.result-teamB dl {
 	text-align: right;
 	padding: 0;
 	margin: 0;
+	background-color: #FFFFFF;
 }
 table#result-table tbody tr td dl dt {
-	border: 1px solid #191950;
-	/* background-color: #E0F0FF; */
-	background: -moz-linear-gradient(top,  rgb(252,252,255) 0%, rgb(224,240,255) 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(252,252,255)), color-stop(100%,rgb(224,240,255)));
-    background: -webkit-linear-gradient(top,  rgb(252,252,255) 0%,rgb(224,240,255) 100%);
-    background: -o-linear-gradient(top,  rgb(252,252,255) 0%,rgb(224,240,255) 100%);
-    background: -ms-linear-gradient(top,  rgb(252,252,255) 0%,rgb(224,240,255) 100%);
-    background: linear-gradient(to bottom, rgb(252,252,255) 0%,rgb(224,240,255) 100%);
+	border-top: 1px solid #E0E0E0;
 	padding: 2px;
-	margin: 2px;
 }
 table#result-table tbody tr td dl dt:hover {
-	/* background-color: #99CCFF; */
 	background: -moz-linear-gradient(top,  rgb(224,240,255) 0%, rgb(204,218,250) 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(224,240,255)), color-stop(100%,rgb(204,218,250)));
     background: -webkit-linear-gradient(top,  rgb(224,240,255) 0%,rgb(204,218,250) 100%);
@@ -276,12 +293,24 @@ table#result-table tbody tr td dl dt img {
 }
 table#result-table tbody tr td dl dt span {
 	color: #191950;
+	display:inline-block;
+	vertical-align: middle;
+}
+@media (max-width: 600px) {
+	table#result-table tbody tr td dl dt {
+		white-space: nowrap;
+	}
+	table#result-table tbody tr td dl dt span {
+		overflow: hidden;
+		width: 100px;
+		text-overflow: ellipsis;
+	}
 }
 table#result-table tbody tr td.result-teamA dl dt span {
-	padding-left: 20px;
+	padding-left: 10px;
 }
 table#result-table tbody tr td.result-teamB dl dt span {
-	padding-right: 20px;
+	padding-right: 10px;
 }
 table#result-table #datepicker {
 	/* color: #006dcc; */
@@ -377,6 +406,8 @@ li.player-droppable:hover {
 /* ------------------------- */
 div#standing-container {
 	padding: 0;
+	min-width: 500px;
+	overflow-x: auto;
 }
 #standing-container div:not(.alert) {
 	padding: 0;

@@ -1,12 +1,9 @@
 /app/bootstrap*
-/app/cache/*
-!app/cache/.gitkeep
+/var/
+!var/cache/.gitkeep
+!var/logs/.gitkeep
 /app/config/parameters.yml
-/app/logs/*
-!app/logs/.gitkeep
-/app/phpunit.xml*
-/bin/
-/composer.phar
+/phpunit.xml*
 /vendor/
 /web/bundles/
 /web/media/cache/*

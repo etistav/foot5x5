@@ -52,8 +52,8 @@ set :ssh_options, { :forward_agent => true }
 set :symfony_env, "prod"
 
 # Valeurs pour SF2. Pour SF3 mettre 3 et 5
-set :symfony_directory_structure, 2
-set :sensio_distribution_version, 4
+set :symfony_directory_structure, 3
+set :sensio_distribution_version, 5
 
 # symfony-standard edition top-level directories : Pour SF2
 set :app_path, "app"
@@ -64,7 +64,7 @@ set :bin_path, "bin"
 # Use closures for directories nested under the top level dirs, so that
 # any changes to web/app etc do not require these to be changed also
 set :app_config_path, -> { fetch(:app_path) + "/config" }
-set :log_path, -> { fetch(:symfony_directory_structure) == 2 ? fetch(:app_path) + "/logs" : fetch(:var_path) + "/logs" }
+set :log_path, -> { fetch(:symfony_directory_structure) == 2 ? fetch(:web_path) + "/logs" : fetch(:var_path) + "/logs" }
 set :cache_path, -> { fetch(:symfony_directory_structure) == 2 ? fetch(:app_path) + "/cache" : fetch(:var_path) + "/cache" }
 set :upload_path, -> { fetch(:web_path) + "/uploads" }
 

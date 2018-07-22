@@ -88,11 +88,11 @@ set :file_permissions_users, ["www-data"]
 # Method used to set permissions (:chmod, :acl, or :chown)
 set :permission_method, :acl
 
-set :composer_install_flags, '--prefer-dist --no-interaction --quiet --optimize-autoloader'
+set :composer_install_flags, '--prefer-dist --no-interaction --optimize-autoloader'
 
 # SSHKit.config.command_map[:composer] = "~/composer"
-SSHKit.config.command_map[:composer] = "/usr/local/php5.6/bin/php #{shared_path.join("composer.phar")}"
-SSHKit.config.command_map[:php] = "/usr/local/php5.6/bin/php"
+SSHKit.config.command_map[:composer] = "/usr/local/php7.1/bin/php #{shared_path.join("composer.phar")}"
+SSHKit.config.command_map[:php] = "/usr/local/php7.1/bin/php"
 
 # after 'deploy:updated', 'symfony:assets:install'
 

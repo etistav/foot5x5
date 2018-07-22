@@ -9,5 +9,8 @@
 /composer.phar
 /vendor/
 /web/bundles/
+/web/media/cache/*
+/web/uploads/*
 /log/*
 gitignore.txt
+\.vscode/launch\.json

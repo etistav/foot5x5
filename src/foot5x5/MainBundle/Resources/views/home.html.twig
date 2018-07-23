@@ -2,14 +2,70 @@
 
 {% block title %}{{ title }}{% endblock %}
 
-{% block content %}
-<h2 class="text-center">{{ block('title') }}</h2>
-<div class="col-sm-12">
-	<div id="home-buttons" class="col-sm-4 col-sm-offset-4">
-		<img src="{{ 'logoFoot5x5_001d.png'  | imagine_filter('avatar_200') }}" alt="Foot5x5_logo" class="img-responsive"/>
+{% block homecontent %}
+<div id="landing">
+	<div class="landing-content">
+		<h2>Bienvenue sur</h2>
+		<h1>foot5x5.fr !</h1>
+		<img src="{{ asset('logoFoot5x5_001d.png') }}" alt="Foot5x5_logo" class="img-responsive"/>
+		<h3>Créé ta communauté foot5x5 ou rejoins en une déjà existante!</h3>
 		<a href="{{ path('login') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-chevron-right"></span> Connexion</button></a>
 		<a href="{{ path('register') }}"><button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> S'inscrire</button></a>
 	</div>
+</div>
+
+<div class="home-padding">
+<div id="home-create" class="container home-container">
+	<div class="row">
+		<div class="col-md-7 col-lg-6 grid">
+			<img src="{{ asset('img/foot5x5_community-home.png') }}">
+			<img src="{{ asset('img/foot5x5_random-draw.png') }}">
+			<img src="{{ asset('img/foot5x5_notes.png') }}">
+			<img src="{{ asset('img/foot5x5_admin.png') }}">
+		</div>
+		<div class="col-md-5 col-lg-6">
+			<h2>Créé ta communauté...</h2>
+			<p>Ça fait un bail que tu joues avec tes potes chaque semaine et t'en as marre de suivre les scores sur un pauvre fichier Excel?</p>
+			<p>Créé ta communauté foot5x5 et tu pourras profiter de fonctionnalités sympas telles que :</p>
+			<p><span class="glyphicon glyphicon-floppy-disk"></span>La saisie et la sauvegarde des matchs joués</p>
+			<p><span class="glyphicon glyphicon-list"></span>Le calcul d'un classement individuel au trimestre et à l'année, selon une règle totalement arbitraire</p>
+			<p><span class="glyphicon glyphicon-search"></span>La possibilité d'évaluer chacun des joueurs de ta communauté (attaque / défense / physique)</p>
+			<p><span class="glyphicon glyphicon-refresh"></span>Le tirage au sort des équipes, équilibré en fonction des notes qui ont pu être données</p>
+			<p><span class="glyphicon glyphicon-piggy-bank"></span>La gestion des finances si nécessaire (eh ouais Billy, tu me la feras pas à l'envers!)</p>
+		</div>
+	</div>
+</div>
+</div>
+
+<div class="home-padding">
+<div id="home-join" class="container home-container">
+	<div class="row">
+		<div class="col-md-5 col-lg-6">
+			<h2>... ou rejoins une communauté</h2>
+			<p>Un pote à toi s'est déjà chargé de la créer ? C'est probablement un mec très bien!</p>
+			<p>Inscris-toi et rejoins la communauté à l'aide du mot de passe qu'il t'aura fourni pour profiter du site toi aussi!</p>
+			<p>Après ça, à toi de lui demander de t'ajouter les rôles qui vont bien :</p>
+			<p> - <strong>Evaluateur</strong> : te permettra de donner des notes à tes collègues</p>
+			<p> - <strong>Administrateur</strong> : te permettra d'accéder à la plateforme d'administration</p>			
+		</div>
+		<div class="col-md-7 col-lg-6 text-center">
+			<img src="{{ asset('img/home-join-lazy.png') }}">
+		</div>
+	</div>
+</div>
+</div>
+
+<div id="fixed">
+</div>
+
+<div class="home-padding">
+<div id="home-prefooter" class="container home-container">
+	<div class="col-xs-12 text-center">
+		<h2>Alors tu fais quoi ?!</h2>
+		<a href="{{ path('login') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-chevron-right"></span> Déjà inscrit!</button></a>
+		<a href="{{ path('register') }}"><button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Je m'inscris!</button></a>
+	</div>
+</div>
 </div>
 
 {% endblock %}

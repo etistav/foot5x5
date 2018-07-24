@@ -215,14 +215,31 @@ div#content {
 	margin: auto;
 	display: block;
 }
-.landing-content a button {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-right: 20px;
+.landing-buttons {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-around;
+	align-content: space-around;
+}
+.landing-buttons button {
+	margin: 5px 0;
 	height: 70px;
 	width: 200px;
 	white-space: normal;
-	border: 2px solid #E0F0FF;
+	border: 2px solid;
+}
+.landing-buttons .btn-success {
+	border-color: #005C1F;
+}
+.landing-buttons .btn-primary {
+	border-color: #191950;
+}
+.landing-buttons .btn-success:hover {
+	border-color: #b3ffb3;
+	color: #b3ffb3;
+}
+.landing-buttons .btn-primary:hover {
+	border-color: #99CCFF;
 }
 
 .home-padding {
@@ -766,6 +783,24 @@ table#standing-table tbody tr td div.standing-player strong {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(25,25,80,0.5); 
 }
+
+
+/* temporary pop-up until community creation will be ready */
+.popup-create-community {
+	padding: 10px;
+	height: auto;
+	top: 450px;
+	width: 60%;
+}
+.popup-create-community .popup-inner-scroll {
+    width:100%;
+	height:100%;
+	margin:0;
+    padding: 15px 30px;
+    overflow-y: auto;
+	overflow-x: auto;
+}
+
 
 /* Close Button */
 .popup-close {

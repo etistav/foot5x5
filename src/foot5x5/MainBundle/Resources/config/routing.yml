@@ -21,10 +21,10 @@ welcome:
     defaults:
         _controller: foot5x5MainBundle:Main:welcome
 
-create_community:
-    path:     /community/create
-    defaults:
-        _controller: foot5x5MainBundle:Community:create
+# create_community:
+#    path:     /community/create
+#    defaults:
+#        _controller: foot5x5MainBundle:Community:create
 
 join_community:
     path:     /community/join

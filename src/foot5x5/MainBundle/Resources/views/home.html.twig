@@ -47,8 +47,8 @@
 			<p>Un pote à toi s'est déjà chargé de la créer ? C'est probablement un mec très bien!</p>
 			<p>Inscris-toi et rejoins la communauté à l'aide du mot de passe qu'il t'aura fourni pour profiter du site toi aussi!</p>
 			<p>Après ça, à toi de lui demander de t'ajouter les rôles qui vont bien :</p>
-			<p> - <strong>Evaluateur</strong> : te permettra de donner des notes à tes collègues</p>
-			<p> - <strong>Administrateur</strong> : te permettra d'accéder à la plateforme d'administration</p>			
+			<p> - <strong>Evaluateur</strong> : permet d'évaluer le niveau footballistique de tes petits camarades</p>
+			<p> - <strong>Administrateur</strong> : permet d'accéder à la plateforme d'administration (Attention ! trop d'admin' et ce sera vite le bordel !)</p>			
 		</div>
 		<div class="col-md-7 col-lg-6 text-center">
 			<img src="{{ asset('img/home-join-lazy.png') }}">
@@ -64,8 +64,10 @@
 <div id="home-prefooter" class="container home-container">
 	<div class="col-xs-12 text-center">
 		<h2>Alors tu fais quoi ?!</h2>
-		<a href="{{ path('login') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-chevron-right"></span> Déjà inscrit!</button></a>
-		<a href="{{ path('register') }}"><button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Je m'inscris!</button></a>
+		<div class="landing-buttons col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+        	<a href="{{ path('login') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-chevron-right"></span> Déjà inscrit!</button></a>
+			<a href="{{ path('register') }}"><button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Je m'inscris!</button></a>
+		</div>
 	</div>
 </div>
 </div>

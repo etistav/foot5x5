@@ -298,26 +298,24 @@ div#content {
 	border-top: 3px solid #4F5261;
 	border-bottom: 3px solid #4F5261;
 }
-/*
-#home-prefooter a button {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-right: 20px;
-	height: 70px;
-	width: 200px;
-	white-space: normal;
-	border: 2px solid #E0F0FF;
-}
-*/
 #welcome-communities {
 	margin-top: 10px;
-	border-top: 2px solid #E0F0FF;
+	border: 2px solid #E0F0FF;
+	border-radius: 15px;
+	-webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+	background-color: #19195077;
 }
 #welcome-communities li {
 	border: 2px solid #191950;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
 	background-color: #E0F0FF;
+	margin: auto;
 	margin-top: 5px;
 	font-weight: bold;
+	max-width: 75%;
 }
 #welcome-communities li:hover {
 	background-color: #99CCFF;
@@ -1320,6 +1318,9 @@ footer div h4 {
 	}
 	.landing-content h3 {
 		font-size: 150%;
+	}
+	#welcome-communities {
+		margin: 10px 10px 0 10px;
 	}
 	/* ----------------------- */
 	/*         FOOTER          */

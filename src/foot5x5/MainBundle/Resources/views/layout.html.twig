@@ -42,32 +42,27 @@
             {% if app.session.get('community_name') is not empty %}
             <ul class="nav navbar-nav">
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="{{ path('foot5x5_main_homepage') }}">{{app.session.get('community_name')}}<b class="caret"></b></a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="{{ path('foot5x5_main_homepage') }}"><span>{{app.session.get('community_name')}}</span><span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ path('foot5x5_main_homepage') }}">Home</a></li>
                         <li><a href="{{ path('welcome') }}">Changer communauté</a></li>
                     </ul>
                 </li>
                 <li {% if app.request.attributes.get('_route') == 'results' %}class="active"{% endif %}>
-                    <a href="{{ path('results') }}">Résultats</a>
+                    <a href="{{ path('results') }}"><span>Résultats</span></a>
                 </li>
                 <li {% if app.request.attributes.get('_route') == 'standings' %}class="active"{% endif %}>
-                    <a href="{{ path('standings') }}">Classement</a>
+                    <a href="{{ path('standings') }}"><span>Classement</span></a>
                 </li>
                 <li {% if app.request.attributes.get('_route') == 'players' %}class="active"{% endif %}>
-                    <a href="{{ path('players') }}">Joueurs</a>
+                    <a href="{{ path('players') }}"><span>Joueurs</span></a>
                 </li>
                 <li {% if app.request.attributes.get('_route') == 'random_draw' %}class="active"{% endif %}>
-                    <a href="{{ path('random_draw') }}">Tirage</a>
+                    <a href="{{ path('random_draw') }}"><span>Tirage</span></a>
                 </li>
                 <li {% if app.request.attributes.get('_route') == 'finances' %}class="active"{% endif %}>
-                    <a href="{{ path('finances') }}">Finances</a>
+                    <a href="{{ path('finances') }}"><span>Finances</span></a>
                 </li>
-                {% if app.user and is_granted('ROLE_EVALUATOR') %}
-                <li {% if app.request.attributes.get('_route') == 'notes' %}class="active"{% endif %}>
-                    <a href="{{ path('notes') }}"><span class="glyphicon glyphicon-cog"></span> Notes</a>
-                </li>
-                {% endif %}
             </ul>
             {% else %}
             <ul id="navbar-site-title" class="nav navbar-nav">
@@ -77,15 +72,21 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if app.user and is_granted('IS_AUTHENTICATED_FULLY') %}
                     {% if app.session.get('community_name') is not empty %}
+                        {% if app.user and is_granted('ROLE_EVALUATOR') %}
+                        <li {% if app.request.attributes.get('_route') == 'notes' %}class="active"{% endif %}>
+                            <a href="{{ path('notes') }}"><span class="glyphicon glyphicon-pencil"></span><span>Notes</span></a>
+                        </li>
+                        {% endif %}
                         {% if app.user and is_granted('ROLE_ADMIN') %}
                         <li class="{% if adminMenu is defined %}active{% endif %}">
-                            <a href="{{ path('admin_home') }}"><span class="glyphicon glyphicon-cog"></span> Administration</a>
+                            <a href="{{ path('admin_home') }}"><span class="glyphicon glyphicon-cog"></span><span>Admin</span></a>
                         </li>
                         {% endif %}
                     {% endif %}
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-user"></span> {{ app.user.username }} <b class="caret"></b></a>
+                            <span><span class="glyphicon glyphicon-user"></span><span>{{ app.user.username }}</span></span><b class="caret"></b>
+                        </a>
                         <ul class="dropdown-menu">
                             <li><a href="{{ path('myprofile') }}">Mon Profil</a></li>
                             <li><a href="{{ path('logout') }}">Déconnexion</a></li>

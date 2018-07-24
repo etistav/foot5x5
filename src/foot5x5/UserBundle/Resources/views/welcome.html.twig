@@ -14,7 +14,7 @@
             <a href="{{ path('join_community') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-chevron-right"></span> Rejoindre une communauté</button></a>
         </div>
         {% if communities is not empty %}
-        <div id="welcome-communities" class="col-lg-6 col-lg-offset-3 col-sm-8 col-sm-offset-2">
+        <div id="welcome-communities" class="well-transparent-blue col-lg-6 col-lg-offset-3 col-sm-8 col-sm-offset-2">
             <h3 class="text-center">Vos communautés</h3>
             <ul class="list-group">
                 {% for community in communities %}

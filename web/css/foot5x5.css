@@ -35,6 +35,13 @@ body {
     background: -webkit-linear-gradient(top, rgb(250,250,250) 0%, rgb(234,234,250) 100%);
 	border-color: #191950;
 }
+.well-transparent-blue {
+	border: 2px solid #E0F0FF;
+	border-radius: 15px;
+	-webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+	background-color: #19195077;
+}
 .dark-blue-grad {
     background: linear-gradient(to bottom, rgb(43,43,136) 0%, rgb(25,25,80) 100%);
 	background: -moz-linear-gradient(top, rgb(43,43,136) 0%, rgb(25,25,80) 100%);
@@ -50,8 +57,12 @@ body {
 	border-color: #99CCFF;
 	color: #99CCFF;
 }
-h2, h3 {
-	font-family: montserrat;
+h2 {
+	font-size: 250%;
+	font-weight: 700;
+}
+.alert-danger ul {
+	list-style-type: none;
 }
 
 /* ------------------------- */
@@ -215,6 +226,9 @@ div#content {
 	margin: auto;
 	display: block;
 }
+.landing-content .form-horizontal {
+	padding-top: 20px;
+}
 .landing-buttons {
 	display: flex;
 	flex-flow: row wrap;
@@ -298,13 +312,9 @@ div#content {
 	border-top: 3px solid #4F5261;
 	border-bottom: 3px solid #4F5261;
 }
+
 #welcome-communities {
 	margin-top: 10px;
-	border: 2px solid #E0F0FF;
-	border-radius: 15px;
-	-webkit-border-radius: 15px;
-    -moz-border-radius: 15px;
-	background-color: #19195077;
 }
 #welcome-communities li {
 	border: 2px solid #191950;
@@ -1319,7 +1329,7 @@ footer div h4 {
 	.landing-content h3 {
 		font-size: 150%;
 	}
-	#welcome-communities {
+	.landing-content .well-transparent-blue {
 		margin: 10px 10px 0 10px;
 	}
 	/* ----------------------- */

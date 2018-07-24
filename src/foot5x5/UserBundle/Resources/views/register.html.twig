@@ -2,6 +2,116 @@
 
 {% block title %}{{ title }}{% endblock %}
 
+{% block homecontent %}
+<div id="landing">
+	<div class="landing-content">
+		<h2>{{ block('title') }}</h2>
+        {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="alert alert-success col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+            {{ flashMessage }}
+        </div>
+        {% endfor %}
+        {% if not userForm.vars.valid %}
+        <div class="alert alert-danger col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3"><ul>
+            {% for child in userForm.children %}
+                {% for error in child.vars.errors %}
+                    <li>{{ error.message }}</li>
+                {% endfor %}
+            {% endfor %}
+            {% if form_errors(userForm.password.first) %}
+                <li>Les mots de passe saisis ne sont pas identiques.</li>
+            {% endif %}
+        </ul></div>
+        {% endif %}
+        <div class="well-transparent-blue col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+            {{ form_start(userForm, { 'attr': {'class': 'form-horizontal'} }) }}
+            <div class="form-group">
+                {{ form_label(userForm.username, null, { 'label_attr':  {
+                    'class': 'col-sm-4 control-label'
+                }}) }}
+                <div class="col-sm-7">
+                    {{ form_widget(userForm.username, { 'attr':  {
+                        'class': 'form-control'
+                    }}) }}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(userForm.password.first, null, { 'label_attr':  {
+                    'class': 'col-sm-4 control-label'
+                }}) }}
+                <div class="col-sm-7">
+                    {{ form_widget(userForm.password.first, { 'attr':  {
+                        'class': 'form-control'
+                    }}) }}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(userForm.password.second, null, { 'label_attr':  {
+                    'class': 'col-sm-4 control-label'
+                }}) }}
+                <div class="col-sm-7">
+                    {{ form_widget(userForm.password.second, { 'attr':  {
+                        'class': 'form-control'
+                    }}) }}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(userForm.firstname, null, { 'label_attr':  {
+                    'class': 'col-sm-4 control-label'
+                }}) }}
+                <div class="col-sm-7">
+                    {{ form_widget(userForm.firstname, { 'attr':  {
+                        'class': 'form-control'
+                    }}) }}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(userForm.lastname, null, { 'label_attr':  {
+                    'class': 'col-sm-4 control-label'
+                }}) }}
+                <div class="col-sm-7">
+                    {{ form_widget(userForm.lastname, { 'attr':  {
+                        'class': 'form-control'
+                    }}) }}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(userForm.birthday, null, { 'label_attr':  {
+                    'class': 'col-sm-4 control-label'
+                }}) }}
+                <div class="col-sm-7 form-inline">
+                    {{ form_widget(userForm.birthday.day, { 'attr':  {
+                        'class': 'form-control mb-10'
+                    }}) }}
+                    {{ form_widget(userForm.birthday.month, { 'attr':  {
+                        'class': 'form-control'
+                    }}) }}
+                    {{ form_widget(userForm.birthday.year, { 'attr':  {
+                        'class': 'form-control'
+                    }}) }}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(userForm.email, null, { 'label_attr':  {
+                    'class': 'col-sm-4 control-label'
+                }}) }}
+                <div class="col-sm-7">
+                    {{ form_widget(userForm.email, { 'attr':  {
+                        'class': 'form-control'
+                    }}) }}
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-5 col-sm-3">
+                    <input type="submit" class="btn btn-primary" value="S'inscrire" />
+                </div>
+            </div>
+        {{ form_end(userForm) }}
+        </div>
+	</div>
+</div>
+{% endblock %}
+
 {% block content %}
 <h2 class="text-center">{{ block('title') }}</h2>
 {% for flashMessage in app.session.flashbag.get('success') %}
@@ -23,7 +133,7 @@
 {% endif %}
 
 
-<div class="well">
+<div class="well-transparent-blue">
 {{ form_start(userForm, { 'attr': {'class': 'form-horizontal'} }) }}
     <div class="form-group">
         {{ form_label(userForm.username, null, { 'label_attr':  {

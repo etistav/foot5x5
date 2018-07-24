@@ -36,7 +36,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ path('welcome') }}"><img src="{{ 'logoFoot5x5_001d.png'  | imagine_filter('avatar_40') }}" alt="Foot5x5_logo" /></a>
+            <a class="navbar-brand" href="{{ path('home') }}"><img src="{{ 'logoFoot5x5_001d.png'  | imagine_filter('avatar_40') }}" alt="Foot5x5_logo" /></a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse-target">
             {% if app.session.get('community_name') is not empty %}
@@ -66,7 +66,7 @@
             </ul>
             {% else %}
             <ul id="navbar-site-title" class="nav navbar-nav">
-                <li><a href="{{ path('welcome') }}">FOOT 5X5</a></li>
+                <li><a href="{{ path('home') }}">FOOT 5X5</a></li>
             </ul>
             {% endif %}
             <ul class="nav navbar-nav navbar-right">
@@ -107,7 +107,9 @@
     </div>
 </nav>
 {% if (app.request.attributes.get('_route') == 'home')
-   or (app.request.attributes.get('_route') == 'welcome') %}
+   or (app.request.attributes.get('_route') == 'welcome')
+   or (app.request.attributes.get('_route') == 'login')
+   or (app.request.attributes.get('_route') == 'register') %}
     {% block homecontent %}{% endblock %}
 {% else %}
 <div id="content" class="container">

@@ -53,6 +53,12 @@ class User implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="usr_username", type="string", length=50, unique=true)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 30,
+     *      minMessage = "Ton pseudo doit faire au moins {{ limit }} caractères",
+     *      maxMessage = "Ton pseudo ne doit pas faire plus de {{ limit }} caractères"
+     * )
      */
     private $username;
 
@@ -67,6 +73,12 @@ class User implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="usr_lastname", type="string", length=50)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 30,
+     *      minMessage = "Ton nom doit faire au moins {{ limit }} caractères",
+     *      maxMessage = "Ton nom ne doit pas faire plus de {{ limit }} caractères"
+     * )
      */
     private $lastname;
 
@@ -74,6 +86,12 @@ class User implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="usr_firstname", type="string", length=50)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 30,
+     *      minMessage = "Ton prénom doit faire au moins {{ limit }} caractères",
+     *      maxMessage = "Ton prénom ne doit pas faire plus de {{ limit }} caractères"
+     * )
      */
     private $firstname;
 

@@ -39,7 +39,7 @@ class UserType extends AbstractType
     					'invalid_message' => 'The password fields must match.',
     					'options'         => array('required' => true),
     					'first_options'   => array('label' => 'Mot de passe'),
-    					'second_options'  => array('label' => 'Confirmer mot de passe'),
+    					'second_options'  => array('label' => 'Confirmation'),
     			))
     			->add('birthday', BirthdayType::class, array(
     					'label' => 'Date de naissance',

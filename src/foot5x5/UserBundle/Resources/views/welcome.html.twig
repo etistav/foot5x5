@@ -1,34 +1,62 @@
 {% extends "foot5x5MainBundle::layout.html.twig" %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block homecontent %}
+<div id="landing">
+	<div class="landing-content">
+		<h2>Bienvenue</h2>
+		<h1>{{ username }} !</h1>
+		<img src="{{ asset('logoFoot5x5_001d.png') }}" alt="Foot5x5_logo" class="img-responsive"/>
+		<h3>Créé ta communauté foot5x5 ou rejoins en une déjà existante!</h3>
+        <div class="landing-buttons col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+            <a data-popup-open="popup-create-community" href="#">
+                <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Créer une communauté</button>
+            </a>
+            <a href="{{ path('join_community') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-chevron-right"></span> Rejoindre une communauté</button></a>
+        </div>
+        {% if communities is not empty %}
+        <div id="welcome-communities" class="well-transparent-blue col-lg-6 col-lg-offset-3 col-sm-8 col-sm-offset-2">
+            <h3 class="text-center">Vos communautés</h3>
+            <ul class="list-group">
+                {% for community in communities %}
+                    <a href="{{ path('select_community', {'id':community.id}) }}"><li class="list-group-item">{{ community.name }}</li></a>
+                {% endfor %}
+            </ul>
+        </div>
+        {% else %}
+        <div class="alert alert-warning col-sm-6 col-sm-offset-3">
+            <span>Vous n'appartenez à aucune communauté pour le moment.</span>
+        </div>
+        {% endif %}
+	</div>
+</div>
 
-{% block content %}
-<h2 class="text-center">{{ block('title') }}</h2>
-{% for flashMessage in app.session.flashbag.get('success') %}
-<div class="alert alert-success">
-    {{ flashMessage }}
+<div class="popup" data-popup="popup-create-community">
+	<div class="popup-inner popup-create-community">
+        <div class="popup-inner-scroll">
+			<h4>La création de communauté n'est pas encore permise pour l'instant... C'est pour bientôt !</h4>
+            <a class="popup-close" data-popup-close="popup-create-community" href="#">x</a>
+        </div>
+    </div>
 </div>
-{% endfor %}
-<div class="col-sm-12">
-    <div id="welcome-buttons" class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
-        <img src="{{ 'logoFoot5x5_001d.png'  | imagine_filter('avatar_200') }}" alt="Foot5x5_logo" class="img-responsive"/>
-        <a href="{{ path('create_community') }}"><button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Créer une communauté</button></a>
-        <a href="{{ path('join_community') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-chevron-right"></span> Rejoindre une communauté</button></a>
-    </div>
-    {% if communities is not empty %}
-    <div id="welcome-communities" class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
-        <h3 class="text-center">Vos communautés</h3>
-        <ul class="list-group">
-            {% for community in communities %}
-                <a href="{{ path('select_community', {'id':community.id}) }}"><li class="list-group-item">{{ community.name }}</li></a>
-            {% endfor %}
-        </ul>
-    </div>
-    {% else %}
-    <div class="alert alert-warning col-sm-6 col-sm-offset-3">
-        <span>Vous n'appartenez à aucune communauté pour le moment.</span>
-    </div>
-    {% endif %}
-</div>
+
+<script>
+    $(function() {
+        //----- OPEN
+        $('[data-popup-open]').on('click', function(e)  {
+            var targeted_popup_class = jQuery(this).attr('data-popup-open');
+            $('[data-popup="' + targeted_popup_class + '"]').fadeIn(350);
+     
+            e.preventDefault();
+        });
+     
+        //----- CLOSE
+        $('[data-popup-close]').on('click', function(e)  {
+            var targeted_popup_class = jQuery(this).attr('data-popup-close');
+            $('[data-popup="' + targeted_popup_class + '"]').fadeOut(350);
+     
+            e.preventDefault();
+        });
+    });
+</script>
 
 {% endblock %}

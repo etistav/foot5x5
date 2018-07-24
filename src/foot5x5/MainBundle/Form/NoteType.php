@@ -25,22 +25,6 @@ class NoteType extends AbstractType
             ->add('valPhy', SliderNoteType::class, array(
                 'label' => 'Note Physique'
             ))
-            // ->add('valDef', 'number', array(
-            //     'label' => 'Note Défense',
-            //     'precision' => '2',
-            //     'rounding_mode' => IntegerToLocalizedStringTransformer::ROUND_HALFUP
-            // ))
-            // ->add('valPhy', 'number', array(
-            //     'label' => 'Note Physique',
-            //     'precision' => '2',
-            //     'rounding_mode' => IntegerToLocalizedStringTransformer::ROUND_HALFUP
-            // ))
-            // ->add('valAvg', 'number', array(
-            //     'label' => 'Note Moyenne',
-            //     'precision' => '2',
-            //     'rounding_mode' => IntegerToLocalizedStringTransformer::ROUND_HALFUP,
-            //     'disabled' => true
-            // ))
         ;
     }
     

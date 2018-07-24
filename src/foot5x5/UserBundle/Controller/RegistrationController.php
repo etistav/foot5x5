@@ -64,7 +64,7 @@ class RegistrationController extends Controller
 				'foot5x5UserBundle::register.html.twig',
 				array(
 						'userForm' => $userForm->createView(),
-						'title' => 'S\'inscrire'
+						'title' => 'Inscris-toi sur foot5x5.fr'
 				)
 		);
 	}

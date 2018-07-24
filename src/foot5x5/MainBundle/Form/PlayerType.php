@@ -5,7 +5,7 @@ namespace foot5x5\MainBundle\Form;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\DataTransformer\IntegerToLocalizedStringTransformer;
+use Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -28,22 +28,22 @@ class PlayerType extends AbstractType
             ->add('valAtt', NumberType::class, array(
                 'label' => 'Note Attaque',
                 'scale' => 2,
-                'rounding_mode' => IntegerToLocalizedStringTransformer::ROUND_HALFUP
+                'rounding_mode' => NumberToLocalizedStringTransformer::ROUND_HALF_UP
             ))
             ->add('valDef', NumberType::class, array(
                 'label' => 'Note Défense',
                 'scale' => 2,
-                'rounding_mode' => IntegerToLocalizedStringTransformer::ROUND_HALFUP
+                'rounding_mode' => NumberToLocalizedStringTransformer::ROUND_HALF_UP
             ))
             ->add('valPhy', NumberType::class, array(
                 'label' => 'Note Physique',
                 'scale' => 2,
-                'rounding_mode' => IntegerToLocalizedStringTransformer::ROUND_HALFUP
+                'rounding_mode' => NumberToLocalizedStringTransformer::ROUND_HALF_UP
             ))
             ->add('cashBalance', NumberType::class, array(
                 'label' => 'Solde en €',
                 'scale' => 2,
-                'rounding_mode' => IntegerToLocalizedStringTransformer::ROUND_HALFUP
+                'rounding_mode' => NumberToLocalizedStringTransformer::ROUND_HALF_UP
             ))
             ->add('isActive', CheckboxType::class, array(
                 'label' => 'En activité',

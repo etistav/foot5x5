@@ -60,6 +60,7 @@ class PlayerType extends AbstractType
                     ->addOrderBy('usr.username', 'ASC');
                 },
                 'choice_label' => 'username',
+                'placeholder' => 'Choisir un user...',
                 'multiple' => false,
                 'required' => false
             ))

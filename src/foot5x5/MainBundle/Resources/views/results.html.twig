@@ -22,7 +22,7 @@
 <div id="results-container" class="col-xs-12">
     <div class="col-lg-6 col-md-8 col-sm-10">
         {% for result in results %}
-        <table id="result-table" class="table table-bordered table-condensed">
+        <table class="table table-bordered table-condensed result-table">
             <thead class="dark-blue-grad">
                 <tr>
                     <th class="text-center" colspan="5">
@@ -41,16 +41,17 @@
                         <dl>
                         {% for matchPlayer in result.matchPlayers %}
                             {% if matchPlayer.match.id == result.id and matchPlayer.team == "A" %}
-                            <a data-popup-open="popup-{{ matchPlayer.player.id }}" href="#">
-                                <dt>
-                                    {% if matchPlayer.player.user is null %}
-                                        <img src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_40') }}" alt="profilePic_default.png" />
-                                    {% else %}
-                                        <img src="{{ matchPlayer.player.user.pictureWebPath | imagine_filter('avatar_40') }}" alt="{{ matchPlayer.player.user.profilePicture }}" />
-                                    {% endif %}
-                                    <span>{{ matchPlayer.player.name }}</span>
-                                </dt>
-                            </a>
+                            <dt>
+                                <a data-popup-open="popup-{{ matchPlayer.player.id }}" href="#">
+                                {% if matchPlayer.player.user is null %}
+                                    <img src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_40') }}" alt="profilePic_default.png" />
+                                {% else %}
+                                    <img src="{{ matchPlayer.player.user.pictureWebPath | imagine_filter('avatar_40') }}" alt="{{ matchPlayer.player.user.profilePicture }}" />
+                                {% endif %}
+                                <span>{{ matchPlayer.player.name }}</span>
+                                </a>
+                            </dt>
+                            <dd></dd>
                             {% endif %}
                         {% endfor %}
                         </dl>
@@ -70,16 +71,17 @@
                         <dl>
                         {% for matchPlayer in result.matchPlayers %}
                             {% if matchPlayer.match.id == result.id and matchPlayer.team == "B" %}
-                            <a data-popup-open="popup-{{ matchPlayer.player.id }}" href="#">
-                                <dt>
+                            <dt>
+                                <a data-popup-open="popup-{{ matchPlayer.player.id }}" href="#">
                                     <span>{{ matchPlayer.player.name }}</span>
                                     {% if matchPlayer.player.user is null %}
-                                        <img src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_40') }}" alt="profilePic_default.png" />
+                                    <img src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_40') }}" alt="profilePic_default.png" />
                                     {% else %}
-                                        <img src="{{ matchPlayer.player.user.pictureWebPath | imagine_filter('avatar_40') }}" alt="{{ matchPlayer.player.user.profilePicture }}" />
+                                    <img src="{{ matchPlayer.player.user.pictureWebPath | imagine_filter('avatar_40') }}" alt="{{ matchPlayer.player.user.profilePicture }}" />
                                     {% endif %}
-                                </dt>
-                            </a>
+                                </a>
+                            </dt>
+                            <dd></dd>
                             {% endif %}
                         {% endfor %}
                         </dl>

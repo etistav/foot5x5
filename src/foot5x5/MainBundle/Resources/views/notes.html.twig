@@ -51,14 +51,14 @@
                 </td>
                 <td>
                     {% if player.notes|length > 0 %}
-                    <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#playerDialog{{ player.id }}"><span class="glyphicon glyphicon-remove"></span>
+                    <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#playerDialog_{{ player.id }}"><span class="glyphicon glyphicon-remove"></span>
                     </button>
-                    <div class="modal fade" id="playerDialog{{ player.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="playerDialog_{{ player.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel_{{ player.id }}" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                    <h4 class="modal-title" id="myModalLabel">Confirmation suppression note</h4>
+                                    <h4 class="modal-title" id="myModalLabel_{{ player.id }}">Confirmation suppression note</h4>
                                 </div>
                                 <div class="modal-body">
                                     Veux-tu vraiment supprimer tes notes pour {{ player.name }} ?

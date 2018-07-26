@@ -235,12 +235,22 @@ div#content {
 	justify-content: space-around;
 	align-content: space-around;
 }
-.landing-buttons button {
+.landing-buttons .btn {
+	display: grid;
+	grid-template-columns: 1fr 2fr 10fr;
+	align-items: center;
+	grid-column-gap: 5px;
 	margin: 5px 0;
 	height: 70px;
 	width: 200px;
 	white-space: normal;
 	border: 2px solid;
+	text-align: left;
+}
+.landing-buttons .btn .glyphicon {
+	top: -1px;
+	grid-column-start: 2;
+	line-height: 20px;
 }
 .landing-buttons .btn-success {
 	border-color: #005C1F;
@@ -322,13 +332,22 @@ div#content {
 	-webkit-border-radius: 10px;
     -moz-border-radius: 10px;
 	background-color: #E0F0FF;
-	margin: auto;
-	margin-top: 5px;
-	font-weight: bold;
+	height: 42px;
 	max-width: 75%;
+	margin: auto;
+	padding: 0;
+	margin-top: 5px;
 }
 #welcome-communities li:hover {
 	background-color: #99CCFF;
+}
+#welcome-communities a {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	font-weight: bold;
+	justify-content: center;
+	align-items: center;
 }
 #welcome-communities a:hover,
 #welcome-communities a:link {
@@ -392,65 +411,57 @@ table thead.bg-primary {
 	background-color: #191950;
 	color: #E0F0FF;
 }
-table#result-table {
+.result-table {
 	margin-top: 10px;
 	margin-bottom: 20px;
 	border: none;
 	border-bottom: 1px solid #191950;
 }
-table#result-table tbody tr td.result-score {
+.result-table .result-score {
 	text-align: center;
 	font-weight: bold;
 	font-size: 2em;
 	vertical-align: middle;
 	background-color: #FFFFFF;
 }
-table#result-table tbody tr td.result-victory {
+.result-table .result-victory {
 	color: #005C1F;
 }
-table#result-table tbody tr td.result-draw {
+.result-table .result-draw {
 	color: #85878B;
 }
-table#result-table tbody tr td.result-defeat {
+.result-table .result-defeat {
 	color: #990000;
 }
-table#result-table tbody tr td.result-score {
-	text-align: center;
-	font-weight: bold;
-	font-size: 2em;
-	vertical-align: middle;
-}
-table#result-table tbody tr td.result-score input {
+.result-table .result-score input {
 	text-align: center;
 	color: #006dcc;
 	margin: auto;
 	width: 80%;
 }
-table#result-table tbody tr td {
-	padding: 0;
+.result-table td {
+	padding: 0!important;
 	background-color: #FFFFFF;
-	border: none;
+	border: none!important;
+	border-top: 1px solid #191950!important;
 }
-table#result-table tbody tr td {
-	border-top: 1px solid #191950;
-}
-table#result-table tbody tr td.result-teamA dl {
+.result-table .result-teamA dl {
 	text-align: left;
 	padding: 0;
 	margin: 0;
 	background-color: #FFFFFF;
 }
-table#result-table tbody tr td.result-teamB dl {
+.result-table .result-teamB dl {
 	text-align: right;
 	padding: 0;
 	margin: 0;
 	background-color: #FFFFFF;
 }
-table#result-table tbody tr td dl dt {
+.result-table dt {
 	border-top: 1px solid #E0E0E0;
 	padding: 2px;
 }
-table#result-table tbody tr td dl dt:hover {
+.result-table dt:hover {
 	background: -moz-linear-gradient(top,  rgb(224,240,255) 0%, rgb(204,218,250) 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(224,240,255)), color-stop(100%,rgb(204,218,250)));
     background: -webkit-linear-gradient(top,  rgb(224,240,255) 0%,rgb(204,218,250) 100%);
@@ -458,41 +469,44 @@ table#result-table tbody tr td dl dt:hover {
     background: -ms-linear-gradient(top,  rgb(224,240,255) 0%,rgb(204,218,250) 100%);
     background: linear-gradient(to bottom, rgb(224,240,255) 0%,rgb(204,218,250) 100%);
 }
-table#result-table tbody tr td dl a {
+.result-table a {
+	display: inline-block;
 	text-decoration: none;
+	height: 100%;
+	width: 100%;
 }
-table#result-table tbody tr td dl dt img {
+.result-table dt img {
 	border: 1px solid #191950;
 	height: 40px;
 	width: 40px;
 }
-table#result-table tbody tr td dl dt span {
+.result-table dt span {
 	color: #191950;
 	display:inline-block;
 	vertical-align: middle;
 }
 @media (max-width: 600px) {
-	table#result-table tbody tr td dl dt {
+	.result-table dt {
 		white-space: nowrap;
 	}
-	table#result-table tbody tr td dl dt span {
+	.result-table dt span {
 		overflow: hidden;
 		width: 100px;
 		text-overflow: ellipsis;
 	}
 }
-table#result-table tbody tr td.result-teamA dl dt span {
+.result-table .result-teamA dt span {
 	padding-left: 10px;
 }
-table#result-table tbody tr td.result-teamB dl dt span {
+.result-table .result-teamB dt span {
 	padding-right: 10px;
 }
-table#result-table #datepicker {
+table.result-table #datepicker {
 	/* color: #006dcc; */
 	/* width: 200px;
 	height: auto; */
 }
-table#result-table #datepicker input {
+table.result-table #datepicker input {
 	/* color: #006dcc; */
 	color: #006dcc;
 	text-align: center;
@@ -799,7 +813,7 @@ table#standing-table tbody tr td div.standing-player strong {
 .popup-create-community {
 	padding: 10px;
 	height: auto;
-	top: 450px;
+	top: 30vh;
 	width: 60%;
 }
 .popup-create-community .popup-inner-scroll {
@@ -1010,12 +1024,12 @@ div#random-btn input {
 div#random-teams-section h2 {
 	margin-top: 0;
 }
-dl#random-list {
+.random-list {
 	margin-top: 20px;
 	margin-bottom: 20px;
 	width: 100%;
 }
-dl#random-list dt {
+.random-list dt {
 	border: 1px solid #191950;
 	line-height: 40px;
 	margin-bottom: 6px;
@@ -1030,21 +1044,21 @@ dl#random-list dt {
 	padding: 2px;
 	padding-left: 10px;
 }
-dl#random-list a {
+.random-list a {
 	text-decoration: none;
 }
-dl#random-list dt img {
+.random-list dt img {
 	border: 1px solid #191950;
 	height: 40px;
 	width: 40px;
 }
-dl#random-list dt span {
+.random-list dt span {
 	color: #191950;
 }
-dl#random-list dt span {
+.random-list dt span {
 	padding-left: 20px;
 }
-dl#random-list dt span {
+.random-list dt span {
 	padding-right: 20px;
 }
 
@@ -1103,7 +1117,10 @@ tr#finances-totalCredits td {
 	white-space: nowrap;
 	overflow: hidden;
 }
-
+#finances-form #datepicker {
+	padding-left: 15px;
+	padding-right: 15px;
+}
 #finances-form #datepicker input {
 	color: #006dcc;
 	text-align: center;

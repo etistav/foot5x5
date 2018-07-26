@@ -1117,7 +1117,10 @@ tr#finances-totalCredits td {
 	white-space: nowrap;
 	overflow: hidden;
 }
-
+#finances-form #datepicker {
+	padding-left: 15px;
+	padding-right: 15px;
+}
 #finances-form #datepicker input {
 	color: #006dcc;
 	text-align: center;

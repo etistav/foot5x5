@@ -72,7 +72,7 @@ class MainController extends Controller
 		return $this->render(
 			'foot5x5UserBundle::welcome.html.twig',
 			array(
-				'title' => 'Bienvenue '.$username. ' !',
+				'title' => 'Bienvenue '.$username.' !',
 				'username' => $username,
 				'communities' => $communities
 			)

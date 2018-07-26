@@ -38,7 +38,7 @@
             <div id="{{ sliderId }}" class="slider-note"></div>
         </div>
         <div class="col-xs-2 col-sm-2 col-md-1 slider-value">
-            <input type="text" id="{{ id }}" name="{{ id|slice(0, 4) }}[{{ name }}]" readonly required="required" class="form-control" rows="2" value="{{ value }}">
+            <input type="text" id="{{ id }}" name="{{ id|slice(0, 4) }}[{{ name }}]" readonly required="required" class="form-control" value="{{ value }}">
         </div>
     {% endspaceless %}
 {% endblock sliderNote_widget %}

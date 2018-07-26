@@ -28,9 +28,6 @@
                     {% endif %}
                 {% else %} class="ui-widget-content"
                 {% endif %}>{{ player.name }}</li>
-            {#
-            <li class="ui-widget-content">{{ player.name }}</li>
-            #}
             {% endfor %}
         </ol>
         {{ form_widget(randomDrawForm.selectedPlayers)}}
@@ -41,61 +38,63 @@
     <div class="col-md-7 col-xs-12" id="random-teams-section">
         <div class="col-xs-6" id="random-teamA" >
             <h2><span class="label dark-blue-grad">Équipe A</span></h2>
-            <dl id="random-list">
+            <dl class="random-list">
                 {% if matchPlayers %}
                     {% for matchPlayer in matchPlayers %}
                         {% if matchPlayer.team == "A" %}
-                        <a data-popup-open="popup-{{ matchPlayer.player.id }}" href="#">
-                            <dt>
+                        <dt>
+                            <a data-popup-open="popup-{{ matchPlayer.player.id }}" href="#">
                                 {% if matchPlayer.player.user is null %}
-                                    <img src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_40') }}" alt="profilePic_default.png" />
+                                <img src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_40') }}" alt="profilePic_default.png" />
                                 {% else %}
-                                    <img src="{{ matchPlayer.player.user.pictureWebPath | imagine_filter('avatar_40') }}" alt="{{ matchPlayer.player.user.profilePicture }}" />
+                                <img src="{{ matchPlayer.player.user.pictureWebPath | imagine_filter('avatar_40') }}" alt="{{ matchPlayer.player.user.profilePicture }}" />
                                 {% endif %}
                                 <span>{{ matchPlayer.player.name }}</span>
-                            </dt>
-                        </a>
+                            </a>
+                        </dt>
+                        <dd></dd>
                         {% endif %}
                     {% endfor %}
                 {% else %}
-                    <dt>-</dt>
-                    <dt>-</dt>
-                    <dt>-</dt>
-                    <dt>-</dt>
-                    <dt>-</dt>
+                    <dt>-</dt><dd></dd>
+                    <dt>-</dt><dd></dd>
+                    <dt>-</dt><dd></dd>
+                    <dt>-</dt><dd></dd>
+                    <dt>-</dt><dd></dd>
                 {% endif %}
             </dl>
         </div>
         <div class="col-xs-6" id="random-teamB" >
             <h2><span class="label dark-blue-grad">Équipe B</span></h2>
-            <dl id="random-list">
+            <dl class="random-list">
                 {% if matchPlayers %}
                     {% for matchPlayer in matchPlayers %}
                         {% if matchPlayer.team == "B" %}
-                        <a data-popup-open="popup-{{ matchPlayer.player.id }}" href="#">
-                            <dt>
+                        <dt>
+                            <a data-popup-open="popup-{{ matchPlayer.player.id }}" href="#">
                                 {% if matchPlayer.player.user is null %}
-                                    <img src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_40') }}" alt="profilePic_default.png" />
+                                <img src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_40') }}" alt="profilePic_default.png" />
                                 {% else %}
-                                    <img src="{{ matchPlayer.player.user.pictureWebPath | imagine_filter('avatar_40') }}" alt="{{ matchPlayer.player.user.profilePicture }}" />
+                                <img src="{{ matchPlayer.player.user.pictureWebPath | imagine_filter('avatar_40') }}" alt="{{ matchPlayer.player.user.profilePicture }}" />
                                 {% endif %}
                                 <span>{{ matchPlayer.player.name }}</span>
-                            </dt>
-                        </a>
+                            </a>
+                        </dt>
+                        <dd></dd>
                         {% endif %}
                     {% endfor %}
                 {% else %}
-                    <dt>-</dt>
-                    <dt>-</dt>
-                    <dt>-</dt>
-                    <dt>-</dt>
-                    <dt>-</dt>
+                    <dt>-</dt><dd></dd>
+                    <dt>-</dt><dd></dd>
+                    <dt>-</dt><dd></dd>
+                    <dt>-</dt><dd></dd>
+                    <dt>-</dt><dd></dd>
                 {% endif %}
             </dl>
         </div>
     </div>
-</div>
 {{ form_end(randomDrawForm) }}
+</div>
 {% endif %}
 <script>
     var _selectRange = false, _deselectQueue = [];

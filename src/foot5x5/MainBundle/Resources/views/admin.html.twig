@@ -54,7 +54,7 @@
         </div>
         {% endif %}
         <div class="admin-button-new col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
-            <a href="{{ path('add_match') }}"><button type="button" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouveau match</button></a>
+            <a href="{{ path('add_match') }}" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouveau match</a>
         </div>
         <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
         {% if results %}
@@ -80,14 +80,14 @@
                         <td class="col-md-2">EQUIPE B</td>
                         <td class="col-md-2 admin-center-column">
                             <a href="{{ path('edit_match', {'id':result.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
-                            <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#resultDialog{{ result.id }}"><span class="glyphicon glyphicon-remove"></span>
+                            <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#resultDialog_{{ result.id }}"><span class="glyphicon glyphicon-remove"></span>
                             </button>
-                            <div class="modal fade" id="resultDialog{{ result.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="resultDialog_{{ result.id }}" tabindex="-1" role="dialog" aria-labelledby="resModalLabel_{{ result.id }}" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h4 class="modal-title" id="myModalLabel">Confirmation suppression match</h4>
+                                            <h4 class="modal-title" id="resModalLabel_{{ result.id }}">Confirmation suppression match</h4>
                                         </div>
                                         <div class="modal-body">
                                             Veux-tu vraiment supprimer le match du {{ result.date|date('d/m/Y') }} ?
@@ -145,7 +145,7 @@
     <div class="tab-pane fade admin-panel" id="admin-players-panel">
     {% endif %}
         <div class="admin-button-new col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
-            <a href="{{ path('add_player') }}"><button type="button" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouveau joueur</button></a>
+            <a href="{{ path('add_player') }}" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouveau joueur</a>
         </div>
         <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
         {% if players %}
@@ -170,14 +170,14 @@
                     <td class="col-md-1 admin-center-column">{{ player.valAvg|number_format(1, '.') }}</td>
                     <td class="col-md-2 admin-center-column">
                         <a href="{{ path('edit_player', {'id':player.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
-                        <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#playerDialog{{ player.id }}"><span class="glyphicon glyphicon-remove"></span>
+                        <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#playerDialog_{{ player.id }}"><span class="glyphicon glyphicon-remove"></span>
                         </button>
-                        <div class="modal fade" id="playerDialog{{ player.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="playerDialog_{{ player.id }}" tabindex="-1" role="dialog" aria-labelledby="plrModalLabel_{{ player.id }}" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title" id="myModalLabel">Confirmation suppression joueur</h4>
+                                        <h4 class="modal-title" id="plrModalLabel_{{ player.id }}">Confirmation suppression joueur</h4>
                                     </div>
                                     <div class="modal-body">
                                         Veux-tu vraiment supprimer le joueur {{ player.name }} ?
@@ -227,7 +227,7 @@
                 </thead>
                 {% for user in users %}
                 <tr>
-                    <td class="col-md-2 admin-left-column">{{ user.user.username }}</a></td>
+                    <td class="col-md-2 admin-left-column">{{ user.user.username }}</td>
                     <td class="col-md-2 admin-left-column">
                         {#% if 'ROLE_ADMIN' in user.roles %}
                             Admin
@@ -244,14 +244,14 @@
                     <td class="col-md-2 admin-left-column">{{ user.user.email }}</td>
                     <td class="col-md-2 admin-center-column">
                         <a href="{{ path('edit_user_role', {'id':user.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
-                        <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#userDialog{{ user.id }}"><span class="glyphicon glyphicon-remove"></span>
+                        <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#userDialog_{{ user.id }}"><span class="glyphicon glyphicon-remove"></span>
                         </button>
-                        <div class="modal fade" id="userDialog{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="userDialog_{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="usrModalLabel_{{ user.id }}" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title" id="myModalLabel">Confirmation suppression utilisateur</h4>
+                                        <h4 class="modal-title" id="usrModalLabel_{{ user.id }}">Confirmation suppression utilisateur</h4>
                                     </div>
                                     <div class="modal-body">
                                         Veux-tu vraiment supprimer le user {{ user.user.username }} de la communauté ?
@@ -279,7 +279,7 @@
     <div class="tab-pane fade admin-panel" id="admin-finances-panel">
     {% endif %}
         <div class="admin-button-new col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
-            <a href="{{ path('add_transaction') }}"><button type="button" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouvelle transaction</button></a>
+            <a href="{{ path('add_transaction') }}" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouvelle transaction</a>
         </div>
         <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
         {% if transactions %}
@@ -295,20 +295,20 @@
                 </thead>
                 {% for tran in transactions %}
                 <tr>
-                    <td class="col-md-2 admin-left-column">{{ tran.date|date('d/m/Y') }}</a></td>
-                    <td class="col-md-2 admin-left-column">{{ tran.giver.name }}</a></td>
-                    <td class="col-md-2 admin-left-column">{{ tran.receiver.name }}</a></td>
-                    <td class="col-md-1 admin-center-column">{{ tran.amount }} €</a></td>
+                    <td class="col-md-2 admin-left-column">{{ tran.date|date('d/m/Y') }}</td>
+                    <td class="col-md-2 admin-left-column">{{ tran.giver.name }}</td>
+                    <td class="col-md-2 admin-left-column">{{ tran.receiver.name }}</td>
+                    <td class="col-md-1 admin-center-column">{{ tran.amount }} €</td>
                     <td class="col-md-2 admin-center-column">
                         <a href="{{ path('edit_transaction', {'id':tran.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
-                        <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#tranDialog{{ tran.id }}"><span class="glyphicon glyphicon-remove"></span>
+                        <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#tranDialog_{{ tran.id }}"><span class="glyphicon glyphicon-remove"></span>
                         </button>
-                        <div class="modal fade" id="tranDialog{{ tran.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="tranDialog_{{ tran.id }}" tabindex="-1" role="dialog" aria-labelledby="trnModalLabel_{{ tran.id }}" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title" id="myModalLabel">Confirmation suppression transaction</h4>
+                                        <h4 class="modal-title" id="trnModalLabel_{{ tran.id }}">Confirmation suppression transaction</h4>
                                     </div>
                                     <div class="modal-body">
                                         Veux-tu vraiment supprimer la transaction de {{ tran.amount }}€ entre {{ tran.giver.name }} et {{ tran.receiver.name }} ?

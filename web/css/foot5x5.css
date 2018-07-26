@@ -236,12 +236,21 @@ div#content {
 	align-content: space-around;
 }
 .landing-buttons .btn {
+	display: grid;
+	grid-template-columns: 1fr 2fr 10fr;
+	align-items: center;
+	grid-column-gap: 5px;
 	margin: 5px 0;
 	height: 70px;
 	width: 200px;
 	white-space: normal;
 	border: 2px solid;
-	line-height: 54px;
+	text-align: left;
+}
+.landing-buttons .btn .glyphicon {
+	top: -1px;
+	grid-column-start: 2;
+	line-height: 20px;
 }
 .landing-buttons .btn-success {
 	border-color: #005C1F;
@@ -323,13 +332,22 @@ div#content {
 	-webkit-border-radius: 10px;
     -moz-border-radius: 10px;
 	background-color: #E0F0FF;
-	margin: auto;
-	margin-top: 5px;
-	font-weight: bold;
+	height: 42px;
 	max-width: 75%;
+	margin: auto;
+	padding: 0;
+	margin-top: 5px;
 }
 #welcome-communities li:hover {
 	background-color: #99CCFF;
+}
+#welcome-communities a {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	font-weight: bold;
+	justify-content: center;
+	align-items: center;
 }
 #welcome-communities a:hover,
 #welcome-communities a:link {
@@ -800,7 +818,7 @@ table#standing-table tbody tr td div.standing-player strong {
 .popup-create-community {
 	padding: 10px;
 	height: auto;
-	top: 450px;
+	top: 30vh;
 	width: 60%;
 }
 .popup-create-community .popup-inner-scroll {

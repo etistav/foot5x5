@@ -235,12 +235,13 @@ div#content {
 	justify-content: space-around;
 	align-content: space-around;
 }
-.landing-buttons button {
+.landing-buttons .btn {
 	margin: 5px 0;
 	height: 70px;
 	width: 200px;
 	white-space: normal;
 	border: 2px solid;
+	line-height: 54px;
 }
 .landing-buttons .btn-success {
 	border-color: #005C1F;

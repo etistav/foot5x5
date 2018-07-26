@@ -22,7 +22,7 @@
 		<a data-popup-open="popup-upload" href="#">
 			<img src="{{ user.pictureWebPath | imagine_filter('avatar_200') }}" alt="{{ user.profilePicture }}" />
 		</a>
-		<a href="{{ path('edit_pwd') }}"><button type="button" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-cog"></span> Modifier mot de passe</button></a>
+		<a href="{{ path('edit_pwd') }}" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-cog"></span> Modifier mot de passe</a>
 	</div>
 	<div id="profile-info" class="col-sm-8 col-md-9">
 		<h3><span class="label">Informations Générales</span></h3>

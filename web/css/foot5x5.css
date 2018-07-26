@@ -411,57 +411,57 @@ table thead.bg-primary {
 	background-color: #191950;
 	color: #E0F0FF;
 }
-#result-table {
+.result-table {
 	margin-top: 10px;
 	margin-bottom: 20px;
 	border: none;
 	border-bottom: 1px solid #191950;
 }
-#result-table .result-score {
+.result-table .result-score {
 	text-align: center;
 	font-weight: bold;
 	font-size: 2em;
 	vertical-align: middle;
 	background-color: #FFFFFF;
 }
-#result-table .result-victory {
+.result-table .result-victory {
 	color: #005C1F;
 }
-#result-table .result-draw {
+.result-table .result-draw {
 	color: #85878B;
 }
-#result-table .result-defeat {
+.result-table .result-defeat {
 	color: #990000;
 }
-#result-table .result-score input {
+.result-table .result-score input {
 	text-align: center;
 	color: #006dcc;
 	margin: auto;
 	width: 80%;
 }
-#result-table td {
-	padding: 0;
+.result-table td {
+	padding: 0!important;
 	background-color: #FFFFFF;
-	border: none;
-	border-top: 1px solid #191950;
+	border: none!important;
+	border-top: 1px solid #191950!important;
 }
-#result-table .result-teamA dl {
+.result-table .result-teamA dl {
 	text-align: left;
 	padding: 0;
 	margin: 0;
 	background-color: #FFFFFF;
 }
-#result-table .result-teamB dl {
+.result-table .result-teamB dl {
 	text-align: right;
 	padding: 0;
 	margin: 0;
 	background-color: #FFFFFF;
 }
-#result-table dt {
+.result-table dt {
 	border-top: 1px solid #E0E0E0;
 	padding: 2px;
 }
-#result-table dt:hover {
+.result-table dt:hover {
 	background: -moz-linear-gradient(top,  rgb(224,240,255) 0%, rgb(204,218,250) 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(224,240,255)), color-stop(100%,rgb(204,218,250)));
     background: -webkit-linear-gradient(top,  rgb(224,240,255) 0%,rgb(204,218,250) 100%);
@@ -469,44 +469,44 @@ table thead.bg-primary {
     background: -ms-linear-gradient(top,  rgb(224,240,255) 0%,rgb(204,218,250) 100%);
     background: linear-gradient(to bottom, rgb(224,240,255) 0%,rgb(204,218,250) 100%);
 }
-#result-table a {
+.result-table a {
 	display: inline-block;
 	text-decoration: none;
 	height: 100%;
 	width: 100%;
 }
-#result-table dt img {
+.result-table dt img {
 	border: 1px solid #191950;
 	height: 40px;
 	width: 40px;
 }
-#result-table dt span {
+.result-table dt span {
 	color: #191950;
 	display:inline-block;
 	vertical-align: middle;
 }
 @media (max-width: 600px) {
-	#result-table dt {
+	.result-table dt {
 		white-space: nowrap;
 	}
-	#result-table dt span {
+	.result-table dt span {
 		overflow: hidden;
 		width: 100px;
 		text-overflow: ellipsis;
 	}
 }
-#result-table .result-teamA dt span {
+.result-table .result-teamA dt span {
 	padding-left: 10px;
 }
-#result-table .result-teamB dt span {
+.result-table .result-teamB dt span {
 	padding-right: 10px;
 }
-table#result-table #datepicker {
+table.result-table #datepicker {
 	/* color: #006dcc; */
 	/* width: 200px;
 	height: auto; */
 }
-table#result-table #datepicker input {
+table.result-table #datepicker input {
 	/* color: #006dcc; */
 	color: #006dcc;
 	text-align: center;

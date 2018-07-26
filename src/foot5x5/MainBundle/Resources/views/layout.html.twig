@@ -12,7 +12,7 @@
     <link href="{{ asset('lib/jquery/jquery-ui.theme.min.css') }}" rel="stylesheet">
     
     <link href="{{ asset('css/foot5x5.css') }}" rel="stylesheet">
-    <title>Foot 5x5 - {% block title %}{% endblock %}</title>
+    <title>Foot 5x5 - {% block title %}{{ title }}{% endblock %}</title>
 
     <!-- jQuery -->
     <script src="{{ asset('lib/jquery/jquery-1.11.2.min.js') }}"></script>

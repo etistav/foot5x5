@@ -1024,12 +1024,12 @@ div#random-btn input {
 div#random-teams-section h2 {
 	margin-top: 0;
 }
-dl#random-list {
+.random-list {
 	margin-top: 20px;
 	margin-bottom: 20px;
 	width: 100%;
 }
-dl#random-list dt {
+.random-list dt {
 	border: 1px solid #191950;
 	line-height: 40px;
 	margin-bottom: 6px;
@@ -1044,21 +1044,21 @@ dl#random-list dt {
 	padding: 2px;
 	padding-left: 10px;
 }
-dl#random-list a {
+.random-list a {
 	text-decoration: none;
 }
-dl#random-list dt img {
+.random-list dt img {
 	border: 1px solid #191950;
 	height: 40px;
 	width: 40px;
 }
-dl#random-list dt span {
+.random-list dt span {
 	color: #191950;
 }
-dl#random-list dt span {
+.random-list dt span {
 	padding-left: 20px;
 }
-dl#random-list dt span {
+.random-list dt span {
 	padding-right: 20px;
 }
 

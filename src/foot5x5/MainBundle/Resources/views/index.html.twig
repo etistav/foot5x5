@@ -28,19 +28,17 @@
                         <dl>
                         {% for matchPlayer in lastResult.matchPlayers %}
                             {% if matchPlayer.match.id == lastResult.id and matchPlayer.team == "A" %}
-                            <a data-popup-open="popup-{{ matchPlayer.player.id }}" href="#">
-                                <dt>
-                                {#
-                                <img src="{{ asset("bundles/foot5x5main/images/icon-user-default.png") }}" alt="{{ matchPlayer.player.name }}" />
-                                #}
-                                    {% if matchPlayer.player.user is null %}
-                                        <img src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_40') }}" alt="profilePic_default.png" />
-                                    {% else %}
-                                        <img src="{{ matchPlayer.player.user.pictureWebPath | imagine_filter('avatar_40') }}" alt="{{ matchPlayer.player.user.profilePicture }}" />
-                                    {% endif %}
-                                    <span>{{ matchPlayer.player.name }}</span>
-                                </dt>
-                            </a>
+                            <dt>
+                                <a data-popup-open="popup-{{ matchPlayer.player.id }}" href="#">
+                                {% if matchPlayer.player.user is null %}
+                                    <img src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_40') }}" alt="profilePic_default.png" />
+                                {% else %}
+                                    <img src="{{ matchPlayer.player.user.pictureWebPath | imagine_filter('avatar_40') }}" alt="{{ matchPlayer.player.user.profilePicture }}" />
+                                {% endif %}
+                                <span>{{ matchPlayer.player.name }}</span>
+                                </a>
+                            </dt>
+                            <dd></dd>
                             {% endif %}
                         {% endfor %}
                         </dl>
@@ -60,16 +58,17 @@
                         <dl>
                         {% for matchPlayer in lastResult.matchPlayers %}
                             {% if matchPlayer.match.id == lastResult.id and matchPlayer.team == "B" %}
-                            <a data-popup-open="popup-{{ matchPlayer.player.id }}" href="#">
-                                <dt>
+                            <dt>
+                                <a data-popup-open="popup-{{ matchPlayer.player.id }}" href="#">
                                     <span>{{ matchPlayer.player.name }}</span>
                                     {% if matchPlayer.player.user is null %}
                                         <img src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_40') }}" alt="profilePic_default.png" />
                                     {% else %}
                                         <img src="{{ matchPlayer.player.user.pictureWebPath | imagine_filter('avatar_40') }}" alt="{{ matchPlayer.player.user.profilePicture }}" />
                                     {% endif %}
-                                </dt>
-                            </a>
+                                </a>
+                            </dt>
+                            <dd></dd>
                             {% endif %}
                         {% endfor %}
                         </dl>

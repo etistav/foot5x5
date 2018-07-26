@@ -411,65 +411,57 @@ table thead.bg-primary {
 	background-color: #191950;
 	color: #E0F0FF;
 }
-table#result-table {
+#result-table {
 	margin-top: 10px;
 	margin-bottom: 20px;
 	border: none;
 	border-bottom: 1px solid #191950;
 }
-table#result-table tbody tr td.result-score {
+#result-table .result-score {
 	text-align: center;
 	font-weight: bold;
 	font-size: 2em;
 	vertical-align: middle;
 	background-color: #FFFFFF;
 }
-table#result-table tbody tr td.result-victory {
+#result-table .result-victory {
 	color: #005C1F;
 }
-table#result-table tbody tr td.result-draw {
+#result-table .result-draw {
 	color: #85878B;
 }
-table#result-table tbody tr td.result-defeat {
+#result-table .result-defeat {
 	color: #990000;
 }
-table#result-table tbody tr td.result-score {
-	text-align: center;
-	font-weight: bold;
-	font-size: 2em;
-	vertical-align: middle;
-}
-table#result-table tbody tr td.result-score input {
+#result-table .result-score input {
 	text-align: center;
 	color: #006dcc;
 	margin: auto;
 	width: 80%;
 }
-table#result-table tbody tr td {
+#result-table td {
 	padding: 0;
 	background-color: #FFFFFF;
 	border: none;
-}
-table#result-table tbody tr td {
 	border-top: 1px solid #191950;
 }
-table#result-table tbody tr td.result-teamA dl {
+#result-table .result-teamA dl {
 	text-align: left;
 	padding: 0;
 	margin: 0;
 	background-color: #FFFFFF;
 }
-table#result-table tbody tr td.result-teamB dl {
+#result-table .result-teamB dl {
 	text-align: right;
 	padding: 0;
 	margin: 0;
 	background-color: #FFFFFF;
 }
-table#result-table tbody tr td dl dt {
+#result-table dt {
 	border-top: 1px solid #E0E0E0;
 	padding: 2px;
 }
-table#result-table tbody tr td dl dt:hover {
+#result-table dt:hover {
 	background: -moz-linear-gradient(top,  rgb(224,240,255) 0%, rgb(204,218,250) 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(224,240,255)), color-stop(100%,rgb(204,218,250)));
     background: -webkit-linear-gradient(top,  rgb(224,240,255) 0%,rgb(204,218,250) 100%);
@@ -477,33 +469,36 @@ table#result-table tbody tr td dl dt:hover {
     background: -ms-linear-gradient(top,  rgb(224,240,255) 0%,rgb(204,218,250) 100%);
     background: linear-gradient(to bottom, rgb(224,240,255) 0%,rgb(204,218,250) 100%);
 }
-table#result-table tbody tr td dl a {
+#result-table a {
+	display: inline-block;
 	text-decoration: none;
+	height: 100%;
+	width: 100%;
 }
-table#result-table tbody tr td dl dt img {
+#result-table dt img {
 	border: 1px solid #191950;
 	height: 40px;
 	width: 40px;
 }
-table#result-table tbody tr td dl dt span {
+#result-table dt span {
 	color: #191950;
 	display:inline-block;
 	vertical-align: middle;
 }
 @media (max-width: 600px) {
-	table#result-table tbody tr td dl dt {
+	#result-table dt {
 		white-space: nowrap;
 	}
-	table#result-table tbody tr td dl dt span {
+	#result-table dt span {
 		overflow: hidden;
 		width: 100px;
 		text-overflow: ellipsis;
 	}
 }
-table#result-table tbody tr td.result-teamA dl dt span {
+#result-table .result-teamA dt span {
 	padding-left: 10px;
 }
-table#result-table tbody tr td.result-teamB dl dt span {
+#result-table .result-teamB dt span {
 	padding-right: 10px;
 }
 table#result-table #datepicker {

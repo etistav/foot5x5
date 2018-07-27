@@ -225,6 +225,10 @@ div#content {
 .landing-content img {
 	margin: auto;
 	display: block;
+	transition: all 0.5s ease-out;
+}
+.landing-content img:hover {
+	transform: rotate(10deg) scale(1.15, 1.15);
 }
 .landing-content .form-horizontal {
 	padding-top: 20px;
@@ -246,6 +250,7 @@ div#content {
 	white-space: normal;
 	border: 2px solid;
 	text-align: left;
+	transition: all 0.5s ease-out;
 }
 .landing-buttons .btn .glyphicon {
 	top: -1px;
@@ -264,6 +269,9 @@ div#content {
 }
 .landing-buttons .btn-primary:hover {
 	border-color: #99CCFF;
+}
+.landing-buttons .btn:hover {
+	transform: scale(1.15, 1.15);
 }
 
 .home-padding {
@@ -293,12 +301,18 @@ div#content {
 	margin-top: 50px;
 	grid-template-columns: 2fr 2fr;
 	grid-template-rows: 2fr 2fr;
+	z-index: 100;
 }
 .grid > img {
 	margin: auto;
 	border: solid 1px #191950;
 	width: 260px;
 	height: 200px;
+	transition: transform 0.5s ease-out;
+}
+#home-create img:hover {
+	transform: scale(1.2, 1.2);
+	outline: 2px solid #191950;
 }
 #home-join .row div {
 	min-height: 300px;
@@ -337,9 +351,13 @@ div#content {
 	margin: auto;
 	padding: 0;
 	margin-top: 5px;
+	transition-property: transform;
+	transition-duration: 0.5s;
+	transition-timing-function: ease-out;
 }
 #welcome-communities li:hover {
 	background-color: #99CCFF;
+	transform: translate(20px, 0);
 }
 #welcome-communities a {
 	display: flex;

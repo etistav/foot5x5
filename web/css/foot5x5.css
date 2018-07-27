@@ -28,6 +28,9 @@ body {
 	min-height: 800px;
 	margin-top: 50px;
 }
+a:hover, a:link, a:visited, a:active {
+	text-decoration: none;
+}
 .well {
     background: linear-gradient(to bottom, rgb(250,250,250) 0%, rgb(234,234,250) 100%);
 	background: -moz-linear-gradient(top, rgb(250,250,250) 0%, rgb(234,234,250) 100%);
@@ -367,11 +370,6 @@ div#content {
 	justify-content: center;
 	align-items: center;
 }
-#welcome-communities a:hover,
-#welcome-communities a:link {
-    text-decoration: none;
-}
-
 /* ------------------------- */
 /*   TRIM FORM               */
 /* ------------------------- */
@@ -489,7 +487,6 @@ table thead.bg-primary {
 }
 .result-table a {
 	display: inline-block;
-	text-decoration: none;
 	height: 100%;
 	width: 100%;
 }
@@ -722,9 +719,6 @@ table#standing-table tbody tr td div.standing-player strong {
 #players-container ul#players-photos li.player-photo:hover {
 	border-color: #4F5261;
 }
-#players-container ul#players-photos li.player-photo a {
-	text-decoration: none;
-}
 #players-container ul#players-photos li.player-photo img {
 	border-bottom: 2px solid #191950;
 	width: 100%;
@@ -868,7 +862,6 @@ table#standing-table tbody tr td div.standing-player strong {
     -webkit-transform:translate(50%, -50%) rotate(180deg);
     transform:translate(50%, -50%) rotate(180deg);
     background:rgba(0,0,0,1);
-    text-decoration:none;
 }
 .popup-player-header,
 .popup-player-stats,
@@ -1061,9 +1054,6 @@ div#random-teams-section h2 {
     background: linear-gradient(to bottom, rgb(252,252,255) 0%,rgb(224,240,255) 100%);
 	padding: 2px;
 	padding-left: 10px;
-}
-.random-list a {
-	text-decoration: none;
 }
 .random-list dt img {
 	border: 1px solid #191950;
@@ -1336,7 +1326,6 @@ footer div h4 {
 }
 .fa:hover {
 	color: #99CCFF;
-	text-decoration: none;
 }
 .icon {
 	max-width: 100px;

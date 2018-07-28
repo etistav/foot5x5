@@ -12,6 +12,7 @@
 <div id="players-container" class="col-xs-12 col-sm-12 col-md-12">
     <ul id="players-photos">
         {% for player in players %}
+        {#}
         <li id="player-photo-{{ player.id }}" class="player-photo">
             <a data-popup-open="popup-{{ player.id }}" href="#">
                 {% if player.user is null %}
@@ -20,7 +21,19 @@
                     <img src="{{ player.user.pictureWebPath | imagine_filter('avatar_200') }}" alt="{{ player.name }}" />
                 {% endif %}
                 <p>{{ player.name }}</p>
-                {#<div class="players-logo"></div>#}
+            </a>
+        </li>
+        #}
+        <li id="player-photo-{{ player.id }}" class="player-photo">
+            <a href="#" data-popup-open="popup-{{ player.id }}" class="profile-pic">
+                {% if player.user is null %}
+                    <img src="{{ 'uploads/img/profilePic_default.png' | imagine_filter('avatar_200') }}" alt="{{ player.name }}" />
+                {% else %}
+                    <img src="{{ player.user.pictureWebPath | imagine_filter('avatar_200') }}" alt="{{ player.name }}" />
+                {% endif %}
+                <div class="profile-pic-caption"></div>
+                <div class="profile-pic-text"><span>{{ player.name }}</span></div>
+                <p class="dark-blue-grad">{{ player.name }}</p>
             </a>
         </li>
         {% endfor %}

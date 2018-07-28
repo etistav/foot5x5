@@ -631,7 +631,7 @@ class AdminController extends Controller
 
         // Création du formulaire associé
         $formOptions = array(
-        		"action" => "addUser"
+        		"form_situation" => "addUser"
         );
         $userForm = $this->createForm(UserType::class, $user, $formOptions);
         $userForm->handleRequest($request);
@@ -687,7 +687,7 @@ class AdminController extends Controller
 		$usrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5UserBundle:User');
         $user = $usrRepo->find($id);
         $formOptions = array(
-        		"action" => "edit"
+        		"form_situation" => "edit"
         );
         $userForm = $this->createForm(UserType::class, $user, $formOptions);
         

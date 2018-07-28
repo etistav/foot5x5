@@ -86,13 +86,62 @@ class MainController extends Controller
      */
     public function profileAction(Request $request) {
 
+		$user = $this->getUser();
+
+		// Management of the "edit personal info" form
+		$formOptions = array(
+			"form_situation" => "editProfileInfo"
+		);
+		$userForm = $this->createForm(UserType::class, $user, $formOptions);
+		$userForm->handleRequest($request);
+		if ($userForm->isSubmitted()) {
+			$em = $this->getDoctrine()->getManager();
+			if ($userForm->isValid()) {
+				// Ecriture du user en BDD
+				$em->persist($user);
+				$em->flush();
+				
+				// Gestion d'un message d'info
+				$this->get('session')->getFlashBag()->add('success', 'Vos infos personnelles ont bien été modifiées.');
+			} else {
+				// Reset user information
+				$em->refresh($user);
+			}
+		}
+
+		// Management of the "Upload profile pic" form
+		$uploadForm = $this->createForm(UploadProfilePicType::class, $user);
+		$uploadForm->handleRequest($request);
+		if ($uploadForm->isSubmitted() && $uploadForm->isValid()) {
+			// Save the user
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($user);
+			$em->flush();
+
+			// Gestion d'un message d'info
+			$this->get('session')->getFlashBag()->add('success', 'Votre photo de profil a bien été mise à jour.');
+		}
+
 		// Retrieve community ID from session
 		$communityId = $this->get('session')->get('community');
+		$isInCommunity = true;
 		if (!isset($communityId)) {
-			return $this->redirect($this->generateUrl('welcome'));
+			// Management of the view rendering from outside of any community
+			$isInCommunity = false;
+			return $this->render(
+				'foot5x5MainBundle::profile.html.twig',
+				array(
+					'user' => $user,
+					'uploadForm' => $uploadForm->createView(),
+					'uploadButtonLabel' => 'Upload',
+					'userForm' => $userForm->createView(),
+					'editInfoButtonLabel' => 'Modifier',
+					'isInCommunity' => $isInCommunity
+				)
+			);
 		}
-        $user = $this->getUser();        
 
+		// Management of the view rendering from inside a community
         $mplRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:MatchPlayer');
         $rnkRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Ranking');
 		$stdRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Standing');
@@ -104,7 +153,7 @@ class MainController extends Controller
 
 		$lastStanding = $stdRepo->findLastStanding($communityId);
 		
-		//Initialisation des paramètres passés à la view twig
+		// Initialization of parameters passed to twig view
 		$rank = "Non classé";
 		$currentForm = "-";
 		$lastMatch = NULL;
@@ -136,18 +185,6 @@ class MainController extends Controller
 			$nbTimesLast = $rnkRepo->howManyTimesLastForPlayer($player);
 		}
 
-		$uploadForm = $this->createForm(UploadProfilePicType::class, $user);
-	    $uploadForm->handleRequest($request);
-	    
-	    if ($uploadForm->isSubmitted() && $uploadForm->isValid()) {
-
-			// Save the user
-			$em = $this->getDoctrine()->getManager();
-			$em->persist($user);
-			$em->flush();
-
-		}
-
         return $this->render(
             'foot5x5MainBundle::profile.html.twig',
             array(
@@ -164,7 +201,10 @@ class MainController extends Controller
                 'nbRelegations' => $nbRelegations,
                 'nbTimesLast' => $nbTimesLast,
 	            'uploadForm' => $uploadForm->createView(),
-	            'buttonLabel' => 'Upload'
+				'uploadButtonLabel' => 'Upload',
+				'userForm' => $userForm->createView(),
+				'editInfoButtonLabel' => 'Modifier',
+				'isInCommunity' => $isInCommunity
             )
         );
     }

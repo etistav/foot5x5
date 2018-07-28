@@ -775,13 +775,14 @@ table#standing-table tbody tr td div.standing-player strong {
 } 
 /* Inner */
 .popup-inner {
-    max-width:700px;
-    width:90%;
-    height: 600px;
+	width:90%;
+	min-width: 350px;
+	max-width: 700px;
+	height: 80vh;
     padding: 40px;
     padding-right: 20px;
     position:absolute;
-    top: 80px;
+    top: 10vh;
     left:50%;
     -webkit-transform:translate(-50%, 0%);
     transform:translate(-50%, 0%);
@@ -791,13 +792,14 @@ table#standing-table tbody tr td div.standing-player strong {
 }
 .popup-mini-inner {
 	height: 300px;
-	top: 120px;
 }
 .popup-upload {
 	padding: 10px;
-	height: 160px;
-	top: 120px;
+	height: 180px;
 	width: 60%;
+}
+.popup-edit-user-info {
+	height: 450px;
 }
 .popup-inner-scroll {
     width:100%;
@@ -819,6 +821,8 @@ table#standing-table tbody tr td div.standing-player strong {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(25,25,80,0.5); 
 }
+
+/* popup forms */
 
 
 /* temporary pop-up until community creation will be ready */
@@ -1180,24 +1184,72 @@ tr#finances-totalCredits td {
 	padding: 10px;
 	overflow: auto;
 }
-#profile-pic {
+#profile-left {
 	float: left;
-	width: 220px;
+	width: 200px;
 	overflow: auto;
 	padding: 0;
+	margin-right: 20px;
 }
-#profile-pic img {
+.profile-pic {
+	display: block;
+	position: relative;
 	border: 2px solid #191950;
 	height: 200px;
 	width: 200px;
+	overflow: hidden;
 	margin-bottom: 20px;
 }
+.profile-pic img {
+	position: absolute;
+	opacity: 1;
+	width: 100%;
+	height: auto;
+	transition: transform 0.5s ease-out;
+}
+.profile-pic-caption, .profile-pic-text {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+.profile-pic-caption {
+	opacity: 1;
+	background-color: #19195000;
+	transition: background-color 0.5s ease;
+}
+.profile-pic-text {
+	display: table;
+	text-align: center;
+	opacity: 0;
+	transition: opacity 0.5s ease;
+}
+.profile-pic-text > span {
+	display: table-cell;
+	vertical-align: middle;
+	font-size: 200%;
+	font-weight: 700;
+	color: #fff;
+}
+.profile-pic:hover img {
+	transform: scale(1.1, 1.1);
+}
+.profile-pic:hover .profile-pic-caption {
+	background-color: #19195066;
+}
+.profile-pic:hover .profile-pic-text {
+	opacity: 1;
+}
+#profile-left .btn {
+	display: block;
+	width: 100%;
+	margin-bottom: 10px;
+	text-align: left;
+}
 #profile-info {
-	/* border: 1px solid #191950; */
 	float: left;
-	/* margin-left: 20px; */
 	padding: 0;
-	/* width: 80%; */
 }
 #profile-info h3 {
 	border-bottom: 1px solid #191950;
@@ -1355,6 +1407,14 @@ footer div h4 {
 	}
 	.landing-content .well-transparent-blue {
 		margin: 10px 10px 0 10px;
+	}
+
+	
+	/* ----------------------- */
+	/*         POPUPS          */
+	/* ----------------------- */
+	.popup-edit-user-info {
+		height: 80vh;
 	}
 	/* ----------------------- */
 	/*         FOOTER          */

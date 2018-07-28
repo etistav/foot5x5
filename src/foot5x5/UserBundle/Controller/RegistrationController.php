@@ -26,7 +26,7 @@ class RegistrationController extends Controller
 		// Build the form
 		$user = new User();
 		$formOptions = array(
-				"action" => "register"
+				"form_situation" => "register"
 		);
 		$userForm = $this->createForm(UserType::class, $user, $formOptions);
 		

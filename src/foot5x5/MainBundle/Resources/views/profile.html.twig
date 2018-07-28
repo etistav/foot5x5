@@ -16,12 +16,26 @@
     {{ flashMessage }}
 </div>
 {% endfor %}
+{% if not userForm.vars.valid %}
+<div class="alert alert-danger">
+	<ul>
+	{% for child in userForm.children %}
+		{% for error in child.vars.errors %}
+			<li>{{ error.message }}</li>
+		{% endfor %}
+	{% endfor %}
+	</ul>
+</div>
+{% endif %}
 
 <div id="profile-container" class="col-xs-12 well">
-	<div id="profile-pic">
-		<a data-popup-open="popup-upload" href="#">
+	<div id="profile-left">
+		<a href="#" data-popup-open="popup-upload" class="profile-pic">
 			<img src="{{ user.pictureWebPath | imagine_filter('avatar_200') }}" alt="{{ user.profilePicture }}" />
+			<div class="profile-pic-caption"></div>
+			<div class="profile-pic-text"><span>Modifier photo</span></div>
 		</a>
+		<a href="#" data-popup-open="popup-edit-user-info" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-info-sign"></span> Modifier infos perso</a>
 		<a href="{{ path('edit_pwd') }}" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-cog"></span> Modifier mot de passe</a>
 	</div>
 	<div id="profile-info" class="col-sm-8 col-md-9">
@@ -36,6 +50,11 @@
 					<td class="profile-info-label">Date de naissance :</td>
 					<td>{{ user.birthday|date('d/m/Y') }} ({{ user.age }} ans)</td>
 				</tr>
+				<tr>
+					<td class="profile-info-label">Email :</td>
+					<td>{{ user.email }}</td>
+				</tr>
+				{% if isInCommunity == true %}
 				<tr>
 					<td class="profile-info-label">Rôle : </td>
 					<td>
@@ -53,9 +72,11 @@
 						{% endif %}
 					</td>
 				</tr>
+				{% endif %}
 			</tbody>
 		</table>
 		
+		{% if isInCommunity == true %}
 		<h3><span class="label">Performances actuelles</span></h3>
 		<table>
 			<tbody>
@@ -107,6 +128,7 @@
 				</tr>
 			</tbody>
 		</table>
+		{% endif %}
 	</div>
 </div>
 
@@ -123,11 +145,83 @@
 					}}) }}
 				</div>
 				<div class="col-sm-2">
-					<input type="submit" class="btn btn-primary" value="{{ buttonLabel }}" />
+					<input type="submit" class="btn btn-primary" value="{{ uploadButtonLabel }}" />
 				</div>
 			</div>
 			{{ form_end(uploadForm) }}
             <a class="popup-close" data-popup-close="popup-upload" href="#">x</a>
+        </div>
+    </div>
+</div>
+
+<div class="popup" data-popup="popup-edit-user-info">
+	<div class="popup-inner popup-edit-user-info">
+        <div class="popup-inner-scroll">
+			<h3 class="text-center">Infos personnelles</h3>
+			{{ form_start(userForm, { 'attr': {'class': 'form-horizontal'} }) }}
+			<div class="form-group">
+				{{ form_label(userForm.username, null, { 'label_attr':  {
+					'class': 'col-sm-3 control-label'
+				}}) }}
+				<div class="col-sm-6">
+					{{ form_widget(userForm.username, { 'attr':  {
+						'class': 'form-control'
+					}}) }}
+				</div>
+			</div>
+			<div class="form-group">
+				{{ form_label(userForm.firstname, null, { 'label_attr':  {
+					'class': 'col-sm-3 control-label'
+				}}) }}
+				<div class="col-sm-6">
+					{{ form_widget(userForm.firstname, { 'attr':  {
+						'class': 'form-control'
+					}}) }}
+				</div>
+			</div>
+			<div class="form-group">
+				{{ form_label(userForm.lastname, null, { 'label_attr':  {
+					'class': 'col-sm-3 control-label'
+				}}) }}
+				<div class="col-sm-6">
+					{{ form_widget(userForm.lastname, { 'attr':  {
+						'class': 'form-control'
+					}}) }}
+				</div>
+			</div>
+			<div class="form-group">
+				{{ form_label(userForm.birthday, null, { 'label_attr':  {
+					'class': 'col-sm-3 control-label'
+				}}) }}
+				<div class="col-sm-6 form-inline">
+					{{ form_widget(userForm.birthday.day, { 'attr':  {
+						'class': 'form-control mb-10'
+					}}) }}
+					{{ form_widget(userForm.birthday.month, { 'attr':  {
+						'class': 'form-control'
+					}}) }}
+					{{ form_widget(userForm.birthday.year, { 'attr':  {
+						'class': 'form-control'
+					}}) }}
+				</div>
+			</div>
+			<div class="form-group">
+				{{ form_label(userForm.email, null, { 'label_attr':  {
+					'class': 'col-sm-3 control-label'
+				}}) }}
+				<div class="col-sm-6">
+					{{ form_widget(userForm.email, { 'attr':  {
+						'class': 'form-control'
+					}}) }}
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-3 col-sm-3">
+					<input type="submit" class="btn btn-primary" value="{{ editInfoButtonLabel }}" />
+				</div>
+			</div>
+			{{ form_end(userForm) }}
+            <a class="popup-close" data-popup-close="popup-edit-user-info" href="#">x</a>
         </div>
     </div>
 </div>

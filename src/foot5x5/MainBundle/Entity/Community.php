@@ -32,7 +32,9 @@ class Community
 	 */
 	public function __construct()
 	{
-		$this->dateOfCreation = new \DateTime();
+        $this->dateOfCreation = new \DateTime();
+        $this->matchPrice = 7;
+        $this->minAttendanceRate = 0.33;
 		// $this->password=bin2hex(random_bytes(10));
 		$this->results = new ArrayCollection();
 		$this->standings = new ArrayCollection();
@@ -70,6 +72,32 @@ class Community
      * @Assert\Date()
      */
     private $dateOfCreation;
+
+    /**
+     * @var float
+     *
+     * @Column(name="cmn_matchPrice", type="decimal", precision=3, scale=1)
+     * @Assert\Range(
+     *      min = 0,
+     *      max = 20,
+     *      minMessage = "Le prix par personne d'un match doit au moins faire {{ limit }}€",
+     *      maxMessage = "Le prix par personne d'un match ne doit pas dépasser {{ limit }}€"
+     * )
+     */
+    private $matchPrice;
+
+    /**
+     * @var float
+     *
+     * @Column(name="cmn_minAttendanceRate", type="decimal", precision=3, scale=2)
+     * @Assert\Range(
+     *      min = 0,
+     *      max = 1,
+     *      minMessage = "Le taux d'apparition minimum doit être compris entre 0 et 1",
+     *      maxMessage = "Le taux d'apparition minimum doit être compris entre 0 et 1"
+     * )
+     */
+    private $minAttendanceRate;
 
     /**
      * @var string
@@ -292,5 +320,53 @@ class Community
     public function getPlayers()
     {
         return $this->players;
+    }
+
+    /**
+     * Set matchPrice.
+     *
+     * @param float $matchPrice
+     *
+     * @return Community
+     */
+    public function setMatchPrice($matchPrice)
+    {
+        $this->matchPrice = $matchPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get matchPrice.
+     *
+     * @return float
+     */
+    public function getMatchPrice()
+    {
+        return $this->matchPrice;
+    }
+
+    /**
+     * Set minAttendanceRate.
+     *
+     * @param float $minAttendanceRate
+     *
+     * @return Community
+     */
+    public function setMinAttendanceRate($minAttendanceRate)
+    {
+        $this->minAttendanceRate = $minAttendanceRate;
+
+        return $this;
+    }
+
+    /**
+     * Get minAttendanceRate.
+     *
+     * @return float
+     */
+    public function getMinAttendanceRate()
+    {
+        return $this->minAttendanceRate;
     }
 }

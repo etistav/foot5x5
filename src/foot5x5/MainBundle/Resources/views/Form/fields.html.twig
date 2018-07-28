@@ -30,15 +30,20 @@
 {% endblock playerDrop_widget %}
 
 
-{# id = note_valAtt _valDef _valPhy#}
+{# id = note_valAtt _valDef _valPhy #}
+{# id = community_minAttendanceRate #}
 {% block sliderNote_widget %}
     {% spaceless %}
         {% set sliderId = id ~ "_slider" %}
-        <div class="col-xs-6 col-sm-5 slider-div">
+        <div class="col-xs-9 col-sm-5 slider-div">
             <div id="{{ sliderId }}" class="slider-note"></div>
         </div>
         <div class="col-xs-2 col-sm-2 col-md-1 slider-value">
+            {% if id|slice(0, 4) == 'note' %}
             <input type="text" id="{{ id }}" name="{{ id|slice(0, 4) }}[{{ name }}]" readonly required="required" class="form-control" value="{{ value }}">
+            {% else %}
+            <input type="text" id="{{ id }}" name="{{ id|slice(0, 9) }}[{{ name }}]" readonly required="required" class="form-control" value="{{ value }}">
+            {% endif %}
         </div>
     {% endspaceless %}
 {% endblock sliderNote_widget %}

@@ -109,7 +109,8 @@
 {% if (app.request.attributes.get('_route') == 'home')
    or (app.request.attributes.get('_route') == 'welcome')
    or (app.request.attributes.get('_route') == 'login')
-   or (app.request.attributes.get('_route') == 'register') %}
+   or (app.request.attributes.get('_route') == 'register')
+   or (app.request.attributes.get('_route') == 'create_community') %}
     {% block homecontent %}{% endblock %}
 {% else %}
 <div id="content" class="container">

@@ -2,32 +2,85 @@
 
 {% block title %}{{ title }}{% endblock %}
 
-{% block content %}
-<h2 class="text-center">{{ block('title') }}</h2>
-{% for flashMessage in app.session.flashbag.get('success') %}
-<div class="alert alert-success">
-    {{ flashMessage }}
-</div>
-{% endfor %}
+{% block homecontent %}
+{% form_theme communityForm 'foot5x5MainBundle:Form:fields.html.twig' %}
 
-<div class="well">
-{{ form_start(communityForm, { 'attr': {'class': 'form-horizontal'} }) }}
-    <div class="form-group">
-        {{ form_label(communityForm.name, null, { 'label_attr':  {
-            'class': 'col-sm-5 control-label'
-        }}) }}
-        <div class="col-sm-3">
-            {{ form_errors(communityForm.name) }}
-            {{ form_widget(communityForm.name, { 'attr':  {
-                'class': 'form-control'
-            }}) }}
+<div id="landing">
+    <div class="landing-content">
+		<h2>{{ block('title') }}</h2>
+        {% if not communityForm.vars.valid %}
+        <div class="alert alert-danger col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+            <ul>
+            {% for child in communityForm.children %}
+                {% for error in child.vars.errors %}
+                <li>{{ error.message }}</li>
+                {% endfor %}
+            {% endfor %}
+            </ul>
         </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-offset-5 col-sm-3">
-            <input type="submit" class="btn btn-primary" value="{{ buttonLabel }}" />
+        {% endif %}
+        <div class="well-transparent-blue col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+            {{ form_start(communityForm, { 'attr': {'class': 'form-horizontal'} }) }}
+            <div class="form-group">
+                {{ form_label(communityForm.name, null, { 'label_attr':  {
+                    'class': 'col-sm-5 control-label'
+                }}) }}
+                <div class="col-sm-5">
+                    {{ form_widget(communityForm.name, { 'attr':  {
+                        'class': 'form-control'
+                    }}) }}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(communityForm.matchPrice, null, { 'label_attr':  {
+                    'class': 'col-sm-5 control-label'
+                }}) }}
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        {{ form_widget(communityForm.matchPrice, { 'attr':  {
+                            'class': 'form-control'
+                        }}) }}
+                        <div class="input-group-addon">
+                            <span class="input-group-text">€</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(communityForm.minAttendanceRate, null, { 'label_attr':  {
+                    'class': 'col-xs-12 col-sm-5 control-label'
+                }}) }}
+                {{ form_widget(communityForm.minAttendanceRate, { 'attr':  {
+                    'class': 'form-control',
+                    'rows': '8'
+                }}) }}
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="{{ buttonLabel }}" />
+            </div>
+        {{ form_end(communityForm) }}
         </div>
-    </div>
-{{ form_end(communityForm) }}
+	</div>
 </div>
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
+});
+</script>
+<script>
+    $(function() {
+        $( "#community_minAttendanceRate_slider" ).slider({
+            step: 0.01,
+            min: 0,
+            max: 1,
+            range: "min",
+            value: $("#community_minAttendanceRate").val(),
+            slide: function( event, ui ) {
+                $("#community_minAttendanceRate").val(ui.value);
+            }
+        });
+        $("#community_minAttendanceRate").val($("#community_minAttendanceRate_slider").slider("value"));
+    });
+</script>
 {% endblock %}

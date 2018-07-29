@@ -340,7 +340,7 @@ class AdminController extends Controller
             $results = $resRepo->findByTrimester($communityId, $year, $trimester);
         }
         $nbTotalResults = count($results);
-        $minParticipation = 0.33;
+        $minParticipation = $community->getMinAttendanceRate();
 
         $currentPlayerId = 0;
         $matchPlayers = $mplRepo->listAllForStanding($community, $year, $trimester);
@@ -468,7 +468,7 @@ class AdminController extends Controller
 	}
 
     /**
-     * Management of the 'edit match' view
+     * Management of the 'edit player' view
      *
      * @param Request $request
      * @param integer $id Player id
@@ -577,18 +577,19 @@ class AdminController extends Controller
      */
     public function updatePlayerBalanceAction($id, $operation) {
 
-	    	// Retrieve community ID from session
-	    	$communityId = $this->get('session')->get('community');
-	    	if (!isset($communityId)) {
-	    		return $this->redirect($this->generateUrl('welcome'));
-	    	}
+        // Retrieve community ID from session
+        $communityId = $this->get('session')->get('community');
+        if (!isset($communityId)) {
+            return $this->redirect($this->generateUrl('welcome'));
+        }
     	
         $plrRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Player');
-        $prmRepo = $this->getDoctrine()->getManager()->getRepository('foot5x5MainBundle:Param');
+        $cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+        $community = $cmnRepo->find($communityId);
         $player = $plrRepo->find($id);
         $playerName = $player->getName();
         $playerBalance = $player->getCashBalance();
-        $matchPrice = $prmRepo->findOneBy(array('name' => 'tarif'))->getValue();
+        $matchPrice = $community->getMatchPrice();
 
         $this->get('session')->set('activeTab', 'players');
 

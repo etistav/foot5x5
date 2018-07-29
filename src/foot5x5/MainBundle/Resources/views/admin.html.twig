@@ -73,7 +73,7 @@
                 <tbody>
                     {% for result in results %}
                     <tr>
-                        <td class="col-md-1">M{{ result.num }}</td>
+                        <td class="col-md-1 admin-text-strong">M{{ "%02d"|format(result.num) }}</td>
                         <td class="col-md-2">{{ result.date|date('d/m/Y') }}</td>
                         <td class="col-md-2 admin-right-column">EQUIPE A</td>
                         <td class="col-md-1 admin-center-column">{{ result.scoreTeamA }}-{{ result.scoreTeamB }}</td>
@@ -126,7 +126,7 @@
                 </thead>
                 {% for standing in standings %}
                 <tr>
-                    <td class="col-md-4 admin-left-column"><a class="standingName" href="/standing/{{ standing.id }}">{{ standing.trimName }} {{ standing.year }}</a></td>
+                    <td class="col-md-4 admin-left-column admin-text-strong admin-text-uppercase">{{ standing.trimName }} {{ standing.year }}</td>
                     <td class="col-md-2 admin-center-column">
                         <a href="{{ path('calc_standing', {'id':standing.id}) }}" class="btn btn-info btn-xs" title="Calculer"><span class="glyphicon glyphicon-refresh"></span></a>
                     </td>
@@ -144,10 +144,10 @@
     {% else %}
     <div class="tab-pane fade admin-panel" id="admin-players-panel">
     {% endif %}
-        <div class="admin-button-new col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+        <div class="admin-button-new col-md-8 col-md-offset-2">
             <a href="{{ path('add_player') }}" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouveau joueur</a>
         </div>
-        <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+        <div class="admin-table table-responsive col-md-8 col-md-offset-2">
         {% if players %}
             <table class="table table-hover table-condensed">
                 <thead class="bg-primary dark-blue-grad">
@@ -157,17 +157,19 @@
                         <th class="col-md-1 admin-center-column">Def</th>
                         <th class="col-md-1 admin-center-column">Phy</th>
                         <th class="col-md-1 admin-center-column">Moy</th>
+                        <th class="col-md-1 admin-center-column">Nb Eval</th>
                         <th class="col-md-2 admin-center-column">Edit/Delete</th>
-                        <th class="col-md-2 admin-center-column">Solde</th>
+                        <th class="col-md-2 admin-center-column">+/- {{ community.matchPrice }}€</th>
                     </tr>
                 </thead>
                 {% for player in players %}
                 <tr>
-                    <td class="col-md-2 admin-left-column"><a class="playerName" href="/player/{{ player.id }}">{{ player.name }}</a></td>
+                    <td class="col-md-2 admin-left-column admin-text-strong admin-text-uppercase">{{ player.name }}</td>
                     <td class="col-md-1 admin-center-column">{{ player.valAtt|number_format(1, '.') }}</td>
                     <td class="col-md-1 admin-center-column">{{ player.valDef|number_format(1, '.') }}</td>
                     <td class="col-md-1 admin-center-column">{{ player.valPhy|number_format(1, '.') }}</td>
-                    <td class="col-md-1 admin-center-column">{{ player.valAvg|number_format(1, '.') }}</td>
+                    <td class="col-md-1 admin-center-column admin-text-hi">{{ player.valAvg|number_format(1, '.') }}</td>
+                    <td class="col-md-1 admin-center-column">{{ player.notes|length }}</td>
                     <td class="col-md-2 admin-center-column">
                         <a href="{{ path('edit_player', {'id':player.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
                         <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#playerDialog_{{ player.id }}"><span class="glyphicon glyphicon-remove"></span>
@@ -191,8 +193,8 @@
                         </div><!-- /.modal -->
                     </td>
                     <td class="col-md-2 admin-center-column">
-                        <a href="{{ path('update_player_balance', {'id':player.id, 'operation':'credit'}) }}" class="btn btn-success btn-xs" title="Plus"><span class="glyphicon glyphicon-plus"></span></a>
-                        <a href="{{ path('update_player_balance', {'id':player.id, 'operation':'debit'}) }}" class="btn btn-warning btn-xs" title="Minus"><span class="glyphicon glyphicon-minus"></span></a>
+                        <a href="{{ path('update_player_balance', {'id':player.id, 'operation':'credit'}) }}" class="btn btn-success btn-xs" title="Avoir de {{ community.matchPrice }}€"><span class="glyphicon glyphicon-plus"></span></a>
+                        <a href="{{ path('update_player_balance', {'id':player.id, 'operation':'debit'}) }}" class="btn btn-warning btn-xs" title="Dette de {{ community.matchPrice }}€"><span class="glyphicon glyphicon-minus"></span></a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -208,12 +210,7 @@
     {% else %}
     <div class="tab-pane fade admin-panel" id="admin-users-panel">
     {% endif %}
-    	{#
-        <div class="admin-button-new col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
-            <a href="{{ path('add_user') }}"><button type="button" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouvel utilisateur</button></a>
-        </div>
-        #}
-        <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+        <div class="admin-table table-responsive col-lg-8 col-lg-offset-2">
         {% if users %}
             <table class="table table-hover table-condensed">
                 <thead class="bg-primary dark-blue-grad">
@@ -227,21 +224,15 @@
                 </thead>
                 {% for user in users %}
                 <tr>
-                    <td class="col-md-2 admin-left-column">{{ user.user.username }}</td>
-                    <td class="col-md-2 admin-left-column">
-                        {#% if 'ROLE_ADMIN' in user.roles %}
-                            Admin
-                        {% else %}
-                            {% if 'ROLE_EVALUATOR' in user.roles %}
-                                Evaluateur
-                            {% else %}
-                                Joueur
-                            {% endif %}
-                        {% endif %#}
-                        {{ user.role }}
+                    <td class="col-md-2 admin-left-column admin-text-strong">{{ user.user.username }}</td>
+                    <td class="col-md-2 admin-left-column admin-text-hi">
+                        {% if user.role == 'ROLE_ADMIN' %}Admin
+                        {% elseif user.role == 'ROLE_EVALUATOR' %}Evaluateur
+                        {% else %} Joueur
+                        {% endif %}
                     </td>
                     <td class="col-md-2 admin-left-column">{% if user.player.name is defined %}{{ user.player.name }}{% endif %}</td>
-                    <td class="col-md-2 admin-left-column">{{ user.user.email }}</td>
+                    <td class="col-md-2 admin-left-column admin-text-ellipsis">{{ user.user.email }}</td>
                     <td class="col-md-2 admin-center-column">
                         <a href="{{ path('edit_user_role', {'id':user.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
                         <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#userDialog_{{ user.id }}"><span class="glyphicon glyphicon-remove"></span>
@@ -295,10 +286,10 @@
                 </thead>
                 {% for tran in transactions %}
                 <tr>
-                    <td class="col-md-2 admin-left-column">{{ tran.date|date('d/m/Y') }}</td>
+                    <td class="col-md-2 admin-left-column admin-text-hi">{{ tran.date|date('d/m/Y') }}</td>
                     <td class="col-md-2 admin-left-column">{{ tran.giver.name }}</td>
                     <td class="col-md-2 admin-left-column">{{ tran.receiver.name }}</td>
-                    <td class="col-md-1 admin-center-column">{{ tran.amount }} €</td>
+                    <td class="col-md-1 admin-center-column admin-text-strong">{{ tran.amount }} €</td>
                     <td class="col-md-2 admin-center-column">
                         <a href="{{ path('edit_transaction', {'id':tran.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
                         <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#tranDialog_{{ tran.id }}"><span class="glyphicon glyphicon-remove"></span>

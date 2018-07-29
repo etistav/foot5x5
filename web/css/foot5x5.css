@@ -1377,6 +1377,26 @@ tr#finances-totalCredits td {
 .admin-table {
     padding: 0;
 }
+.admin-text-strong {
+	font-weight: 700;
+}
+.admin-text-hi {
+	color: #2447B2;
+}
+.admin-text-uppercase {
+	text-transform: uppercase;
+}
+.admin-text-ellipsis {
+	max-width: 200px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+/*
+.admin-text-ellipsis:hover {
+	overflow: visible;
+}
+*/
 .admin-table > table > tbody > tr:nth-child(odd) > td {
    background-color: #E0F0FF;
 }

@@ -116,7 +116,8 @@ class AdminController extends Controller
                 'transactions' => $transactions,
                 'trimesterForm' => $trimesterForm->createView(),
                 'currentYear' => $currentYear,
-                'currentTrimester' => $currentTrimester
+                'currentTrimester' => $currentTrimester,
+                'community' => $community
 			)
 		);
     }

@@ -41,6 +41,11 @@ community_home:
     defaults:
         _controller: foot5x5MainBundle:Community:home
 
+community_info:
+    path:     /community/info
+    defaults:
+        _controller: foot5x5MainBundle:Community:info
+
 myprofile:
     path:     /profile
     defaults:

@@ -223,6 +223,44 @@ class CommunityController extends Controller
 	}
 	
 	/**
+	 * Management of the information page of a community
+	 * 
+	 * @param Request $request
+	 */
+	public function infoAction(Request $request) {
+
+		// Retrieve community ID from session
+		$communityId = $this->get('session')->get('community');
+		if (!isset($communityId)) {
+			return $this->redirect($this->generateUrl('welcome'));
+		}
+
+		$cmnRepo = $this->getDoctrine()->getRepository(Community::class);
+		$community = $cmnRepo->find($communityId);
+		$communityForm = $this->createForm(CommunityType::class, $community);
+		
+		$communityForm->handleRequest($request);
+		if ($communityForm->isSubmitted() && $communityForm->isValid()) {
+			
+			// Save the community in db
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($community);
+			$em->flush();
+			
+			// Redirect to home page
+			$this->get('session')->getFlashBag()->add('success', 'Les infos de la communauté ont bien été modifiées !');
+		}
+        return $this->render(
+            'foot5x5MainBundle::community.html.twig',
+            array(
+				'community' => $community,
+				'communityForm' => $communityForm->createView(),
+				'editInfoButtonLabel' => 'Enregistrer'
+            )
+        );
+	}
+
+	/**
 	 * Management of the 'results' view
 	 *
 	 * @param Request $request

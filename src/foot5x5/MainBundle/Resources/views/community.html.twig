@@ -1,0 +1,166 @@
+{% extends "foot5x5MainBundle::layout.html.twig" %}
+
+{% block title %}{{ community.name }}{% endblock %}
+
+{% block content %}
+{% form_theme communityForm 'foot5x5MainBundle:Form:fields.html.twig' %}
+
+<h2><span class="label dark-blue-grad">{{ community.name }}</span></h2>
+
+{% for flashMessage in app.session.flashbag.get('success') %}
+<div class="alert alert-success">
+    {{ flashMessage }}
+</div>
+{% endfor %}
+{% for flashMessage in app.session.flashbag.get('warning') %}
+<div class="alert alert-warning">
+    {{ flashMessage }}
+</div>
+{% endfor %}
+{% if not communityForm.vars.valid %}
+<div class="alert alert-danger">
+	<ul>
+	{% for child in communityForm.children %}
+		{% for error in child.vars.errors %}
+			<li>{{ error.message }}</li>
+		{% endfor %}
+	{% endfor %}
+	</ul>
+</div>
+{% endif %}
+
+<div id="community-container" class="col-xs-12 well">
+	<div id="community-info" class="col-sm-10">
+		<h3><span class="label">Informations Générales</span></h3>
+		<table>
+			<tbody>
+				<tr>
+					<td class="community-info-label">Nom communauté :</td>
+					<td>{{ community.name }}</td>
+				</tr>
+				<tr>
+					<td class="community-info-label">Mot de passe communauté :</td>
+					<td>{{ community.password }} <i class="fa fa-info-circle" data-tooltip="#tooltip-cmn-pwd"></i></td>
+				</tr>
+				<tr>
+					<td class="community-info-label">Date de creation :</td>
+					<td>{{ community.dateOfCreation|date('d/m/Y') }}</td>
+				</tr>
+				<tr>
+					<td class="community-info-label">Créateur :</td>
+					<td>{{ community.creatorUserId.firstname }} {{ community.creatorUserId.lastname }}</td>
+				</tr>
+				<tr>
+					<td class="community-info-label">Prix match :</td>
+					<td>{{ community.matchPrice|number_format(2, '.') }} € <i class="fa fa-info-circle" data-tooltip="#tooltip-cmn-match-price"></i></td>
+				</tr>
+				<tr>
+					<td class="community-info-label">Taux de participation min. :</td>
+					<td>{{ (community.minAttendanceRate * 100) }} % <i class="fa fa-info-circle" data-tooltip="#tooltip-cmn-min-rate"></i></td>
+				</tr>
+			</tbody>
+		</table>
+		{% if app.user and is_granted('ROLE_ADMIN') %}
+		<a href="#" data-popup-open="popup-edit-cmn-info" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-info-sign"></span> Modifier infos</a>
+		{% endif %}
+	</div>
+</div>
+
+<div style ="display:none;" id="tooltip-cmn-pwd">
+	<small>Nécessaire pour rejoindre la communauté!</small>
+</div>
+<div style ="display:none;" id="tooltip-cmn-match-price">
+	<small>Prix d'un match par personne</small>
+</div>
+<div style ="display:none;" id="tooltip-cmn-min-rate">
+	<small>% de matchs joués à satisfaire pour apparaître dans le classement</small>
+</div>
+
+<div class="popup" data-popup="popup-edit-cmn-info">
+	<div class="popup-inner popup-edit-cmn-info">
+        <div class="popup-inner-scroll">
+			<h3 class="text-center">Infos communauté</h3>
+			{{ form_start(communityForm, { 'attr': {'class': 'form-horizontal'} }) }}
+            <div class="form-group">
+                {{ form_label(communityForm.name, null, { 'label_attr':  {
+                    'class': 'col-sm-5 control-label'
+                }}) }}
+                <div class="col-sm-5">
+                    {{ form_widget(communityForm.name, { 'attr':  {
+                        'class': 'form-control'
+                    }}) }}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(communityForm.matchPrice, null, { 'label_attr':  {
+                    'class': 'col-sm-5 control-label'
+                }}) }}
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        {{ form_widget(communityForm.matchPrice, { 'attr':  {
+                            'class': 'form-control'
+                        }}) }}
+                        <div class="input-group-addon">
+                            <span class="input-group-text">€</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(communityForm.minAttendanceRate, null, { 'label_attr':  {
+                    'class': 'col-xs-12 col-sm-5 control-label'
+                }}) }}
+                {{ form_widget(communityForm.minAttendanceRate, { 'attr':  {
+                    'class': 'form-control',
+                    'rows': '8'
+                }}) }}
+            </div>
+            <div class="form-group">
+				<div class="col-sm-offset-5 col-sm-3">
+                	<input type="submit" class="btn btn-primary" value="{{ editInfoButtonLabel }}" />
+				</div>
+            </div>
+        	{{ form_end(communityForm) }}
+            <a class="popup-close" data-popup-close="popup-edit-cmn-info" href="#">x</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function() {
+        //----- OPEN
+        $('[data-popup-open]').on('click', function(e)  {
+            var targeted_popup_class = jQuery(this).attr('data-popup-open');
+            $('[data-popup="' + targeted_popup_class + '"]').fadeIn(350);
+     
+            e.preventDefault();
+        });
+     
+        //----- CLOSE
+        $('[data-popup-close]').on('click', function(e)  {
+            var targeted_popup_class = jQuery(this).attr('data-popup-close');
+            $('[data-popup="' + targeted_popup_class + '"]').fadeOut(350);
+     
+            e.preventDefault();
+        });
+    });
+</script>
+<script>
+    $(function() {
+        $( "#community_minAttendanceRate_slider" ).slider({
+            step: 0.01,
+            min: 0,
+            max: 1,
+            range: "min",
+            value: $("#community_minAttendanceRate").val(),
+            slide: function( event, ui ) {
+                $("#community_minAttendanceRate").val(ui.value);
+            }
+        });
+        $("#community_minAttendanceRate").val($("#community_minAttendanceRate_slider").slider("value"));
+    });
+</script>
+
+<script src="{{ asset('js/tooltip.js') }}"></script>
+
+{% endblock %}

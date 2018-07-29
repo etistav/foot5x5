@@ -64,8 +64,35 @@ h2 {
 	font-size: 250%;
 	font-weight: 700;
 }
+h3 {
+	font-size: 200%;
+	font-weight: 700;
+	font-family: montserrat;
+}
 .alert-danger ul {
 	list-style-type: none;
+}
+.foot5x5_tooltip {
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: -moz-linear-gradient(top,  rgb(252,252,255) 0%, rgb(224,240,255) 100%);
+    background: -webkit-linear-gradient(top,  rgb(252,252,255) 0%,rgb(224,240,255) 100%);
+    background: -o-linear-gradient(top,  rgb(252,252,255) 0%,rgb(224,240,255) 100%);
+    background: linear-gradient(to bottom, rgb(252,252,255) 0%,rgb(224,240,255) 100%);
+	padding: 3px 10px;
+	font-style: italic;
+	font-weight: 700;
+	color: #191950;
+	border-radius: 4px;
+	border: 1px solid #191950;
+	opacity: 0;
+	transform: translateX(-10px);
+	transition: opacity 0.5s, transform 0.5s;
+}
+.foot5x5_tooltip.visible {
+	opacity: 1;
+	transform: translateX(0);
 }
 
 /* ------------------------- */
@@ -370,10 +397,77 @@ div#content {
 	justify-content: center;
 	align-items: center;
 }
+
+/* ------------------------- */
+/*   COMMUNITY               */
+/* ------------------------- */
+#community-container {
+	padding: 15px;
+	overflow: auto;
+}
+#community-info .btn {
+	display: inline-block;
+	width: auto;
+	margin-bottom: 10px;
+	text-align: left;
+}
+#community-info h3 {
+	border-bottom: 1px solid #191950;
+	margin: 0px;
+	margin-bottom: 10px;
+	padding-bottom: 5px;
+}
+#community-info h3 span {
+	color: #191950;
+	padding: 0;
+}
+#community-info table {
+	border-left: 5px solid #191950;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	width: 100%;
+}
+#community-info tr {
+	line-height: 30px;
+}
+#community-info td:not(.community-info-label) {
+	font-weight: bold;
+}
+.community-info-label {
+	color: #2447B2;
+	padding-right: 20px;
+	padding-left: 20px;
+	width: 250px;
+}
+#community-info td .fa {
+	padding: 0 0 0 5px;
+	font-size: 18px;
+	color: #191950;
+	vertical-align: middle;
+}
+#community-info td .fa:hover {
+	color: #99CCFF;
+}
+@media (max-width: 768px) {
+	#community-info {
+		margin-top: 10px!important;
+		margin-left: 0!important;
+		width: 100%;
+	}
+	#community-info table {
+		border-left: 0!important;
+	}
+	.community-info-label {
+		padding-left: 0!important;
+	}
+	#community-info td .fa {
+		padding: 0;
+	}
+}
+
 /* ------------------------- */
 /*   TRIM FORM               */
 /* ------------------------- */
-
 #trim-form-container {
 	border-bottom: 1px solid #4F5261;
 	padding: 0;
@@ -770,6 +864,9 @@ table#standing-table tbody tr td div.standing-player strong {
 	width: 60%;
 }
 .popup-edit-user-info {
+	height: 450px;
+}
+.popup-edit-cmn-info {
 	height: 450px;
 }
 .popup-inner-scroll {

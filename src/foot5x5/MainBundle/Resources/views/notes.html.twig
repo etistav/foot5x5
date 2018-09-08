@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<div id="notes-container" class="col-md-8">
+<div id="notes-container" class="col-md-8 col-md-offset-2">
     <h2><span class="label dark-blue-grad">Mes notes</span></h2>
     {% for flashMessage in app.session.flashbag.get('success') %}
     <div class="alert alert-success">
@@ -17,9 +17,14 @@
     </div>
     {% endfor %}
     {% if players %}
+    <div id="notes-form" class="well">
+        <input type="checkbox" id="notes-form-activePlayers" name="notes-forms"
+                value="notes-form-activePlayers" checked />
+        <label for="notes-form-activePlayers">Joueurs actifs uniquement</label>
+    </div>
     <div class="table-responsive">
-        <table data-toggle="table" class="table table-hover table-striped table-condensed" data-sort-name="name" data-sort-order="asc">
-            <thead>
+        <table data-toggle="table" class="table table-hover table-condensed" data-sort-name="name" data-sort-order="asc">
+            <thead class="dark-blue-grad">
                 <tr>
                     <th data-field="name" data-sortable="true" class="col-md-2">Joueur</th>
                     <th data-field="valAtt" data-sortable="true" class="col-md-1 text-center">Attaque</th>
@@ -31,20 +36,20 @@
                 </tr>
             </thead>
             {% for player in players %}
-            <tr>
+            <tr class="notes-playerRow {{ player.isActive == 1 ? 'notes-activePlayer' : 'notes-inactivePlayer' }}">
                 <td class="playerName">{{ player.name }}</td>
                 {% if player.notes|length > 0 %}
                     {% for note in player.notes %}
                     <td class="text-center">{{ note.valAtt|number_format(1, '.') }}</td>
                     <td class="text-center">{{ note.valDef|number_format(1, '.') }}</td>
                     <td class="text-center">{{ note.valPhy|number_format(1, '.') }}</td>
-                    <td class="text-center">{{ note.valAvg|number_format(1, '.') }}</td>
+                    <td class="text-center playerValAvg">{{ note.valAvg|number_format(1, '.') }}</td>
                     {% endfor %}
                 {% else %}
                     <td class="text-center">-</td>
                     <td class="text-center">-</td>
                     <td class="text-center">-</td>
-                    <td class="text-center">-</td>
+                    <td class="text-center playerValAvg">-</td>
                 {% endif %}
                 <td class="text-center">
                     <a href="{{ path('edit_note', {'id':player.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
@@ -78,4 +83,7 @@
     </div>
     {% endif %}
 </div>
+
+<script src="{{ asset('js/playersFilter.js') }}"></script>
+
 {% endblock %}

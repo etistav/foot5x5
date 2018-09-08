@@ -773,12 +773,6 @@ table#standing-table tbody tr td div.standing-player strong {
 }
 
 
-
-#notes-container {
-	padding: 0;
-}
-
-
 /* ------------------------- */
 /*   JOUEURS                 */
 /* ------------------------- */
@@ -1210,6 +1204,31 @@ tr#finances-totalCredits td {
 /* ------------------------- */
 /*   NOTES                   */
 /* ------------------------- */
+#notes-container {
+	padding: 0;
+}
+#notes-form {
+	margin-bottom: 5px;
+}
+#notes-container .table-responsive {
+	margin-bottom: 10px;
+}
+#notes-container .table-responsive .notes-playerRow:hover {
+	background: -moz-linear-gradient(top,  rgb(224,240,255) 0%, rgb(204,218,250) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(224,240,255)), color-stop(100%,rgb(204,218,250)));
+    background: -webkit-linear-gradient(top,  rgb(224,240,255) 0%,rgb(204,218,250) 100%);
+    background: -o-linear-gradient(top,  rgb(224,240,255) 0%,rgb(204,218,250) 100%);
+    background: -ms-linear-gradient(top,  rgb(224,240,255) 0%,rgb(204,218,250) 100%);
+    background: linear-gradient(to bottom, rgb(224,240,255) 0%,rgb(204,218,250) 100%);
+}
+#notes-container .table-responsive .playerName,
+#notes-container .table-responsive .playerValAvg {
+	font-weight: 700;
+}
+#notes-container .table-responsive .playerValAvg {
+	color: #2447B2;
+}
+
 #note-container,
 #note-title {
 	min-width: 350px;

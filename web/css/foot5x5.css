@@ -530,15 +530,18 @@ table thead.bg-primary {
 .result-table {
 	margin-top: 10px;
 	margin-bottom: 20px;
-	border: none;
-	border-bottom: 1px solid #191950;
+	border: 2px solid #191950;
+}
+.result-table th {
+	border: 1px solid #191950!important;
+	border-bottom-width: 2px!important;
 }
 .result-table .result-score {
 	text-align: center;
 	font-weight: bold;
 	font-size: 2em;
 	vertical-align: middle;
-	background-color: #FFFFFF;
+	background-color: #F3F8FF;
 }
 .result-table .result-victory {
 	color: #005C1F;
@@ -557,7 +560,7 @@ table thead.bg-primary {
 }
 .result-table td {
 	padding: 0!important;
-	background-color: #FFFFFF;
+	background-color: #F3F8FF;
 	border: none!important;
 	border-top: 1px solid #191950!important;
 }
@@ -565,17 +568,17 @@ table thead.bg-primary {
 	text-align: left;
 	padding: 0;
 	margin: 0;
-	background-color: #FFFFFF;
 }
 .result-table .result-teamB dl {
 	text-align: right;
 	padding: 0;
 	margin: 0;
-	background-color: #FFFFFF;
 }
 .result-table dt {
-	border-top: 1px solid #E0E0E0;
-	padding: 2px;
+	padding: 4px;
+}
+.result-table dt:not(:first-child) {
+	border-top: 1px solid #ddd;
 }
 .result-table dt:hover {
 	background: -moz-linear-gradient(top,  rgb(224,240,255) 0%, rgb(204,218,250) 100%);
@@ -776,12 +779,15 @@ table#standing-table tbody tr td div.standing-player img {
 table#standing-table tbody tr td div.standing-player strong {
 	padding-left: 10px;
 }
-table#standing-table .admin-text-strong {
-	font-weight: 700;
-}
 table#standing-table .standing-text-hi {
 	color: #2447B2;
 }
+table#standing-table > tbody > tr:nth-child(-n+3) .standing-text-hi {
+	color: #005C1F;
+ }
+ table#standing-table > tbody > tr:nth-last-child(-n+3) .standing-text-hi {
+	color: #990000;
+ }
 
 /* ------------------------- */
 /*   JOUEURS                 */

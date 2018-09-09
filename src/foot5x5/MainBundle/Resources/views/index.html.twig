@@ -109,7 +109,7 @@
                     {% elseif ranking.rank > loop.length - 3 and ranking.rank < loop.length %} class="danger"
                     {% elseif ranking.rank == loop.length %} class="standing-last-player"
                     {% else %} class="standing-mid-table" {% endif %}>
-                    <td class="col-md-1 standing-center-column">{{ ranking.rank }}</td>
+                    <td class="col-md-1 standing-center-column standing-text-hi"><strong>{{ ranking.rank }}</strong></td>
                     <td class="col-md-2 standing-left-column">
                         <div class="standing-player">
                             {% if ranking.player.user is null %}

@@ -16,7 +16,7 @@
 </div>
 {% endfor %}
 <div class="row">
-    <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
         <ul class="nav nav-tabs nav-justified">
             <li {% if activeTab == 'results' %}class="active"{% endif %}><a href="#admin-results-panel" data-toggle="tab">Résultats</a></li>
             <li {% if activeTab == 'standings' %}class="active"{% endif %}><a href="#admin-standings-panel" data-toggle="tab">Classements</a></li>
@@ -26,7 +26,7 @@
         </ul>
     </div>
 </div>
-<div class="tab-content">
+<div class="tab-content col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
     
     {% if activeTab == 'results' %}
     <div class="tab-pane fade in active admin-panel" id="admin-results-panel">
@@ -34,29 +34,29 @@
     <div class="tab-pane fade admin-panel" id="admin-results-panel">
     {% endif %}
         {% if trimesterForm is defined %}
-        <div id="admin-results-form" class="well col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+        <div id="admin-results-form" class="well">
             {{ form_start(trimesterForm, { 'attr': {'class': 'form-horizontal'} }) }}
             <div class="form-group">
                 {{ form_label(trimesterForm.stdCombo, null, { 'label_attr':  {
-                    'class': 'col-sm-3 col-md-3 control-label'
+                    'class': 'col-sm-2 control-label'
                 }}) }}
-                <div class="col-sm-4 col-md-4">
+                <div class="col-sm-3">
                     {{ form_errors(trimesterForm.stdCombo) }}
                     {{ form_widget(trimesterForm.stdCombo, { 'attr':  {
                         'class': 'form-control'
                     }}) }}
                 </div>
-                <div class="col-sm-3 col-md-3">
+                <div class="col-sm-2">
                     <input type="submit" class="btn btn-primary dark-blue-grad" value="Afficher" />
                 </div>
             </div>
             {{ form_end(trimesterForm) }}
         </div>
         {% endif %}
-        <div class="admin-button-new col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+        <div class="admin-button-new">
             <a href="{{ path('add_match') }}" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouveau match</a>
         </div>
-        <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+        <div class="admin-table table-responsive col-sm-12">
         {% if results %}
             <table class="table table-hover table-condensed">
                 <thead class="bg-primary dark-blue-grad">
@@ -115,7 +115,7 @@
     {% else %}
     <div class="tab-pane fade admin-panel" id="admin-standings-panel">
     {% endif %}
-        <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+        <div class="admin-table table-responsive col-sm-12">
         {% if standings %}
             <table class="table table-hover table-condensed">
                 <thead class="bg-primary dark-blue-grad">
@@ -144,10 +144,15 @@
     {% else %}
     <div class="tab-pane fade admin-panel" id="admin-players-panel">
     {% endif %}
-        <div class="admin-button-new col-md-8 col-md-offset-2">
+        <div id="admin-players-form" class="well col-sm-12">
+            <input type="checkbox" id="admin-players-form-activePlayers" class="activePlayersCheckbox" name="admin-players-form"
+                value="admin-players-form-activePlayers" checked />
+            <label for="admin-players-form-activePlayers">Joueurs actifs uniquement</label>
+        </div>
+        <div class="admin-button-new">
             <a href="{{ path('add_player') }}" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouveau joueur</a>
         </div>
-        <div class="admin-table table-responsive col-md-8 col-md-offset-2">
+        <div class="admin-table table-responsive col-sm-12">
         {% if players %}
             <table class="table table-hover table-condensed">
                 <thead class="bg-primary dark-blue-grad">
@@ -158,18 +163,20 @@
                         <th class="col-md-1 admin-center-column">Phy</th>
                         <th class="col-md-1 admin-center-column">Moy</th>
                         <th class="col-md-1 admin-center-column">Nb Eval</th>
+                        <th class="col-md-1 admin-center-column">Actif</th>
                         <th class="col-md-2 admin-center-column">Edit/Delete</th>
                         <th class="col-md-2 admin-center-column">+/- {{ community.matchPrice }}€</th>
                     </tr>
                 </thead>
                 {% for player in players %}
-                <tr>
+                <tr class="notes-playerRow {{ player.isActive == 1 ? 'activePlayer' : 'inactivePlayer' }}">
                     <td class="col-md-2 admin-left-column admin-text-strong admin-text-uppercase">{{ player.name }}</td>
                     <td class="col-md-1 admin-center-column">{{ player.valAtt|number_format(1, '.') }}</td>
                     <td class="col-md-1 admin-center-column">{{ player.valDef|number_format(1, '.') }}</td>
                     <td class="col-md-1 admin-center-column">{{ player.valPhy|number_format(1, '.') }}</td>
                     <td class="col-md-1 admin-center-column admin-text-hi">{{ player.valAvg|number_format(1, '.') }}</td>
                     <td class="col-md-1 admin-center-column">{{ player.notes|length }}</td>
+                    <td class="col-md-1 admin-center-column">{{ player.isActive ? "O" : "N" }}</td>
                     <td class="col-md-2 admin-center-column">
                         <a href="{{ path('edit_player', {'id':player.id}) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
                         <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#playerDialog_{{ player.id }}"><span class="glyphicon glyphicon-remove"></span>
@@ -210,7 +217,7 @@
     {% else %}
     <div class="tab-pane fade admin-panel" id="admin-users-panel">
     {% endif %}
-        <div class="admin-table table-responsive col-lg-8 col-lg-offset-2">
+        <div class="admin-table table-responsive col-sm-12">
         {% if users %}
             <table class="table table-hover table-condensed">
                 <thead class="bg-primary dark-blue-grad">
@@ -269,10 +276,10 @@
     {% else %}
     <div class="tab-pane fade admin-panel" id="admin-finances-panel">
     {% endif %}
-        <div class="admin-button-new col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+        <div class="admin-button-new">
             <a href="{{ path('add_transaction') }}" class="btn btn-primary dark-blue-grad"><span class="glyphicon glyphicon-plus"></span> Nouvelle transaction</a>
         </div>
-        <div class="admin-table table-responsive col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+        <div class="admin-table table-responsive col-sm-12">
         {% if transactions %}
             <table class="table table-hover table-condensed">
                 <thead class="bg-primary dark-blue-grad">
@@ -321,4 +328,7 @@
         </div>
     </div>
 </div>
+
+<script src="{{ asset('js/playersFilter.js') }}"></script>
+
 {% endblock %}

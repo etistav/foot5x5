@@ -6,11 +6,11 @@ class PlayersFilter {
      */
     static filter(value) {
         var i;
-        var allInactivePlayers = document.getElementsByClassName("notes-inactivePlayer");
-        console.log("Clic sur playersFilterCheckbox : " + value);
+        var allInactivePlayers = document.getElementsByClassName("inactivePlayer");
+        // console.log("Clic sur playersFilterCheckbox : " + value);
         for (i = 0; i < allInactivePlayers.length; i++) {
             if (value) {
-                console.log("Masquer les joueurs inactifs");
+                // console.log("Masquer les joueurs inactifs");
                 allInactivePlayers[i].style.display = 'none';
             } else {
                 allInactivePlayers[i].style.removeProperty('display');
@@ -20,11 +20,11 @@ class PlayersFilter {
 }
 
 $(document).ready(function() {
-    var playersFilterCheckbox = document.getElementById("notes-form-activePlayers");
-    var checkedValue = playersFilterCheckbox.checked;
+    var playersFilterCheckbox = document.getElementsByClassName("activePlayersCheckbox");
+    var checkedValue = playersFilterCheckbox[0].checked;
     PlayersFilter.filter(checkedValue);
 
-    playersFilterCheckbox.addEventListener("click", function(e) {
+    playersFilterCheckbox[0].addEventListener("click", function(e) {
         var checkedValue = this.checked;
         PlayersFilter.filter(checkedValue);
     });

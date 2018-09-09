@@ -192,7 +192,7 @@ class CommunityController extends Controller
 			$lastStanding = $stdRepo->findStanding($lastStanding->getId());
 		}
 		
-		$players = $plrRepo->findAllActives($communityId);
+		$players = $plrRepo->findByCommunity($communityId);
 		$ranks = array();
 		$currentForms = array();
 		$currentSeries = array();

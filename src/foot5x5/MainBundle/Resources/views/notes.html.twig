@@ -18,7 +18,7 @@
     {% endfor %}
     {% if players %}
     <div id="notes-form" class="well">
-        <input type="checkbox" id="notes-form-activePlayers" name="notes-forms"
+        <input type="checkbox" id="notes-form-activePlayers" class="activePlayersCheckbox" name="notes-form"
                 value="notes-form-activePlayers" checked />
         <label for="notes-form-activePlayers">Joueurs actifs uniquement</label>
     </div>
@@ -36,7 +36,7 @@
                 </tr>
             </thead>
             {% for player in players %}
-            <tr class="notes-playerRow {{ player.isActive == 1 ? 'notes-activePlayer' : 'notes-inactivePlayer' }}">
+            <tr class="notes-playerRow {{ player.isActive == 1 ? 'activePlayer' : 'inactivePlayer' }}">
                 <td class="playerName">{{ player.name }}</td>
                 {% if player.notes|length > 0 %}
                     {% for note in player.notes %}

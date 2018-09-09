@@ -128,7 +128,7 @@
                     <td class="col-md-1 standing-center-column">{{ ranking.goalsFor }}</td>
                     <td class="col-md-1 standing-center-column">{{ ranking.goalsAgainst }}</td>
                     <td class="col-md-1 standing-center-column">{{ ranking.goalsDiff }}</td>
-                    <td class="col-md-1 standing-center-column">{{ ranking.eval|number_format(2, '.') }}</td>
+                    <td class="col-md-1 standing-center-column standing-text-hi"><strong>{{ ranking.eval|number_format(2, '.') }}</strong></td>
                 </tr>
             {% endfor %}
             </tbody>

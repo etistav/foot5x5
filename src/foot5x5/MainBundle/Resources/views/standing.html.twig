@@ -3,7 +3,7 @@
 {% block title %}Classement {{ standing.name }}{% endblock %}
 
 {% block content %}
-<div id="trim-form-container" class="col-xs-10">
+<div id="trim-form-container" class="col-xs-12">
     <h2><span class="label dark-blue-grad">Classement {{ standing.name }}</span></h2>
     {% if standingForm is defined %}
     <div class="well col-lg-6 col-md-8 col-sm-10">
@@ -18,7 +18,7 @@
     {% endif %}
 </div>
 
-<div id="standing-container" class="col-xs-10">
+<div id="standing-container" class="col-xs-12">
     <div class="table-responsive">
         {% if standing.rankings %}
         <table id="standing-table" class="table table-striped table-bordered table-condensed">
@@ -63,7 +63,7 @@
                     <td class="col-md-1 standing-center-column">{{ ranking.goalsFor }}</td>
                     <td class="col-md-1 standing-center-column">{{ ranking.goalsAgainst }}</td>
                     <td class="col-md-1 standing-center-column">{{ ranking.goalsDiff }}</td>
-                    <td class="col-md-1 standing-center-column">{{ ranking.eval|number_format(2, '.') }}</td>
+                    <td class="col-md-1 standing-center-column standing-text-hi"><strong>{{ ranking.eval|number_format(2, '.') }}</strong></td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -717,11 +717,19 @@ div#standing-container {
 	padding: 0;
 }
 table#standing-table {
-	border: none;
+	border: 2px solid #191950;
+	/*
+	border-collapse: separate;
+	border-spacing: 0 5px;
+	*/
 }
 table#standing-table tr td,
 table#standing-table tr th {
 	border: none;
+}
+table#standing-table tr {
+	border-left: 2px solid #191950;
+	border-right: 2px solid #191950;
 }
 table#standing-table thead tr th.standing-left-column {
 	text-align: left;
@@ -742,11 +750,11 @@ tbody > tr.standing-first-player > td {
 tbody > tr.standing-last-player > td {
 	background-color: #f2cdcd;
 }
-table#standing-table > tbody > tr:nth-child(3) > td {
-   border-bottom: 2px solid #bdf0c7;
+table#standing-table > tbody > tr:nth-child(3) {
+   border-bottom: 2px solid #59d972;
 }
-table#standing-table > tbody > tr:nth-last-child(3) > td {
-   border-top: 2px solid #f2cdcd;
+table#standing-table > tbody > tr:nth-last-child(3) {
+   border-top: 2px solid #da7171;
 }
 table#standing-table tbody tr td {
 	vertical-align: middle;
@@ -754,15 +762,6 @@ table#standing-table tbody tr td {
 	margin: 0px;
 	color: #191950;
 }
-/*
-table#standing-table tr td,
-table#standing-table tr th {
-	border-left: none;
-	border-right: none;
-	border-top: 1px solid #191950;
-	border-bottom: 1px solid #191950;
-}
-*/
 table#standing-table tbody tr td div.standing-player {
 	padding: 0px;
 	margin: 0px;
@@ -777,7 +776,12 @@ table#standing-table tbody tr td div.standing-player img {
 table#standing-table tbody tr td div.standing-player strong {
 	padding-left: 10px;
 }
-
+table#standing-table .admin-text-strong {
+	font-weight: 700;
+}
+table#standing-table .standing-text-hi {
+	color: #2447B2;
+}
 
 /* ------------------------- */
 /*   JOUEURS                 */

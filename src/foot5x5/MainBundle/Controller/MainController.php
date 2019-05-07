@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use foot5x5\MainBundle\Entity\Community;
 use foot5x5\MainBundle\Form\CommunityType;
+use foot5x5\MainBundle\Entity\Param;
 
 class MainController extends Controller
 {
@@ -59,6 +60,14 @@ class MainController extends Controller
 		// Init community variables in session
 		$this->get('session')->remove('community');
 		$this->get('session')->remove('community_name');
+
+		// Get isCommunityCreationAllowed parameter
+		$isCommunityCreationAllowed = false;
+		$prmRepo = $this->getDoctrine()->getRepository(Param::class);
+		$isCommunityCreationAllowedValue = $prmRepo->findOneBy(array('name' => "isCommunityCreationAllowed"))->getValue();
+		if ($isCommunityCreationAllowedValue == "Y") {
+			$isCommunityCreationAllowed = true;
+		}
 		
 		$user = $this->get('security.token_storage')->getToken()->getUser();
 		$username = $user->getFirstname();
@@ -74,7 +83,8 @@ class MainController extends Controller
 			array(
 				'title' => 'Bienvenue '.$username.' !',
 				'username' => $username,
-				'communities' => $communities
+				'communities' => $communities,
+				'isCommunityCreationAllowed' => $isCommunityCreationAllowed
 			)
 		);
     }

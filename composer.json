@@ -29,7 +29,8 @@
         "coresphere/console-bundle": "dev-master",
         "liip/imagine-bundle": "^1.9",
         "kriswallsmith/assetic": "^1.4",
-        "symfony/webpack-encore-pack": "^1.0"
+        "symfony/webpack-encore-pack": "^1.0",
+        "symfony/class-loader": "^3.4"
     },
     "scripts": {
         "post-install-cmd": [

@@ -46,7 +46,6 @@ class PlayerToNameTransformer implements DataTransformerInterface
         }
 
         $player = $this->repo->findOneBy(array('id' => $playerId));
-
         if (null === $player) {
             throw new TransformationFailedException(sprintf(
                 'Il n\'existe pas de joueur avec l\ID "%s"!',

@@ -109,10 +109,12 @@
         $( init );
         function init() {
             var player = "";
+            var inputId = "";
+            var playerId = "";
 
             // Boucle sur les 10 potentiels matchPlayers
             for ( var i=0; i<10; i++ ) {
-                player = $("#matchPlayers_"+i).text().trim()
+                player = $("#matchPlayers_"+i).text().trim();
                 if (player == "") {
                     // Désactiver le drag
                     $("#matchPlayers_"+i).draggable("disable");
@@ -120,6 +122,11 @@
                     // Mettre en surbrillance et cacher le joueur dans la liste à gauche
                     $("#matchPlayers_"+i).addClass("ui-state-highlight");
                     hidePlayer(player);
+                    // Mise à jour de la value de l'input hidden pour prise
+                    // en compte lors de la soumission du formulaire
+                    inputId = "#result_matchPlayers_"+i+"_player";
+                    playerId = getPlayerId(player);
+                    $(inputId).val(playerId);
                 }
             }
         }
@@ -220,6 +227,15 @@
                     $(this).removeClass("player-dropped");
                 }
             });
+        }
+
+        function getPlayerId(player) {
+            $(".player-draggable").each( function() {
+                if ($(this).text().trim() == player) {
+                    playerId = $(this).attr("id").substring(12);
+                }
+            });
+            return playerId;
         }
 
     });
